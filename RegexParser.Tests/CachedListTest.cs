@@ -30,15 +30,15 @@ namespace RegexParser.Tests
             conversionTest(new Match2[] { }, "Match2[]");
         }
 
-        //[Test]
-        //public void ConvertNullElement()
-        //{
-        //    conversionTest(new string[] { "" }, "Empty string");
-        //    conversionTest(new string[] { null }, "Null string");
-        //    conversionTest(new int[] { 0 }, "Zero");
-        //    conversionTest(new int?[] { null }, "Null Int32");
-        //    conversionTest(new Regex2[] { null }, "Null Regex2");
-        //}
+        [Test]
+        public void ConvertNullElement()
+        {
+            conversionTest(new string[] { "" }, "Empty string");
+            conversionTest(new string[] { null }, "Null string");
+            conversionTest(new int[] { 0 }, "Zero");
+            conversionTest(new int?[] { null }, "Null Int32");
+            conversionTest(new Regex2[] { null }, "Null Regex2");
+        }
 
         [Test]
         public void ConvertOneElement()
@@ -59,20 +59,88 @@ namespace RegexParser.Tests
         [Test]
         public void ConvertManyElements()
         {
-            string[] strings = Enumerable.Range(0, 26)
-                                         .Select(i => (char)(i + (byte)'a'))
-                                         .Select(c => new string(Enumerable.Repeat(c, 3).ToArray()))
-                                         .ToArray();
-
-            conversionTest(strings, "String[]");
+            conversionTest(threeLetterStrings, "String[]");
             conversionTest(Enumerable.Range(1000, 2700), "Int32[]");
-            conversionTest(strings.Select(s => new Regex2(s)).ToArray(), "Regex2[]");
+            conversionTest(threeLetterStrings.Select(s => new Regex2(s)).ToArray(), "Regex2[]");
         }
 
         private void conversionTest<T>(IEnumerable<T> original, string message)
         {
             CollAssert.AreEqual(original.ToArray(), (new CachedList<T>(original)).ToArray(), message);
         }
+
+        [Test]
+        public void MoveAfterEnd_Int32()
+        {
+            IEnumerable<int> list =
+                //new List<int>(new int[] { });
+                new CachedList<int>(new int[] { });
+
+            IEnumerator<int> e = list.GetEnumerator();
+
+            Assert.AreEqual(0, e.Current, "Before MoveNext.");
+            e.MoveNext();
+            Assert.AreEqual(0, e.Current, "After one MoveNext.");
+            e.MoveNext();
+            Assert.AreEqual(0, e.Current, "After two MoveNext's.");
+        }
+
+        [Test]
+        public void MoveAfterEnd_String()
+        {
+            IEnumerable<string> list =
+                //new List<string>(new string[] { });
+                new CachedList<string>(new string[] { });
+
+            IEnumerator<string> e = list.GetEnumerator();
+
+            Assert.AreEqual(null, e.Current, "Before MoveNext.");
+            e.MoveNext();
+            Assert.AreEqual(null, e.Current, "After one MoveNext.");
+            e.MoveNext();
+            Assert.AreEqual(null, e.Current, "After two MoveNext's.");
+        }
+
+        [Test]
+        public void Indexer()
+        {
+            CachedList<string> cachedList = new CachedList<string>(threeLetterStrings);
+
+            for (int i = 0; i < threeLetterStrings.Length; i++)
+                Assert.AreEqual(threeLetterStrings[i], cachedList[i], "First/at index: " + i.ToString());
+
+            // move past the end
+            IEnumerator<string> cachedListEnum = cachedList.GetEnumerator();
+            for (int i = 0; i < threeLetterStrings.Length + 1; i++)
+                cachedListEnum.MoveNext();
+
+            for (int i = 0; i < threeLetterStrings.Length; i++)
+                Assert.AreEqual(threeLetterStrings[i], cachedList[i], "Second/at index: " + i.ToString());
+        }
+
+        [Test]
+        public void IndexerOutOfRange()
+        {
+            CachedList<string> cachedList = new CachedList<string>(new string[] { });
+            string s;
+
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[-1]; });
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[-7]; });
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[0]; });
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[1]; });
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[10]; });
+
+            cachedList = new CachedList<string>(new string[] { "abc" });
+
+            s = cachedList[0];
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[1]; });
+            Assert.Catch<ArgumentOutOfRangeException>(() => { s = cachedList[-1]; });
+        }
+
+        private string[] threeLetterStrings = Enumerable.Range(0, 26)
+                                                        .Select(i => (char)(i + (byte)'a'))
+                                                        .Select(c => new string(Enumerable.Repeat(c, 3).ToArray()))
+                                                        .ToArray();
 
         #endregion
 

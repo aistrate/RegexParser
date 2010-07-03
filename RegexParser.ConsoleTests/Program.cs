@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using RegexParser;
+using RegexParser.Util;
 
 namespace RegexParser.ConsoleTests
 {
@@ -33,6 +34,8 @@ namespace RegexParser.ConsoleTests
 
             {
                 List<int> xxi = new List<int>();
+                //Console.WriteLine("xxi[0]: {0}", xxi[0]);
+                
                 IEnumerator<int> ei = xxi.GetEnumerator();
                 ei.MoveNext();
                 int xi = ei.Current;
@@ -71,6 +74,36 @@ namespace RegexParser.ConsoleTests
             //IEnumerable<int> c = null;
             //foreach (int xc in c)
             //    Console.WriteLine("xc: {0}", xc);
+
+            //Console.WriteLine(typeof(Array).FullName);
+
+            //IEnumerable<int> numbers = getNaturalNumbers();
+            //Console.WriteLine("Count: {0}", numbers.Count());
+
+            //CachedList<string> cachedList = new CachedList<string>(threeLetterStrings);
+
+            //for (int i = 0; i < threeLetterStrings.Length; i++)
+            //    Console.WriteLine("First: c[{0}] = {1}", i, cachedList[i]);
+
+            //IEnumerator<string> cachedListEnum = cachedList.GetEnumerator();
+
+            //for (int i = 0; i < 2 * threeLetterStrings.Length; i++)
+            //    cachedListEnum.MoveNext();
+
+            //Console.WriteLine();
+            //for (int i = 0; i < threeLetterStrings.Length; i++)
+            //    Console.WriteLine("Second: c[{0}] = {1}", i, cachedList[i]);
         }
+
+        private static IEnumerable<int> getNaturalNumbers()
+        {
+            for (int i = 0; ; i++)
+                yield return i;
+        }
+        
+        private static string[] threeLetterStrings = Enumerable.Range(0, 26)
+                                                               .Select(i => (char)(i + (byte)'a'))
+                                                               .Select(c => new string(Enumerable.Repeat(c, 3).ToArray()))
+                                                               .ToArray();
     }
 }

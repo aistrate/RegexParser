@@ -15,88 +15,92 @@ namespace RegexParser.Util
             
             originalEnumerator = originalColl.GetEnumerator();
 
-            LastEvaluatedIndex = -1;
-            EvaluatedAll = false;
+            OriginalIndex = -1;
+            IsOriginalAfterEnd = false;
         }
 
+        private List<T> cache = new List<T>();
+        
         private IEnumerator<T> originalEnumerator;
 
-        public int LastEvaluatedIndex { get; private set; }
-        public bool EvaluatedAll { get; private set; }
+        public int OriginalIndex { get; private set; }
+        public bool IsOriginalAfterEnd { get; private set; }
 
+        public T this[int index]
+        {
+            get
+            {
+                if (IsValidIndex(index))
+                    return cache[index];
+                else
+                    throw new ArgumentOutOfRangeException(
+                                    "index",
+                                    "Index was out of range. Must be non-negative and less than the size of the collection.");
+            }
+        }
 
-        private List<T> cache = new List<T>();
-
-        private object getItem(int index)
+        public bool IsValidIndex(int index)
         {
             if (index < 0)
-                throw new IndexOutOfRangeException();
+                return false;
 
-            while (LastEvaluatedIndex < index)
+            while (OriginalIndex < index)
             {
-                EvaluatedAll = EvaluatedAll || !originalEnumerator.MoveNext();
-                if (EvaluatedAll)
-                    return null;
+                IsOriginalAfterEnd = IsOriginalAfterEnd || !originalEnumerator.MoveNext();
+
+                if (IsOriginalAfterEnd)
+                    return false;
 
                 cache.Add(originalEnumerator.Current);
-                LastEvaluatedIndex++;
+                OriginalIndex++;
             }
 
-            return cache[index];
+            return true;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new Enumerator<T>(this);
+            return new Enumerator(this);
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
-            return new Enumerator<T>(this);
+            return new Enumerator(this);
         }
 
-        public struct Enumerator<T> : IEnumerator<T>
+        public struct Enumerator : IEnumerator<T>
         {
             public Enumerator(CachedList<T> parent)
             {
                 this.currentIndex = -1;
-                this.current = null;
+                this.current = default(T);
                 this.parent = parent;
             }
 
             private int currentIndex;
-            private object current;
+            private T current;
             private CachedList<T> parent;
 
             object IEnumerator.Current { get { return current; } }
-
-            T IEnumerator<T>.Current
-            {
-                get
-                {
-                    if (current != null)
-                        return (T)current;
-                    else
-                        throw new NullReferenceException("Trying to access object beyond end of collection.");
-                }
-            }
-
-            public void Dispose() { }
+            T IEnumerator<T>.Current { get { return current; } }
 
             public bool MoveNext()
             {
-                current = parent.getItem(currentIndex + 1);
-
-                if (current != null)
-                    currentIndex++;
-
-                return current != null;
+                if (parent.IsValidIndex(currentIndex + 1))
+                {
+                    current = parent[++currentIndex];
+                    return true;
+                }
+                else
+                    return false;
             }
 
             public void Reset()
             {
                 currentIndex = -1;
             }
+
+            public void Dispose() { }
         }
     }
 }
