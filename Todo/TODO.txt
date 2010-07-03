@@ -1,2 +1,25 @@
-To do for the RegexParser project:
+Big:
 
+- build a parse tree (lexical and syntax analysis)
+
+- for the explicit/implicit DFA algorithms: build a state machine
+
+- for the explicit DFA algorithm: transform the NFA state machine into a DFA one (powerset construction)
+
+- for the backtracking algorithm (like the .NET Framework's): build an input string matcher capabable of bactracking
+
+
+
+Features:
+
+- basic language elements (no backtracking): ordinary chars, char escapes, quantifiers, char classes, alternation constructs, anchors, comments, non-capturing grouping
+
+- lazy quantification
+
+- captures and capturing groups
+
+- substitutions
+
+- backreferences
+
+- non-ASCII (Unicode) encodings

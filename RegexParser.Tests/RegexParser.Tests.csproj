@@ -46,8 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CachedListTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\CollAssert.cs" />
+    <Compile Include="Util\Counter.cs" />
+    <Compile Include="Util\SeqAssert.cs" />
+    <Compile Include="Util\SeqAssertTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RegexParser\RegexParser.csproj">
+      <Project>{F870A64D-2B11-4804-BD5E-36D9B0984CB8}</Project>
+      <Name>RegexParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

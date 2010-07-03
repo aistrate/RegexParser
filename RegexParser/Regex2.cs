@@ -5,6 +5,13 @@ using System.Text;
 
 namespace RegexParser
 {
+    public enum AlgorithmType
+    {
+        ExplicitDFA,
+        ImplicitDFA,
+        Backtracking
+    }
+
     public class Regex2
     {
         public Regex2(string pattern)

@@ -1,0 +1,34 @@
+Language Elements:
+
+- ordinary characters: a, X, 1
+
+- character escapes: \n, \r, \t, backslash followed by . $ ^ { [ ( | ) * + ? \
+
+- quantifiers: *, +, ?, {n}, {n,}, {n,m}, *?, +?, ??, {n}?, {n,}?, {n,m}?
+
+- character classes: \w, \W, \s, \S, \d, \D, [ae], [^a-z], [A-Z], .
+
+- alternation constructs: |
+
+- anchors: ^, $, \b, \B
+
+- miscellaneous constructs: (?#comment), (?i)
+
+- grouping constructs: (expr), (?<phone>expr), (?:expr), (?=expr), (?!expr), (?<=expr), (?<!expr), (?>expr)
+
+- backreference constructs: \1, \k<phone>
+
+- substitutions: $1, ${word1}; $$, $&, $`, $', $+, $_
+
+
+
+
+Regex Options:
+
+- IgnoreCase
+
+- Multiline
+
+- Singleline
+
+- IgnorePatternWhitespace

@@ -30,6 +30,18 @@ namespace RegexParser.ConsoleTests
 
 
             Console.WriteLine();
+
+            {
+                List<int> xxi = new List<int>();
+                IEnumerator<int> ei = xxi.GetEnumerator();
+                ei.MoveNext();
+                int xi = ei.Current;
+                ei.MoveNext();
+                xi = ei.Current;
+
+                Console.WriteLine("xi == null: {0}", xi == null);
+                Console.WriteLine("xi: {0}", xi);
+            }
             
             {
                 List<Match> xx = new List<Match>();
@@ -55,6 +67,10 @@ namespace RegexParser.ConsoleTests
 
             Console.WriteLine("xm == null: {0}", xm == null);
             //Console.WriteLine("xm.Success: {0}", xm.Success);
+
+            //IEnumerable<int> c = null;
+            //foreach (int xc in c)
+            //    Console.WriteLine("xc: {0}", xc);
         }
     }
 }
