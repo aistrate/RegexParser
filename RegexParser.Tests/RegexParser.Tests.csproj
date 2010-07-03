@@ -49,12 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CachedListTest.cs" />
+    <Compile Include="CachedListTests.cs" />
+    <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\ClassExtensions.cs" />
     <Compile Include="Util\CollAssert.cs" />
     <Compile Include="Util\Counter.cs" />
     <Compile Include="Util\SeqAssert.cs" />
-    <Compile Include="Util\SeqAssertTest.cs" />
+    <Compile Include="Util\SeqAssertTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RegexParser\RegexParser.csproj">

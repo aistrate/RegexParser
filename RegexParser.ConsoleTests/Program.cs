@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using RegexParser;
@@ -93,7 +94,17 @@ namespace RegexParser.ConsoleTests
             //Console.WriteLine();
             //for (int i = 0; i < threeLetterStrings.Length; i++)
             //    Console.WriteLine("Second: c[{0}] = {1}", i, cachedList[i]);
+
+
+            //MatchCollection2 coll = createMatchCollection2(Match2.Empty);
         }
+
+        //private static MatchCollection2 createMatchCollection2(Match2 firstMatch)
+        //{
+        //    ConstructorInfo constructorInfo = typeof(MatchCollection2).GetConstructor(new Type[] { typeof(Match2) });
+
+        //    return constructorInfo.Invoke(new object[] { firstMatch }) as MatchCollection2;
+        //}
 
         private static IEnumerable<int> getNaturalNumbers()
         {

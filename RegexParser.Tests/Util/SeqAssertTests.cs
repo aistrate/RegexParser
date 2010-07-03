@@ -7,10 +7,10 @@ using NUnit.Framework;
 namespace RegexParser.Tests.Util
 {
     //[TestFixture]
-    public class SeqAssertTest
+    public class SeqAssertTests
     {
         //[Test]
-        public void AssertTest()
+        public void AreEqualTest()
         {
             //SeqAssert.AreEqual(null, new int[] { 12345 }, "First seq null.");
             //SeqAssert.AreEqual(new int[] { 12345 }, null, "Second seq null.");

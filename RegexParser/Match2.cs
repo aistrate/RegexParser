@@ -10,6 +10,8 @@ namespace RegexParser
         private Match2()
         {
             Success = false;
+
+            Index = -1;
         }
 
         internal Match2(int index, int length, string value, Func<Match2> nextMatch)
@@ -20,7 +22,8 @@ namespace RegexParser
             Length = length;
             Value = value;
 
-            this.nextMatch = nextMatch;
+            if (nextMatch != null)
+                this.nextMatch = nextMatch;
         }
 
         public bool Success { get; private set; }

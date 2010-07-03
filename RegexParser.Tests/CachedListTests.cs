@@ -9,7 +9,7 @@ using RegexParser.Util;
 namespace RegexParser.Tests
 {
     [TestFixture]
-    public class CachedListTest
+    public class CachedListTests
     {
         #region Correctness Tests
 
