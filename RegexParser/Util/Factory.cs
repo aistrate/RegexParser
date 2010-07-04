@@ -6,7 +6,7 @@ using System.Text;
 namespace RegexParser.Util
 {
     /// <summary>
-    /// Gives access to non-public constructors. Used only for testing (with NUnit).
+    /// Provides backdoor access to non-public constructors. To be used for unit testing only.
     /// </summary>
     public static class Factory
     {

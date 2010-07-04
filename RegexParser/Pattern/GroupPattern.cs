@@ -7,7 +7,7 @@ using RegexParser.Util;
 
 namespace RegexParser.Pattern
 {
-    public class GroupPattern : BasePattern, IEnumerable<BasePattern>, IEquatable<GroupPattern>
+    public class GroupPattern : BasePattern, IEquatable<GroupPattern>
     {
         public GroupPattern(IEnumerable<BasePattern> patterns)
         {
@@ -23,19 +23,9 @@ namespace RegexParser.Pattern
             return string.Format("Group <{0}>", string.Join(", ", Patterns.Select(p => p.ToString()).ToArray()));
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Patterns.GetEnumerator();
-        }
-
-        public IEnumerator<BasePattern> GetEnumerator()
-        {
-            return Patterns.Cast<BasePattern>().GetEnumerator();
-        }
-
         bool IEquatable<GroupPattern>.Equals(GroupPattern other)
         {
-            return other != null && this.SequenceEqual(other);
+            return other != null && this.Patterns.SequenceEqual(other.Patterns);
         }
 
         public override int GetHashCode()
