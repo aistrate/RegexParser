@@ -12,7 +12,7 @@ namespace RegexParser
         {
             Success = false;
 
-            Index = -1;
+            Value = "";
         }
 
         internal Match2(int index, int length, string value, Func<Match2> nextMatch)

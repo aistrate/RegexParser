@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using MSoft = System.Text.RegularExpressions;
+using RegexParser.Tests;
+using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.ConsoleTests
 {
@@ -13,9 +14,11 @@ namespace RegexParser.ConsoleTests
             try
             {
                 //new RegexTests().CharPatternMatches_Overlap();
+                //new RegexTests().CharPatternMatches();
+                new CharPatternMatchTests().CompareToMsoft();
 
-                Console.WriteLine(formatMSoftMatches(MSoft.Regex.Matches("This is alfalfa", "alfa")));
-                Console.WriteLine(formatMSoftMatches(MSoft.Regex.Matches("This is alfa and alfa", "alfa")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));
             }
             catch (Exception ex)
             {
@@ -49,16 +52,16 @@ namespace RegexParser.ConsoleTests
                              .Replace(".cs:line ", ".cs\n   ln ");
         }
 
-        private static string formatMSoftMatches(MSoft.MatchCollection matches)
+        private static string formatMsoftMatches(Msoft.MatchCollection matches)
         {
-            MSoft.Match[] matchArr = matches.Cast<MSoft.Match>().ToArray();
+            Msoft.Match[] matchArr = matches.Cast<Msoft.Match>().ToArray();
 
             return string.Format("{0} matches: [", matchArr.Length) +
-                   string.Join(", ", matchArr.Select(m => formatMSoftMatch(m)).ToArray()) +
+                   string.Join(", ", matchArr.Select(m => formatMsoftMatch(m)).ToArray()) +
                    "]";
         }
 
-        private static string formatMSoftMatch(MSoft.Match match)
+        private static string formatMsoftMatch(Msoft.Match match)
         {
             return string.Format("({0}, {1}, \"{2}\")", match.Index, match.Length, match.Value);
         }
