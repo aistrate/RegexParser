@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RegexParser.Util;
 
 namespace RegexParser
 {
-    public class Match2
+    public class Match2 : IEquatable<Match2>
     {
         private Match2()
         {
@@ -32,6 +33,14 @@ namespace RegexParser
         public int Length { get; private set; }
         public string Value { get; private set; }
 
+        public Match2 NextMatch()
+        {
+            return nextMatch();
+        }
+        private Func<Match2> nextMatch = () => Match2.Empty;
+
+        public static Match2 Empty = new Match2();
+
         public override string ToString()
         {
             if (Success)
@@ -40,12 +49,20 @@ namespace RegexParser
                 return string.Format("Match {{Success={0}}}", Success);
         }
 
-        public Match2 NextMatch()
+        bool IEquatable<Match2>.Equals(Match2 other)
         {
-            return nextMatch();
+            return other != null && this.Success == other.Success &&
+                   this.Index == other.Index && this.Length == other.Length && this.Value == other.Value;
         }
-        private Func<Match2> nextMatch = () => Match2.Empty;
 
-        public static Match2 Empty { get { return new Match2(); } }
+        public override int GetHashCode()
+        {
+            return HashCodeCombiner.Combine(Success.GetHashCode(), Index.GetHashCode(), Length.GetHashCode(), Value.GetHashCode());
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ((IEquatable<Match2>)this).Equals(obj as Match2);
+        }
     }
 }
