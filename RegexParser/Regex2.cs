@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RegexParser.Pattern;
 
 namespace RegexParser
 {
@@ -17,9 +18,12 @@ namespace RegexParser
         public Regex2(string pattern)
         {
             Pattern = pattern;
+            ParsedPattern = BasePattern.CreatePattern(pattern);
         }
 
         public string Pattern { get; private set; }
+
+        protected BasePattern ParsedPattern { get; private set; }
 
         public override string ToString() { return Pattern; }
 

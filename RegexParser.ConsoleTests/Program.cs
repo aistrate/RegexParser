@@ -97,6 +97,8 @@ namespace RegexParser.ConsoleTests
 
 
             //MatchCollection2 coll = createMatchCollection2(Match2.Empty);
+
+            Console.WriteLine("".GetHashCode().ToString());
         }
 
         //private static MatchCollection2 createMatchCollection2(Match2 firstMatch)

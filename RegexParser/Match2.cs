@@ -32,7 +32,13 @@ namespace RegexParser
         public int Length { get; private set; }
         public string Value { get; private set; }
 
-        public override string ToString() { return Value; }
+        public override string ToString()
+        {
+            if (Success)
+                return string.Format("Match {{Index={0}, Length={1}, Value=\"{2}\"}}", Index, Length, Value);
+            else
+                return string.Format("Match {{Success={0}}}", Success);
+        }
 
         public Match2 NextMatch()
         {

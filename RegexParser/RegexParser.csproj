@@ -47,9 +47,14 @@
   <ItemGroup>
     <Compile Include="Match2.cs" />
     <Compile Include="MatchCollection2.cs" />
+    <Compile Include="Pattern\CharPattern.cs" />
+    <Compile Include="Pattern\GroupPattern.cs" />
+    <Compile Include="Pattern\BasePattern.cs" />
     <Compile Include="Regex2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CachedList.cs" />
+    <Compile Include="Util\Factory.cs" />
+    <Compile Include="Util\HashCodeCombiner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
