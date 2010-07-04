@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using RegexParser;
 using RegexParser.Tests;
-using RegexParser.Tests.Pattern;
+using RegexParser.Tests.Patterns;
 using RegexParser.Util;
 
 namespace RegexParser.ConsoleTests

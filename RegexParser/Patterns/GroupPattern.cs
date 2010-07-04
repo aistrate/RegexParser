@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections;
 using RegexParser.Util;
 
-namespace RegexParser.Pattern
+namespace RegexParser.Patterns
 {
     public class GroupPattern : BasePattern, IEquatable<GroupPattern>
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using RegexParser.Pattern;
+using RegexParser.Patterns;
 
-namespace RegexParser.Tests.Pattern
+namespace RegexParser.Tests.Patterns
 {
     [TestFixture]
     public class PatternTests

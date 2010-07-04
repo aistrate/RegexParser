@@ -1,6 +1,6 @@
 Big:
 
-- build a parse tree (lexical and syntax analysis)
+- build a parse tree for the pattern (lexical and syntactic analysis)
 
 - for the explicit/implicit DFA algorithms: build a state machine
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexParser.Pattern
+namespace RegexParser.Patterns
 {
     public class CharPattern : BasePattern, IEquatable<CharPattern>
     {
