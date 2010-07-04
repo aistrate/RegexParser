@@ -34,8 +34,9 @@ namespace RegexParser
 
         private static IEnumerable<Match2> getAllMatches(Func<Match2> getFirstMatch)
         {
-            foreach (var match in getAllMatches(getFirstMatch()))
-                yield return match;
+            if (getFirstMatch != null)
+                foreach (var match in getAllMatches(getFirstMatch()))
+                    yield return match;
             
             yield break;
         }
