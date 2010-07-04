@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
-using RegexParser;
-using RegexParser.Tests;
-using RegexParser.Tests.Patterns;
-using RegexParser.Util;
+using MSoft = System.Text.RegularExpressions;
 
 namespace RegexParser.ConsoleTests
 {
@@ -18,9 +12,10 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //originalRegexTest();
+                //new RegexTests().CharPatternMatches_Overlap();
 
-                new RegexTests().CharPatternMatch();
+                Console.WriteLine(formatMSoftMatches(MSoft.Regex.Matches("This is alfalfa", "alfa")));
+                Console.WriteLine(formatMSoftMatches(MSoft.Regex.Matches("This is alfa and alfa", "alfa")));
             }
             catch (Exception ex)
             {
@@ -54,27 +49,18 @@ namespace RegexParser.ConsoleTests
                              .Replace(".cs:line ", ".cs\n   ln ");
         }
 
-        private static void originalRegexTest()
+        private static string formatMSoftMatches(MSoft.MatchCollection matches)
         {
-            Match match = Regex.Match("abc", "x");
+            MSoft.Match[] matchArr = matches.Cast<MSoft.Match>().ToArray();
 
-            Console.WriteLine("Value = '{0}'", match.Value);
-            Console.WriteLine("Success = {0}", match.Success);
+            return string.Format("{0} matches: [", matchArr.Length) +
+                   string.Join(", ", matchArr.Select(m => formatMSoftMatch(m)).ToArray()) +
+                   "]";
+        }
 
-            Console.WriteLine("NextMatch().Value = '{0}'", match.NextMatch().Value);
-            Console.WriteLine("NextMatch().Success = {0}", match.NextMatch().Success);
-
-
-            MatchCollection matches = Regex.Matches("abc", "x");
-
-            Console.WriteLine();
-            Console.WriteLine("matches.Count = {0}", matches.Count);
-
-            matches = Regex.Matches("abc", "b");
-
-            Console.WriteLine();
-            Console.WriteLine("matches.Count = {0}", matches.Count);
-            Console.WriteLine("matches[0] = '{0}'", matches[0].Value);
+        private static string formatMSoftMatch(MSoft.Match match)
+        {
+            return string.Format("({0}, {1}, \"{2}\")", match.Index, match.Length, match.Value);
         }
     }
 }

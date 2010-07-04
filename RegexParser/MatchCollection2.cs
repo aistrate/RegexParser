@@ -9,6 +9,14 @@ namespace RegexParser
 {
     public class MatchCollection2 : CachedList<Match2>
     {
+        internal MatchCollection2(IEnumerable<Match2> matches)
+            : base(matches)
+        {
+        }
+
+
+        #region Other constructors (for unit testing)
+
         internal MatchCollection2(Match2 firstMatch)
             : base(getAllMatches(firstMatch))
         {
@@ -41,6 +49,16 @@ namespace RegexParser
             yield break;
         }
 
+        #endregion
+
+
         public int Count { get { return this.Count(); } }
+
+        public override string ToString()
+        {
+            return string.Format("MatchColl <{0}>", 
+                                 this.FirstOrDefault() != null ? string.Join(", ", this.Select(m => m.ToString()).ToArray()) :
+                                                                 "empty");
+        }
     }
 }

@@ -2,39 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RegexParser.Matchers;
 using RegexParser.Patterns;
 
 namespace RegexParser
 {
-    public enum AlgorithmType
-    {
-        ExplicitDFA,
-        ImplicitDFA,
-        Backtracking
-    }
-
     public class Regex2
     {
-        public Regex2(string pattern)
+        public Regex2(string patternText)
+            : this(patternText, AlgorithmType.Backtracking)
         {
-            Pattern = pattern;
-            ParsedPattern = BasePattern.CreatePattern(pattern);
         }
 
-        public string Pattern { get; private set; }
+        public Regex2(string patternText, AlgorithmType algorithmType)
+        {
+            PatternText = patternText;
+            AlgorithmType = algorithmType;
+        }
 
-        protected BasePattern ParsedPattern { get; private set; }
+        public string PatternText { get; private set; }
+        public AlgorithmType AlgorithmType { get; private set; }
 
-        public override string ToString() { return Pattern; }
+        protected BasePattern Pattern
+        {
+            get
+            {
+                if (pattern == null)
+                    pattern = BasePattern.CreatePattern(PatternText);
+                return pattern;
+            }
+        }
+        private BasePattern pattern;
+        
+        public override string ToString() { return PatternText; }
 
         public Match2 Match(string input)
         {
-            return Match2.Empty;
+            return Matches(input).FirstOrDefault() ?? Match2.Empty;
         }
 
         public MatchCollection2 Matches(string input)
         {
-            return new MatchCollection2(Match(input));
+            return BaseMatcher.CreateMatcher(AlgorithmType, Pattern, input).Matches;
         }
 
         public bool IsMatch(string input)
@@ -45,19 +54,19 @@ namespace RegexParser
 
         #region Static Methods
 
-        public static Match2 Match(string input, string pattern)
+        public static Match2 Match(string input, string patternText)
         {
-            return (new Regex2(pattern)).Match(input);
+            return new Regex2(patternText).Match(input);
         }
 
-        public static MatchCollection2 Matches(string input, string pattern)
+        public static MatchCollection2 Matches(string input, string patternText)
         {
-            return (new Regex2(pattern)).Matches(input);
+            return new Regex2(patternText).Matches(input);
         }
 
-        public static bool IsMatch(string input, string pattern)
+        public static bool IsMatch(string input, string patternText)
         {
-            return (new Regex2(pattern)).IsMatch(input);
+            return new Regex2(patternText).IsMatch(input);
         }
 
         #endregion
