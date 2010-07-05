@@ -87,5 +87,31 @@ namespace RegexParser.Tests
             RegexAssert.AreMatchesSameAsMsoft("This is alfalfalfa", "alfa");
             RegexAssert.AreMatchesSameAsMsoft("This is alfalfalf", "alfa");
         }
+
+        [Test]
+        public void Grouping()
+        {
+            string input = "A thing or another thing";
+
+            RegexAssert.AreMatchesSameAsMsoft(input, "th(in)g");
+            RegexAssert.AreMatchesSameAsMsoft(input, "(thing)");
+            RegexAssert.AreMatchesSameAsMsoft(input, "t(hi)n(g)");
+            RegexAssert.AreMatchesSameAsMsoft(input, "t(h(i)n)g");
+            RegexAssert.AreMatchesSameAsMsoft(input, "th(((((in)))))g");
+        }
+
+        [Test]
+        public void Grouping_Errors()
+        {
+            string input = "A thing or another thing";
+
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, "th((in)g"); });
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, "th((in)))g"); });
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, "(t(h(in))g"); });
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, "thing)))"); });
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, "(thing"); });
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, ")thing"); });
+            Assert.Catch<ArgumentException>(() => { Regex2.Match(input, "thi)ng"); });
+        }
     }
 }
