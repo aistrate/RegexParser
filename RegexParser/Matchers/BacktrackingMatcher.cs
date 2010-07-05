@@ -36,7 +36,7 @@ namespace RegexParser.Matchers
 
                 if (isMatch)
                 {
-                    yield return new Match2(index, length, new string(patternText), null);
+                    yield return new Match2(index, length, new string(patternText));
                     index = i;
                 }
             }

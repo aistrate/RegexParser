@@ -11,20 +11,21 @@ namespace RegexParser
         private Match2()
         {
             Success = false;
-
             Value = "";
         }
 
-        internal Match2(int index, int length, string value, Func<Match2> nextMatch)
+        internal Match2(int index, int length, string value)
         {
             Success = true;
-
             Index = index;
             Length = length;
             Value = value;
+        }
 
-            if (nextMatch != null)
-                this.nextMatch = nextMatch;
+        internal Match2(int index, int length, string value, Func<Match2> nextMatchFunc)
+            : this(index, length, value)
+        {
+            NextMatchFunc = nextMatchFunc;
         }
 
         public bool Success { get; private set; }
@@ -35,9 +36,10 @@ namespace RegexParser
 
         public Match2 NextMatch()
         {
-            return nextMatch();
+            return NextMatchFunc != null ? NextMatchFunc() : Match2.Empty;
         }
-        private Func<Match2> nextMatch = () => Match2.Empty;
+
+        internal Func<Match2> NextMatchFunc { get; set; }
 
         public static Match2 Empty = new Match2();
 

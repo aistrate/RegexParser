@@ -52,10 +52,14 @@ namespace RegexParser.Util
                     return false;
 
                 cache.Add(originalEnumerator.Current);
-                OriginalIndex++;
+                OnNextOriginal(originalEnumerator.Current, ++OriginalIndex);
             }
 
             return true;
+        }
+
+        protected virtual void OnNextOriginal(T item, int originalIndex)
+        {
         }
 
         IEnumerator IEnumerable.GetEnumerator()

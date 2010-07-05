@@ -52,6 +52,12 @@ namespace RegexParser
         #endregion
 
 
+        protected override void OnNextOriginal(Match2 match, int originalIndex)
+        {
+            if (match.NextMatchFunc == null)
+                match.NextMatchFunc = () => IsValidIndex(originalIndex + 1) ? this[originalIndex + 1] : Match2.Empty;
+        }
+
         public int Count { get { return this.Count(); } }
 
         public override string ToString()

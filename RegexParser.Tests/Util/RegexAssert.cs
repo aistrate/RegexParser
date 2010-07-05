@@ -42,7 +42,7 @@ namespace RegexParser.Tests.Util
         private static Match2 createMatch(Msoft.Match msoftMatch)
         {
             if (msoftMatch.Success)
-                return Factory.CreateMatch(msoftMatch.Index, msoftMatch.Length, msoftMatch.Value, null);
+                return Factory.CreateMatch(msoftMatch.Index, msoftMatch.Length, msoftMatch.Value);
             else
                 return Match2.Empty;
         }

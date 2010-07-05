@@ -20,9 +20,14 @@ namespace RegexParser.Util
             return new MatchCollection2(getFirstMatch);
         }
 
-        public static Match2 CreateMatch(int index, int length, string value, Func<Match2> nextMatch)
+        public static Match2 CreateMatch(int index, int length, string value)
         {
-            return new Match2(index, length, value, nextMatch);
+            return new Match2(index, length, value);
+        }
+
+        public static Match2 CreateMatch(int index, int length, string value, Func<Match2> nextMatchFunc)
+        {
+            return new Match2(index, length, value, nextMatchFunc);
         }
     }
 }

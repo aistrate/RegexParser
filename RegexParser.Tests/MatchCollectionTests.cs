@@ -36,6 +36,9 @@ namespace RegexParser.Tests
             MatchCollection2 coll = Factory.CreateMatchCollection(Factory.CreateMatch(0, 0, "", null));
             Assert.AreEqual(1, coll.Count, "Second null.");
 
+            coll = Factory.CreateMatchCollection(Factory.CreateMatch(0, 0, "", () => null));
+            Assert.AreEqual(1, coll.Count, "Second null/Func.");
+
             coll = Factory.CreateMatchCollection(Factory.CreateMatch(0, 0, "", () => Match2.Empty));
             Assert.AreEqual(1, coll.Count, "Second empty.");
         }
@@ -121,6 +124,16 @@ namespace RegexParser.Tests
             counter.Inc();
 
             return Factory.CreateMatch(from, from, string.Format("Match{0}", from), () => getMatchChain(from + 1, counter));
+        }
+
+        [Test]
+        public static void MoveNextTest()
+        {
+            //IEnumerable<M
+            
+            Counter counter = new Counter();
+            MatchCollection2 coll = Factory.CreateMatchCollection(() => getMatchChain(0, counter));
+
         }
     }
 }
