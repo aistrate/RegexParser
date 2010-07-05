@@ -23,3 +23,9 @@ Features:
 - backreferences
 
 - non-ASCII (Unicode) encodings
+
+
+
+Small:
+
+- rename Matcher classes to Parser
