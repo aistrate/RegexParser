@@ -10,6 +10,11 @@ namespace RegexParser.Util
     /// </summary>
     public static class Factory
     {
+        public static MatchCollection2 CreateMatchCollection(IEnumerable<Match2> matches)
+        {
+            return new MatchCollection2(matches);
+        }
+
         public static MatchCollection2 CreateMatchCollection(Match2 firstMatch)
         {
             return new MatchCollection2(firstMatch);

@@ -111,6 +111,29 @@ namespace RegexParser.Tests
             Assert.AreEqual(n5, counter.Value, "First/counter/5");
         }
 
+        [Test]
+        public static void NextMatchTest()
+        {
+            const int n1 = 5000, n2 = 5300, n3 = 5500, n4 = 7000;
+
+            Counter counter = new Counter();
+            MatchCollection2 coll = Factory.CreateMatchCollection(getMatches(n1, counter));
+
+            Assert.AreEqual(0, counter.Value);
+
+            for (Match2 match = coll.First(); match.Index < n2; match = match.NextMatch()) ;
+            Assert.AreEqual(n2 - n1 + 1, counter.Value);
+
+            for (Match2 match = coll.First(); match.Index < n3; match = match.NextMatch()) ;
+            Assert.AreEqual(n3 - n1 + 1, counter.Value);
+
+            for (Match2 match = coll.First(); match.Index < n4; match = match.NextMatch()) ;
+            Assert.AreEqual(n4 - n1 + 1, counter.Value);
+
+            for (Match2 match = coll.First(); match.Index < n2; match = match.NextMatch()) ;
+            Assert.AreEqual(n4 - n1 + 1, counter.Value);
+        }
+
         private static Match2 getMatchChain(int from, int to)
         {
             if (from <= to)
@@ -126,14 +149,13 @@ namespace RegexParser.Tests
             return Factory.CreateMatch(from, from, string.Format("Match{0}", from), () => getMatchChain(from + 1, counter));
         }
 
-        [Test]
-        public static void MoveNextTest()
+        private static IEnumerable<Match2> getMatches(int from, Counter counter)
         {
-            //IEnumerable<M
-            
-            Counter counter = new Counter();
-            MatchCollection2 coll = Factory.CreateMatchCollection(() => getMatchChain(0, counter));
-
+            for (int i = from; ; i++)
+            {
+                counter.Inc();
+                yield return Factory.CreateMatch(i, i, string.Format("Match{0}", i));
+            }
         }
     }
 }
