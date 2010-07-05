@@ -20,7 +20,14 @@ namespace RegexParser.Tests.Util
             Match2 actual = Regex2.Match(input, patternText);
             Match2 expected = createMatch(Msoft.Regex.Match(input, patternText));
 
-            Assert.AreEqual(expected, actual, message);
+            try
+            {
+                Assert.AreEqual(expected, actual);
+            }
+            catch (Exception ex)
+            {
+                throw new AssertionException(formatException(message, input, patternText, ex));
+            }
         }
 
         public static void AreMatchesSameAsMsoft(string input, string patternText)
@@ -36,7 +43,14 @@ namespace RegexParser.Tests.Util
                                            .Select(m => createMatch(m))
                                            .ToArray();
 
-            CollectionAssert.AreEqual(expected, actual, message);
+            try
+            {
+                CollectionAssert.AreEqual(expected, actual);
+            }
+            catch (Exception ex)
+            {
+                throw new AssertionException(formatException(message, input, patternText, ex));
+            }
         }
 
         private static Match2 createMatch(Msoft.Match msoftMatch)
@@ -45,6 +59,22 @@ namespace RegexParser.Tests.Util
                 return Factory.CreateMatch(msoftMatch.Index, msoftMatch.Length, msoftMatch.Value);
             else
                 return Match2.Empty;
+        }
+
+        private static string formatException(string message, string regexInputText, string regexPatternText, Exception ex)
+        {
+            const string indent = "  ";
+
+            if (string.IsNullOrEmpty(message))
+                message = "";
+            else
+                message += "\n";
+
+            message += string.Format("Compare with .NET Regex: Input=\"{0}\", Pattern=\"{1}\"\n", regexInputText, regexPatternText) +
+                       ex.Message;
+            message = indent + message.Replace("\n", "\n" + indent);
+
+            return message;
         }
     }
 }
