@@ -1,12 +1,11 @@
 Big:
 
-- build a parse tree for the pattern (lexical and syntactic analysis)
+- Build a parse tree for the pattern (lexical and syntactic analysis).
 
-- for the explicit/implicit DFA algorithms: build a state machine
+- For the backtracking algorithm (like the .NET Framework's): build an input string matcher capabable of bactracking.
 
-- for the explicit DFA algorithm: transform the NFA state machine into a DFA one (powerset construction)
-
-- for the backtracking algorithm (like the .NET Framework's): build an input string matcher capabable of bactracking
+-~For the explicit/implicit DFA algorithms: build a state machine.
+-~For the explicit DFA algorithm: transform the NFA state machine into a DFA one (powerset construction).
 
 
 
@@ -28,4 +27,6 @@ Features:
 
 Small:
 
-- rename Matcher classes to Parser
+- Rename Matcher classes to Parser.
+
+- A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
