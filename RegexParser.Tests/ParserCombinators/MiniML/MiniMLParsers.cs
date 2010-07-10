@@ -66,14 +66,14 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
 
                             from t in Term1
                             from ts in Many(Term1)
-                            select (Term)new AppTerm(t, ts)));
+                            select (Term)new AppTerm(t, ts.ToArray())));
 
             All = from t in Term
                   from u in WsChr(';')
                   select t;
         }
 
-        public Parser<TInput, char[]> Whitespace;
+        public Parser<TInput, IEnumerable<char>> Whitespace;
         public Func<char, Parser<TInput, char>> WsChr;
         public Parser<TInput, string> Id;
         public Parser<TInput, string> Ident;

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using RegexParser.Tests;
+
 using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.ConsoleTests
@@ -13,9 +15,11 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //new RegexTests().CharPatternMatches_Overlap();
-                //new RegexTests().CharPatternMatches();
-                new CharPatternMatchTests().CompareToMsoft();
+                //EnumerableCharTests.TestEnumerableCharsWithSubstring();
+                //EnumerableCharTests.TestEnumerableCharsWithCharBuffer();
+                EnumerableCharTests.TestEnumerableCharsWithLinkedList();
+                
+                //new CharPatternMatchTests().CompareToMsoft();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));

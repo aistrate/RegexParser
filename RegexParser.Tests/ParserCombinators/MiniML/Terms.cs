@@ -38,7 +38,7 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
 
         public readonly string Ident;
         public readonly Term Rhs;
-        public Term Body;
+        public readonly Term Body;
 
         public override string ToString()
         {

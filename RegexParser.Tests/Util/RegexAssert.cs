@@ -10,6 +10,8 @@ namespace RegexParser.Tests.Util
 {
     public static class RegexAssert
     {
+        // TODO: add new method: ThrowsSameExceptionAsMsoft
+
         public static void IsFirstMatchSameAsMsoft(string input, string patternText)
         {
             IsFirstMatchSameAsMsoft(input, patternText, null);

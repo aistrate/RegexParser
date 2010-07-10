@@ -13,7 +13,7 @@ namespace RegexParser.ParserCombinators
             Rest = rest;
         }
 
-        public readonly TValue Value;
-        public readonly TInput Rest;
+        public TValue Value { get; private set; }
+        public TInput Rest { get; private set; }
     }
 }

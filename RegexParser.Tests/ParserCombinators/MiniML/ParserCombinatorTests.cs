@@ -18,8 +18,8 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
                                   let if = \b.\l.\r.(b l) r in
                                   if true false true;";
 
-            MiniMLParsers<string> parser = new MiniMLParsers<string>(ParserFactory.CharParserFromString);
-            Result<string, Term> result = parser.All(sourceCode);
+            MiniMLParsers<string> miniMLParsers = new MiniMLParsers<string>(ParserFactory.CharParserFromString);
+            Result<string, Term> result = miniMLParsers.All(sourceCode);
 
             string expected = @"
 let true = \x. \y. (x ) in

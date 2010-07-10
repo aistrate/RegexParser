@@ -50,6 +50,10 @@
     <Compile Include="Matchers\BacktrackingMatcher.cs" />
     <Compile Include="Matchers\BaseMatcher.cs" />
     <Compile Include="ParserCombinators\CharParsers.cs" />
+    <Compile Include="ParserCombinators\ConsLists\ArrayConsList.cs" />
+    <Compile Include="ParserCombinators\ConsLists\IConsList.cs" />
+    <Compile Include="ParserCombinators\ConsLists\LinkedConsList.cs" />
+    <Compile Include="ParserCombinators\ConsLists\StringConsList.cs" />
     <Compile Include="ParserCombinators\Parser.cs" />
     <Compile Include="ParserCombinators\ParserFactory.cs" />
     <Compile Include="ParserCombinators\ParserMonad.cs" />
