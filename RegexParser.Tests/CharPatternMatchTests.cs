@@ -101,7 +101,7 @@ namespace RegexParser.Tests
         }
 
         [Test]
-        public void Grouping_Errors()
+        public void Grouping_ErrorHandling()
         {
             string input = "A thing or another thing";
 

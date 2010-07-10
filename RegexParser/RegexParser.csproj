@@ -49,6 +49,12 @@
     <Compile Include="MatchCollection2.cs" />
     <Compile Include="Matchers\BacktrackingMatcher.cs" />
     <Compile Include="Matchers\BaseMatcher.cs" />
+    <Compile Include="ParserCombinators\CharParsers.cs" />
+    <Compile Include="ParserCombinators\Parser.cs" />
+    <Compile Include="ParserCombinators\ParserFactory.cs" />
+    <Compile Include="ParserCombinators\ParserMonad.cs" />
+    <Compile Include="ParserCombinators\Parsers.cs" />
+    <Compile Include="ParserCombinators\Result.cs" />
     <Compile Include="Patterns\CharPattern.cs" />
     <Compile Include="Patterns\GroupPattern.cs" />
     <Compile Include="Patterns\BasePattern.cs" />

@@ -27,6 +27,6 @@ Features:
 
 Small:
 
-- Rename Matcher classes to Parser.
-
 - A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
+
+*0Rename Matcher classes to Parser.
