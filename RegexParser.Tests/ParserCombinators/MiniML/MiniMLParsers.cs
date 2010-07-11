@@ -6,10 +6,9 @@ using RegexParser.ParserCombinators;
 
 namespace RegexParser.Tests.ParserCombinators.MiniML
 {
-    public class MiniMLParsers<TInput> : CharParsers<TInput>
+    public class MiniMLParsers : CharParsers
     {
-        public MiniMLParsers(Parser<TInput, char> parseOneChar)
-            : base(parseOneChar)
+        public MiniMLParsers()
         {
             Whitespace = Many(Choice(new[] { Char(' '), Char('\t'), Char('\n'), Char('\r') }));
 
@@ -67,14 +66,14 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
                   select t;
         }
 
-        public Parser<TInput, IEnumerable<char>> Whitespace;
-        public Func<char, Parser<TInput, char>> WsChr;
-        public Parser<TInput, string> Id;
-        public Parser<TInput, string> Ident;
-        public Parser<TInput, string> LetId;
-        public Parser<TInput, string> InId;
-        public Parser<TInput, Term> Term;
-        public Parser<TInput, Term> Term1;
-        public Parser<TInput, Term> All;
+        public Parser<char, IEnumerable<char>> Whitespace;
+        public Func<char, Parser<char, char>> WsChr;
+        public Parser<char, string> Id;
+        public Parser<char, string> Ident;
+        public Parser<char, string> LetId;
+        public Parser<char, string> InId;
+        public Parser<char, Term> Term;
+        public Parser<char, Term> Term1;
+        public Parser<char, Term> All;
     }
 }

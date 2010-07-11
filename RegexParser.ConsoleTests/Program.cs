@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using RegexParser.Tests;
+using RegexParser.Tests.ParserCombinators.MiniML;
 
 using Msoft = System.Text.RegularExpressions;
 
@@ -17,12 +18,14 @@ namespace RegexParser.ConsoleTests
             {
                 //EnumerableCharTests.TestEnumerableCharsWithSubstring();
                 //EnumerableCharTests.TestEnumerableCharsWithCharBuffer();
-                EnumerableCharTests.TestEnumerableCharsWithLinkedList();
+                //EnumerableCharTests.TestEnumerableCharsWithLinkedList();
                 
                 //new CharPatternMatchTests().CompareToMsoft();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));
+
+                //new ParserCombinatorTests().MiniML();
             }
             catch (Exception ex)
             {

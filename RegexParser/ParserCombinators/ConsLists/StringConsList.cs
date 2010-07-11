@@ -21,6 +21,6 @@ namespace RegexParser.ParserCombinators.ConsLists
 
         public IConsList<char> Tail { get { return new StringConsList(Value.Substring(1)); } }
 
-        public bool IsEmpty { get { return Value.Length > 0; } }
+        public bool IsEmpty { get { return Value.Length == 0; } }
     }
 }

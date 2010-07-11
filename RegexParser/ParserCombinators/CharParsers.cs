@@ -5,25 +5,21 @@ using System.Text;
 
 namespace RegexParser.ParserCombinators
 {
-    public class CharParsers<TInput> : Parsers<TInput>
+    public class CharParsers : Parsers<char>
     {
-        public CharParsers(Parser<TInput, char> parseOneChar)
+        public Parser<char, char> Satisfy(Predicate<char> predicate)
         {
-            this.parseOneChar = parseOneChar;
-        }
-
-        private readonly Parser<TInput, char> parseOneChar;
-
-        public Parser<TInput, char> AnyChar { get { return parseOneChar; } }
-
-        public Parser<TInput, char> Satisfy(Predicate<char> predicate)
-        {
-            return from c in parseOneChar
+            return from c in Token
                    where predicate(c)
                    select c;
         }
 
-        public Parser<TInput, char> Char(char ch)
+        public Parser<char, char> AnyChar
+        {
+            get { return Satisfy(c => true); }
+        }
+
+        public Parser<char, char> Char(char ch)
         {
             return Satisfy(c => c == ch);
         }
