@@ -6,5 +6,5 @@ using RegexParser.ParserCombinators.ConsLists;
 
 namespace RegexParser.ParserCombinators
 {
-    public delegate Result<TToken, TValue> Parser<TToken, TValue>(IConsList<TToken> input);
+    public delegate Result<TToken, TValue> Parser<TToken, TValue>(IConsList<TToken> consList);
 }

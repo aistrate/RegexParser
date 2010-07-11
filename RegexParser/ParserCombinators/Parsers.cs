@@ -9,26 +9,26 @@ namespace RegexParser.ParserCombinators
     {
         public Parser<TToken, TToken> Token
         {
-            get { return input => !input.IsEmpty ? new Result<TToken, TToken>(input.Head, input.Tail) : null; }
+            get { return consList => !consList.IsEmpty ? new Result<TToken, TToken>(consList.Head, consList.Tail) : null; }
         }
 
         public Parser<TToken, TValue> Succeed<TValue>(TValue value)
         {
-            return input => new Result<TToken, TValue>(value, input);
+            return consList => new Result<TToken, TValue>(value, consList);
         }
 
         public Parser<TToken, TValue> Fail<TValue>()
         {
-            return input => null;
+            return consList => null;
         }
 
         public Parser<TToken, TValue> EitherOf<TValue>(Parser<TToken, TValue> parser1,
                                                        Parser<TToken, TValue> parser2)
         {
-            return input => parser1(input) ?? parser2(input);
+            return consList => parser1(consList) ?? parser2(consList);
         }
 
-        public Parser<TToken, TValue> Choice<TValue>(IEnumerable<Parser<TToken, TValue>> choices)
+        public Parser<TToken, TValue> Choice<TValue>(params Parser<TToken, TValue>[] choices)
         {
             return choices.Aggregate<Parser<TToken, TValue>, Parser<TToken, TValue>>(Fail<TValue>(), EitherOf);
         }

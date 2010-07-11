@@ -10,9 +10,8 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
     {
         public MiniMLParsers()
         {
-            Whitespace = Many(Choice(new[] { Char(' '), Char('\t'), Char('\n'), Char('\r') }));
+            Whitespace = Many(Choice(Char(' '), Char('\t'), Char('\n'), Char('\r')));
 
-            //WsChr = chr => Whitespace.AND(Char(chr));
             WsChr = chr => from w in Whitespace
                            from c in Char(chr)
                            select c;
@@ -42,24 +41,23 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
                              from u2 in WsChr(')')
                              select t);
 
-            Term = Choice(new[] {
-                            from u1 in WsChr('\\')
-                            from x in Ident
-                            from u2 in WsChr('.')
-                            from t in Term
-                            select (Term)new LambdaTerm(x, t),
+            Term = Choice(from u1 in WsChr('\\')
+                          from x in Ident
+                          from u2 in WsChr('.')
+                          from t in Term
+                          select (Term)new LambdaTerm(x, t),
 
-                            from letid in LetId
-                            from x in Ident
-                            from u1 in WsChr('=')
-                            from t in Term
-                            from inid in InId
-                            from c in Term
-                            select (Term)new LetTerm(x, t, c),
+                          from letid in LetId
+                          from x in Ident
+                          from u1 in WsChr('=')
+                          from t in Term
+                          from inid in InId
+                          from c in Term
+                          select (Term)new LetTerm(x, t, c),
 
-                            from t in Term1
-                            from ts in Many(Term1)
-                            select (Term)new AppTerm(t, ts.ToArray()) });
+                          from t in Term1
+                          from ts in Many(Term1)
+                          select (Term)new AppTerm(t, ts.ToArray()));
 
             All = from t in Term
                   from u in WsChr(';')
