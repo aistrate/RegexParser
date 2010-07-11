@@ -99,6 +99,16 @@ namespace RegexParser.Tests
         }
 
         [Test]
+        public void FalseStart()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "thingy");
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "Somme");
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "Som(me)");
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "So(mme)");
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "So(m)");
+        }
+
+        [Test]
         public void Grouping()
         {
             string input = "A thing or another thing";
