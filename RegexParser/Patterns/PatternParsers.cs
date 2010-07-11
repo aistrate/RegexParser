@@ -10,7 +10,7 @@ namespace RegexParser.Patterns
     {
         public PatternParsers()
         {
-            CharPattern = from c in Satisfy(c => !specialCharacters.Contains(c))
+            CharPattern = from c in NoneOf(specialCharacters)
                           select (BasePattern)new CharPattern(c);
 
             BareGroupPattern = from ps in Many(Choice(allPatterns))

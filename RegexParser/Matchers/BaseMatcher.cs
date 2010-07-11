@@ -15,22 +15,28 @@ namespace RegexParser.Matchers
 
     public abstract class BaseMatcher
     {
-        protected BaseMatcher(BasePattern pattern, string input)
+        protected BaseMatcher(BasePattern pattern, string inputText)
         {
             Pattern = pattern;
-            InputText = input.ToCharArray();
+            InputText = inputText;
         }
 
         protected BasePattern Pattern { get; private set; }
-        protected char[] InputText { get; private set; }
+        protected string InputText { get; private set; }
 
-        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, BasePattern pattern, string input)
+        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, BasePattern pattern, string inputText)
         {
             switch (algorithmType)
             {
+                case AlgorithmType.ExplicitDFA:
+                    return new ExplicitDFAMatcher(pattern, inputText);
+
+                case AlgorithmType.ImplicitDFA:
+                    return new ImplicitDFAMatcher(pattern, inputText);
+
                 case AlgorithmType.Backtracking:
-                    return new BacktrackingMatcher(pattern, input);
-                
+                    return new BacktrackingMatcher(pattern, inputText);
+
                 default:
                     throw new NotImplementedException("Algorithm not yet implemented.");
             }

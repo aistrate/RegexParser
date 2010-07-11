@@ -16,6 +16,11 @@ namespace RegexParser.ParserCombinators.ConsLists
         {
         }
 
+        public ArrayConsList(T[] array)
+            : this(array, 0)
+        {
+        }
+
         private ArrayConsList(T[] array, int index)
         {
             this.array = array;

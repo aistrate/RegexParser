@@ -10,7 +10,7 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
     {
         public MiniMLParsers()
         {
-            Whitespace = Many(Choice(new[] { Char(' '), Char('\t'), Char('\n'), Char('\r') }));
+            Whitespace = Many(OneOf(new[] {' ', '\t', '\n', '\r'}));
 
             WsChr = chr => from w in Whitespace
                            from c in Char(chr)

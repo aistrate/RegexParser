@@ -49,8 +49,12 @@
     <Compile Include="MatchCollection2.cs" />
     <Compile Include="Matchers\BacktrackingMatcher.cs" />
     <Compile Include="Matchers\BaseMatcher.cs" />
+    <Compile Include="Matchers\ExplicitDFAMatcher.cs" />
+    <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
+    <Compile Include="Matchers\MatchParsers.cs" />
     <Compile Include="ParserCombinators\CharParsers.cs" />
     <Compile Include="ParserCombinators\ConsLists\ArrayConsList.cs" />
+    <Compile Include="ParserCombinators\ConsLists\ConsList.cs" />
     <Compile Include="ParserCombinators\ConsLists\IConsList.cs" />
     <Compile Include="ParserCombinators\ConsLists\LinkedConsList.cs" />
     <Compile Include="ParserCombinators\ConsLists\StringConsList.cs" />

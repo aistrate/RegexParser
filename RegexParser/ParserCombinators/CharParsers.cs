@@ -23,5 +23,15 @@ namespace RegexParser.ParserCombinators
         {
             return Satisfy(c => c == ch);
         }
+
+        public Parser<char, char> OneOf(IEnumerable<char> chars)
+        {
+            return Satisfy(c => chars.Contains(c));
+        }
+
+        public Parser<char, char> NoneOf(IEnumerable<char> chars)
+        {
+            return Satisfy(c => !chars.Contains(c));
+        }
     }
 }

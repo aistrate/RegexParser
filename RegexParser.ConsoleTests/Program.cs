@@ -20,7 +20,7 @@ namespace RegexParser.ConsoleTests
                 //EnumerableCharTests.TestEnumerableCharsWithCharBuffer();
                 //EnumerableCharTests.TestEnumerableCharsWithLinkedList();
                 
-                //new CharPatternMatchTests().CompareToMsoft();
+                //new CharPatternMatchTests().Grouping();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));

@@ -8,14 +8,14 @@ namespace RegexParser.Matchers
 {
     public class BacktrackingMatcher : BaseMatcher
     {
-        public BacktrackingMatcher(BasePattern pattern, string input)
-            : base(pattern, input)
+        public BacktrackingMatcher(BasePattern pattern, string inputText)
+            : base(pattern, inputText)
         {
         }
 
         protected override IEnumerable<Match2> GetMatches()
         {
-            char[] patternText = ((GroupPattern)Pattern).Patterns.Cast<CharPattern>()
+            char[] patternText = ((GroupPattern)Pattern).Patterns.OfType<CharPattern>()
                                                                  .Select(cp => cp.Value)
                                                                  .ToArray();
 
@@ -37,11 +37,9 @@ namespace RegexParser.Matchers
                 if (isMatch)
                 {
                     yield return new Match2(index, length, new string(patternText));
-                    index = i;
+                    index = i - 1;
                 }
             }
-
-            yield break;
         }
     }
 }
