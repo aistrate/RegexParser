@@ -5,8 +5,9 @@ using System.Text;
 using NUnit.Framework;
 using RegexParser.ParserCombinators;
 using RegexParser.ParserCombinators.ConsLists;
+using RegexParser.Tests.ParserCombinators.MiniML;
 
-namespace RegexParser.Tests.ParserCombinators.MiniML
+namespace RegexParser.Tests.ParserCombinators
 {
     [TestFixture]
     public class ParserCombinatorTests

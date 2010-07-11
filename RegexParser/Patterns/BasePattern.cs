@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RegexParser.ParserCombinators.ConsLists;
 
 namespace RegexParser.Patterns
 {
@@ -9,8 +10,7 @@ namespace RegexParser.Patterns
     {
         public static BasePattern CreatePattern(string patternText)
         {
-            return new GroupPattern(patternText.Select(c => new CharPattern(c))
-                                               .Cast<BasePattern>());
+            return new PatternParsers().WholePattern(new LinkedConsList<char>(patternText)).Value;
         }
     }
 }

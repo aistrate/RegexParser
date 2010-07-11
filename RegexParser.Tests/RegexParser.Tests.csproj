@@ -52,7 +52,7 @@
     <Compile Include="CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="ParserCombinators\MiniML\MiniMLParsers.cs" />
-    <Compile Include="ParserCombinators\MiniML\ParserCombinatorTests.cs" />
+    <Compile Include="ParserCombinators\ParserCombinatorTests.cs" />
     <Compile Include="ParserCombinators\MiniML\Terms.cs" />
     <Compile Include="Patterns\PatternTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

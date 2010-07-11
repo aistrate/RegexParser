@@ -28,9 +28,19 @@ namespace RegexParser.ParserCombinators
             return consList => parser1(consList) ?? parser2(consList);
         }
 
-        public Parser<TToken, TValue> Choice<TValue>(params Parser<TToken, TValue>[] choices)
+        public Parser<TToken, TValue> Choice<TValue>(IEnumerable<Parser<TToken, TValue>> choices)
         {
-            return choices.Aggregate<Parser<TToken, TValue>, Parser<TToken, TValue>>(Fail<TValue>(), EitherOf);
+            return consList =>
+            {
+                foreach (var parser in choices)
+                {
+                    var value = parser(consList);
+                    if (value != null)
+                        return value;
+                }
+
+                return null;
+            };
         }
 
         public Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
@@ -43,6 +53,16 @@ namespace RegexParser.ParserCombinators
             return from x in parser
                    from xs in Many(parser)
                    select Enumerable.Repeat(x, 1).Concat(xs);
+        }
+
+        public Parser<TToken, TValue> Between<TOpen, TClose, TValue>(Parser<TToken, TOpen> open,
+                                                                     Parser<TToken, TClose> close,
+                                                                     Parser<TToken, TValue> parser)
+        {
+            return from o in open
+                   from x in parser
+                   from c in close
+                   select x;
         }
     }
 }
