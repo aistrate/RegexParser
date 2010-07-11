@@ -11,13 +11,7 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
         public MiniMLParsers(Parser<TInput, char> parseOneChar)
             : base(parseOneChar)
         {
-            //Whitespace = Many(Char(' ').OR(Char('\t').OR(Char('\n')).OR(Char('\r'))));
-
-            // TODO: use method Choice()
-            Whitespace = Many(EitherOf(Char(' '),
-                              EitherOf(Char('\t'),
-                              EitherOf(Char('\n'),
-                                       Char('\r')))));
+            Whitespace = Many(Choice(new[] { Char(' '), Char('\t'), Char('\n'), Char('\r') }));
 
             //WsChr = chr => Whitespace.AND(Char(chr));
             WsChr = chr => from w in Whitespace
@@ -49,14 +43,14 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
                              from u2 in WsChr(')')
                              select t);
 
-            // TODO: use method Choice()
-            Term = EitherOf(from u1 in WsChr('\\')
+            Term = Choice(new[] {
+                            from u1 in WsChr('\\')
                             from x in Ident
                             from u2 in WsChr('.')
                             from t in Term
                             select (Term)new LambdaTerm(x, t),
 
-                   EitherOf(from letid in LetId
+                            from letid in LetId
                             from x in Ident
                             from u1 in WsChr('=')
                             from t in Term
@@ -66,7 +60,7 @@ namespace RegexParser.Tests.ParserCombinators.MiniML
 
                             from t in Term1
                             from ts in Many(Term1)
-                            select (Term)new AppTerm(t, ts.ToArray())));
+                            select (Term)new AppTerm(t, ts.ToArray()) });
 
             All = from t in Term
                   from u in WsChr(';')

@@ -12,13 +12,21 @@ namespace RegexParser.ParserCombinators
             return input => new Result<TInput, TValue>(value, input);
         }
 
+        public Parser<TInput, TValue> Fail<TValue>()
+        {
+            return input => null;
+        }
+
         public Parser<TInput, TValue> EitherOf<TValue>(Parser<TInput, TValue> parser1,
                                                        Parser<TInput, TValue> parser2)
         {
             return input => parser1(input) ?? parser2(input);
         }
 
-        // TODO: method Choice()
+        public Parser<TInput, TValue> Choice<TValue>(IEnumerable<Parser<TInput, TValue>> choices)
+        {
+            return choices.Aggregate<Parser<TInput, TValue>, Parser<TInput, TValue>>(Fail<TValue>(), EitherOf);
+        }
 
         public Parser<TInput, IEnumerable<TValue>> Many<TValue>(Parser<TInput, TValue> parser)
         {
