@@ -7,7 +7,7 @@ namespace RegexParser.ParserCombinators
 {
     public class CharParsers : Parsers<char>
     {
-        public Parser<char, char> Satisfy(Predicate<char> predicate)
+        public Parser<char, char> Satisfy(Func<char, bool> predicate)
         {
             return from c in Token
                    where predicate(c)
