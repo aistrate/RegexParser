@@ -15,6 +15,7 @@ namespace RegexParser
         }
 
 
+        // TODO: eliminate other constructors (and their unit tests)
         #region Other constructors (for unit testing)
 
         internal MatchCollection2(Match2 firstMatch)
