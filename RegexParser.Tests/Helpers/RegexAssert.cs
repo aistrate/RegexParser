@@ -5,21 +5,22 @@ using System.Text;
 using NUnit.Framework;
 using RegexParser.Util;
 using Msoft = System.Text.RegularExpressions;
+using RegexParser.Matchers;
 
-namespace RegexParser.Tests.Util
+namespace RegexParser.Tests.Helpers
 {
     public static class RegexAssert
     {
         // TODO: add new method: ThrowsSameExceptionAsMsoft
 
-        public static void IsFirstMatchSameAsMsoft(string input, string patternText)
+        public static void IsFirstMatchSameAsMsoft(string input, string patternText, AlgorithmType algorithmType)
         {
-            IsFirstMatchSameAsMsoft(input, patternText, null);
+            IsFirstMatchSameAsMsoft(input, patternText, algorithmType, null);
         }
 
-        public static void IsFirstMatchSameAsMsoft(string input, string patternText, string message)
+        public static void IsFirstMatchSameAsMsoft(string input, string patternText, AlgorithmType algorithmType, string message)
         {
-            Match2 actual = Regex2.Match(input, patternText);
+            Match2 actual = new Regex2(patternText, algorithmType).Match(input);
             Match2 expected = createMatch(Msoft.Regex.Match(input, patternText));
 
             try
@@ -32,14 +33,14 @@ namespace RegexParser.Tests.Util
             }
         }
 
-        public static void AreMatchesSameAsMsoft(string input, string patternText)
+        public static void AreMatchesSameAsMsoft(string input, string patternText, AlgorithmType algorithmType)
         {
-            AreMatchesSameAsMsoft(input, patternText, null);
+            AreMatchesSameAsMsoft(input, patternText, algorithmType, null);
         }
 
-        public static void AreMatchesSameAsMsoft(string input, string patternText, string message)
+        public static void AreMatchesSameAsMsoft(string input, string patternText, AlgorithmType algorithmType, string message)
         {
-            Match2[] actual = Regex2.Matches(input, patternText).ToArray();
+            Match2[] actual = new Regex2(patternText, algorithmType).Matches(input).ToArray();
             Match2[] expected = Msoft.Regex.Matches(input, patternText)
                                            .Cast<Msoft.Match>()
                                            .Select(m => createMatch(m))

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexParser.Tests.Util
+namespace RegexParser.Tests.Helpers
 {
     /// <summary>
     /// Object that counts the number of times a method has been used.

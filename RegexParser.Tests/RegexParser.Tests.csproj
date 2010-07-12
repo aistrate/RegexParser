@@ -49,20 +49,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CachedListTests.cs" />
+    <Compile Include="Matchers\GroupPatternMatcherTests.cs" />
+    <Compile Include="Matchers\MatcherTests.cs" />
+    <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="ParserCombinators\MiniML\MiniMLParsers.cs" />
     <Compile Include="ParserCombinators\ParserCombinatorTests.cs" />
     <Compile Include="ParserCombinators\MiniML\Terms.cs" />
     <Compile Include="Patterns\PatternTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CharPatternMatchTests.cs" />
-    <Compile Include="Util\ClassExtensions.cs" />
-    <Compile Include="Util\CollAssert.cs" />
-    <Compile Include="Util\Counter.cs" />
-    <Compile Include="Util\RegexAssert.cs" />
-    <Compile Include="Util\SeqAssert.cs" />
-    <Compile Include="Util\SeqAssertTests.cs" />
+    <Compile Include="Matchers\CharPatternMatcherTests.cs" />
+    <Compile Include="Helpers\ClassExtensions.cs" />
+    <Compile Include="Helpers\CollAssert.cs" />
+    <Compile Include="Helpers\Counter.cs" />
+    <Compile Include="Helpers\RegexAssert.cs" />
+    <Compile Include="Helpers\SeqAssert.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RegexParser\RegexParser.csproj">

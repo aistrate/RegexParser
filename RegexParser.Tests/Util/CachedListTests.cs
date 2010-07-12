@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using RegexParser.Tests.Util;
+using RegexParser.Tests.Helpers;
 using RegexParser.Util;
 
-namespace RegexParser.Tests
+namespace RegexParser.Tests.Util
 {
     [TestFixture]
     public class CachedListTests

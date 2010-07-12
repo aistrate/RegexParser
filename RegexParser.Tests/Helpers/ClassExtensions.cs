@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace RegexParser.Tests.Util
+namespace RegexParser.Tests.Helpers
 {
     public static class ClassExtensions
     {

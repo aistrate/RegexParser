@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace RegexParser.Tests.Util
+namespace RegexParser.Tests.Helpers
 {
     /// <summary>
     /// Generic equivalent of class NUnit.Framework.CollectionAssert.

@@ -10,7 +10,7 @@ namespace RegexParser
     public class Regex2
     {
         public Regex2(string patternText)
-            : this(patternText, AlgorithmType.ImplicitDFA)
+            : this(patternText, AlgorithmType.Backtracking)
         {
         }
 
