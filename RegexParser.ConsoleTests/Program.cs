@@ -20,7 +20,7 @@ namespace RegexParser.ConsoleTests
             try
             {
                 //EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer();
-                ConsListPerformanceTests.StringConsList();
+                ConsListPerformanceTests.LinkedConsList();
 
                 //new GroupPatternMatcherTests(AlgorithmType.ImplicitDFA).Grouping();
 

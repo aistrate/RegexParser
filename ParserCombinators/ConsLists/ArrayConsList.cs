@@ -6,7 +6,7 @@ using System.Text;
 namespace ParserCombinators.ConsLists
 {
     /// <summary>
-    /// Traversal is fast (but about 2.4 times slower than LinkedConsList).
+    /// Traversal is very fast (slightly faster than LinkedConsList).
     /// The constructor is very fast.
     /// </summary>
     public class ArrayConsList<T> : IConsList<T>
