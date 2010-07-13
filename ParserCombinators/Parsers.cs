@@ -43,6 +43,11 @@ namespace ParserCombinators
             };
         }
 
+        public Parser<TToken, TValue> Choice<TValue>(params Func<Parser<TToken, TValue>>[] choices)
+        {
+            return Choice(LazySeq(choices));
+        }
+
         public Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
         {
             return EitherOf(Many1(parser), Succeed(Enumerable.Empty<TValue>()));
@@ -63,6 +68,11 @@ namespace ParserCombinators
                    from x in parser
                    from c in close
                    select x;
+        }
+
+        public IEnumerable<Parser<TToken, TValue>> LazySeq<TValue>(params Func<Parser<TToken, TValue>>[] thunks)
+        {
+            return thunks.Select(e => e());
         }
     }
 }

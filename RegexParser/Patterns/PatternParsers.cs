@@ -13,10 +13,13 @@ namespace RegexParser.Patterns
             CharPattern = from c in NoneOf(specialCharacters)
                           select (BasePattern)new CharPattern(c);
 
-            BareGroupPattern = from ps in Many(Choice(allPatterns))
+            BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
+                                                      () => CharPattern))
                                select (BasePattern)new GroupPattern(ps);
 
-            GroupPattern = Between(Char('('), Char(')'), BareGroupPattern);
+            GroupPattern = Between(Char('('),
+                                   Char(')'),
+                                   BareGroupPattern);
 
             WholePattern = BareGroupPattern;
         }
@@ -26,15 +29,6 @@ namespace RegexParser.Patterns
         public Parser<char, BasePattern> GroupPattern;
         public Parser<char, BasePattern> WholePattern;
 
-        private IEnumerable<Parser<char, BasePattern>> allPatterns
-        {
-            get
-            {
-                yield return GroupPattern;
-                yield return CharPattern;
-            }
-        }
-
-        private char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
+        private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
     }
 }
