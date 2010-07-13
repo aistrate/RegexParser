@@ -110,5 +110,14 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft("Something or other", "Somme", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("Something or other", "Some", AlgorithmType);
         }
+
+        [Test]
+        public void WithSpaces()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", " or ", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "g o", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "g or o", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("Something or other", "thing or other", AlgorithmType);
+        }
     }
 }

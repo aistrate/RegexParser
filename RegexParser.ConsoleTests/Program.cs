@@ -20,7 +20,7 @@ namespace RegexParser.ConsoleTests
             try
             {
                 //EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer();
-                ConsListPerformanceTests.LinkedConsList();
+                //ConsListPerformanceTests.LinkedConsList();
 
                 //new GroupPatternMatcherTests(AlgorithmType.ImplicitDFA).Grouping();
 
@@ -28,6 +28,8 @@ namespace RegexParser.ConsoleTests
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));
 
                 //new ParserCombinatorTests().MiniML_ArrayConsList();
+
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "[5-4]")));
             }
             catch (Exception ex)
             {
