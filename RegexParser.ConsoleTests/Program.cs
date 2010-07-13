@@ -19,10 +19,9 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //EnumerablePerformanceTests.TestEnumerableCharsWithSubstring();
                 //EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer();
-                EnumerablePerformanceTests.TestEnumerableCharsWithLinkedList();
-                
+                ConsListPerformanceTests.StringConsList();
+
                 //new GroupPatternMatcherTests(AlgorithmType.ImplicitDFA).Grouping();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));

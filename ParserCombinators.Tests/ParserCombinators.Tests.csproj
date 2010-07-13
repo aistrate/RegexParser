@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsLists\CharBuffer.cs" />
+    <Compile Include="ConsLists\ConsListPerformanceTests.cs" />
     <Compile Include="ConsLists\EnumerablePerformanceTests.cs" />
     <Compile Include="MiniML\MiniMLParsers.cs" />
     <Compile Include="MiniML\Terms.cs" />

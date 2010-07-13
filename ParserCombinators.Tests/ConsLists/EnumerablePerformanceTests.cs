@@ -6,7 +6,7 @@ using System.Text;
 namespace ParserCombinators.Tests.ConsLists
 {
     /// <summary>
-    /// Does NOT contain unit tests, but performance-comparison tests to be run from the console.
+    /// Does NOT contain unit tests, but performance-comparison tests to be run from a console.
     /// </summary>
     public static class EnumerablePerformanceTests
     {
@@ -18,10 +18,10 @@ namespace ParserCombinators.Tests.ConsLists
             Console.WriteLine("Initialization:");
             DateTime start = DateTime.Now;
 
-            IEnumerable<char> charEnum = getDigitChars(max);
-            char[] charArr = getDigitChars(max).ToArray();
-            List<char> charList = getDigitChars(max).ToArray().ToList();
-            string charString = new string(getDigitChars(max).ToArray());
+            IEnumerable<char> charEnum = GetDigitChars(max);
+            char[] charArr = GetDigitChars(max).ToArray();
+            List<char> charList = GetDigitChars(max).ToArray().ToList();
+            string charString = new string(GetDigitChars(max).ToArray());
 
             Console.WriteLine(DateTime.Now - start);
             Console.WriteLine();
@@ -73,8 +73,8 @@ namespace ParserCombinators.Tests.ConsLists
             const int times = 1;
             const int max = 700;
 
-            char[] charArr = getDigitChars(max).ToArray();
-            string charString = new string(getDigitChars(max).ToArray());
+            char[] charArr = GetDigitChars(max).ToArray();
+            string charString = new string(GetDigitChars(max).ToArray());
 
             Console.WriteLine("char[]:");
             testEnumerableWithSkip(charArr, times);
@@ -108,7 +108,7 @@ namespace ParserCombinators.Tests.ConsLists
             const int times = 1;
             const int max = 50000;
 
-            string str = new string(getDigitChars(max).ToArray());
+            string str = new string(GetDigitChars(max).ToArray());
 
 
             Console.WriteLine("substring:");
@@ -138,7 +138,7 @@ namespace ParserCombinators.Tests.ConsLists
             const int times = 200;
             const int max = 1000000;
 
-            string str = new string(getDigitChars(max).ToArray());
+            string str = new string(GetDigitChars(max).ToArray());
 
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
@@ -176,7 +176,7 @@ namespace ParserCombinators.Tests.ConsLists
             const int times = 200;
             const int max = 1000000;
 
-            string str = new string(getDigitChars(max).ToArray());
+            string str = new string(GetDigitChars(max).ToArray());
             
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
@@ -248,7 +248,7 @@ namespace ParserCombinators.Tests.ConsLists
                 yield return n;
         }
 
-        private static IEnumerable<char> getDigitChars(int max)
+        public static IEnumerable<char> GetDigitChars(int max)
         {
             IEnumerable<char> digitChars = Enumerable.Repeat("1234567890", (max / 10) + 1)
                                                      .SelectMany(s => s.ToCharArray())
