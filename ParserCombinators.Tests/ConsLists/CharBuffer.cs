@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexParser.ConsoleTests
+namespace ParserCombinators.Tests.ConsLists
 {
     public class CharBuffer
     {

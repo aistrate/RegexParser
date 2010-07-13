@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexParser.ParserCombinators.ConsLists
+namespace ParserCombinators.ConsLists
 {
     /// <summary>
     /// Traversal is very fast, but the constructor is slow.

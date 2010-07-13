@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RegexParser.ParserCombinators;
-using RegexParser.ParserCombinators.ConsLists;
+using ParserCombinators;
+using ParserCombinators.ConsLists;
 using RegexParser.Patterns;
 
 namespace RegexParser.Matchers

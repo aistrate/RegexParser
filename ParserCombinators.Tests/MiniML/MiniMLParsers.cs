@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RegexParser.ParserCombinators;
+using ParserCombinators;
 
-namespace RegexParser.Tests.ParserCombinators.MiniML
+namespace ParserCombinators.Tests.MiniML
 {
     public class MiniMLParsers : CharParsers
     {

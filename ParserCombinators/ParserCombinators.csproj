@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F870A64D-2B11-4804-BD5E-36D9B0984CB8}</ProjectGuid>
+    <ProjectGuid>{E02FEF77-7F73-47EA-A775-4FFAAD77147B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RegexParser</RootNamespace>
-    <AssemblyName>RegexParser</AssemblyName>
+    <RootNamespace>ParserCombinators</RootNamespace>
+    <AssemblyName>ParserCombinators</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,28 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Match2.cs" />
-    <Compile Include="MatchCollection2.cs" />
-    <Compile Include="Matchers\BacktrackingMatcher.cs" />
-    <Compile Include="Matchers\BaseMatcher.cs" />
-    <Compile Include="Matchers\ExplicitDFAMatcher.cs" />
-    <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
-    <Compile Include="Matchers\MatchParsers.cs" />
-    <Compile Include="Patterns\CharPattern.cs" />
-    <Compile Include="Patterns\GroupPattern.cs" />
-    <Compile Include="Patterns\BasePattern.cs" />
-    <Compile Include="Patterns\PatternParsers.cs" />
-    <Compile Include="Regex2.cs" />
+    <Compile Include="CharParsers.cs" />
+    <Compile Include="ConsLists\ArrayConsList.cs" />
+    <Compile Include="ConsLists\ConsList.cs" />
+    <Compile Include="ConsLists\IConsList.cs" />
+    <Compile Include="ConsLists\LinkedConsList.cs" />
+    <Compile Include="ConsLists\StringConsList.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="ParserMonad.cs" />
+    <Compile Include="Parsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\CachedList.cs" />
-    <Compile Include="Util\Factory.cs" />
-    <Compile Include="Util\HashCodeCombiner.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ParserCombinators\ParserCombinators.csproj">
-      <Project>{E02FEF77-7F73-47EA-A775-4FFAAD77147B}</Project>
-      <Name>ParserCombinators</Name>
-    </ProjectReference>
+    <Compile Include="Result.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

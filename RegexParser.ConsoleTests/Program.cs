@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using ParserCombinators.Tests;
+using ParserCombinators.Tests.ConsLists;
+using RegexParser.Matchers;
 using RegexParser.Tests;
-using RegexParser.Tests.ParserCombinators.MiniML;
+using RegexParser.Tests.Matchers;
 
 using Msoft = System.Text.RegularExpressions;
 
@@ -16,16 +19,16 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //EnumerableCharTests.TestEnumerableCharsWithSubstring();
-                //EnumerableCharTests.TestEnumerableCharsWithCharBuffer();
-                //EnumerableCharTests.TestEnumerableCharsWithLinkedList();
+                //EnumerablePerformanceTests.TestEnumerableCharsWithSubstring();
+                //EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer();
+                EnumerablePerformanceTests.TestEnumerableCharsWithLinkedList();
                 
-                //new CharPatternMatchTests().Grouping();
+                //new GroupPatternMatcherTests(AlgorithmType.ImplicitDFA).Grouping();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));
 
-                //new ParserCombinatorTests().MiniML();
+                //new ParserCombinatorTests().MiniML_ArrayConsList();
             }
             catch (Exception ex)
             {

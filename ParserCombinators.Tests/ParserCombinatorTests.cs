@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using RegexParser.ParserCombinators;
-using RegexParser.ParserCombinators.ConsLists;
-using RegexParser.Tests.ParserCombinators.MiniML;
+using ParserCombinators;
+using ParserCombinators.ConsLists;
+using ParserCombinators.Tests.MiniML;
 
-namespace RegexParser.Tests.ParserCombinators
+namespace ParserCombinators.Tests
 {
     [TestFixture]
     public class ParserCombinatorTests

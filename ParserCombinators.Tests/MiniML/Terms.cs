@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexParser.Tests.ParserCombinators.MiniML
+namespace ParserCombinators.Tests.MiniML
 {
     public abstract class Term
     {

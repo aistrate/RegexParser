@@ -49,12 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharBuffer.cs" />
-    <Compile Include="EnumerableCharTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ParserCombinators.Tests\ParserCombinators.Tests.csproj">
+      <Project>{EB0E0DBE-EB79-41CB-9B3D-09A8B4CDD5B4}</Project>
+      <Name>ParserCombinators.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParserCombinators\ParserCombinators.csproj">
+      <Project>{E02FEF77-7F73-47EA-A775-4FFAAD77147B}</Project>
+      <Name>ParserCombinators</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RegexParser.Tests\RegexParser.Tests.csproj">
       <Project>{5A5C2DF3-04BE-44D0-A357-534CBBE1B0E6}</Project>
       <Name>RegexParser.Tests</Name>

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexParser.ConsoleTests
+namespace ParserCombinators.Tests.ConsLists
 {
-    public static class EnumerableCharTests
+    /// <summary>
+    /// Does NOT contain unit tests, but performance-comparison tests to be run from the console.
+    /// </summary>
+    public static class EnumerablePerformanceTests
     {
         public static void TestEnumerableChars()
         {
