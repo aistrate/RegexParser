@@ -15,24 +15,9 @@ namespace RegexParser.Util
             return new MatchCollection2(matches);
         }
 
-        public static MatchCollection2 CreateMatchCollection(Match2 firstMatch)
-        {
-            return new MatchCollection2(firstMatch);
-        }
-
-        public static MatchCollection2 CreateMatchCollection(Func<Match2> getFirstMatch)
-        {
-            return new MatchCollection2(getFirstMatch);
-        }
-
         public static Match2 CreateMatch(int index, int length, string value)
         {
             return new Match2(index, length, value);
-        }
-
-        public static Match2 CreateMatch(int index, int length, string value, Func<Match2> nextMatchFunc)
-        {
-            return new Match2(index, length, value, nextMatchFunc);
         }
     }
 }

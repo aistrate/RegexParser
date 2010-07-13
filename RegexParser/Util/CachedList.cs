@@ -11,7 +11,7 @@ namespace RegexParser.Util
         public CachedList(IEnumerable<T> originalColl)
         {
             if (originalColl == null)
-                throw new ArgumentNullException("originalColl", "Could not build CachedList.");
+                throw new ArgumentNullException("originalColl.", "Could not build CachedList.");
             
             originalEnumerator = originalColl.GetEnumerator();
 

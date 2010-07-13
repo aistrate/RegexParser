@@ -22,12 +22,6 @@ namespace RegexParser
             Value = value;
         }
 
-        internal Match2(int index, int length, string value, Func<Match2> nextMatchFunc)
-            : this(index, length, value)
-        {
-            NextMatchFunc = nextMatchFunc;
-        }
-
         public bool Success { get; private set; }
 
         public int Index { get; private set; }

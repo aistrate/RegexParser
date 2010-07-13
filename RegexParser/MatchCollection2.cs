@@ -14,49 +14,9 @@ namespace RegexParser
         {
         }
 
-
-        // TODO: eliminate other constructors (and their unit tests)
-        #region Other constructors (for unit testing)
-
-        internal MatchCollection2(Match2 firstMatch)
-            : base(getAllMatches(firstMatch))
-        {
-        }
-
-        internal MatchCollection2(Func<Match2> getFirstMatch)
-            : base(getAllMatches(getFirstMatch))
-        {
-        }
-
-        private static IEnumerable<Match2> getAllMatches(Match2 firstMatch)
-        {
-            Match2 current = firstMatch;
-
-            while (current != null && current.Success)
-            {
-                yield return current;
-                current = current.NextMatch();
-            }
-
-            yield break;
-        }
-
-        private static IEnumerable<Match2> getAllMatches(Func<Match2> getFirstMatch)
-        {
-            if (getFirstMatch != null)
-                foreach (var match in getAllMatches(getFirstMatch()))
-                    yield return match;
-            
-            yield break;
-        }
-
-        #endregion
-
-
         protected override void OnNextOriginal(Match2 match, int originalIndex)
         {
-            if (match.NextMatchFunc == null)
-                match.NextMatchFunc = () => IsValidIndex(originalIndex + 1) ? this[originalIndex + 1] : Match2.Empty;
+            match.NextMatchFunc = () => IsValidIndex(originalIndex + 1) ? this[originalIndex + 1] : Match2.Empty;
         }
 
         public int Count { get { return this.Count(); } }
