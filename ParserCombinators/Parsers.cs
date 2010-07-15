@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.ConsLists;
 
 namespace ParserCombinators
 {
@@ -50,7 +51,31 @@ namespace ParserCombinators
 
         public Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
         {
-            return EitherOf(Many1(parser), Succeed(Enumerable.Empty<TValue>()));
+            return consList =>
+            {
+                IEnumerable<Result<TToken, TValue>> results = getMany(parser, consList);
+                Result<TToken, TValue> lastResult = results.LastOrDefault();
+
+                return new Result<TToken, IEnumerable<TValue>>(results.Select(r => r.Value),
+                                                               lastResult != null ? lastResult.Rest : consList);
+            };
+        }
+
+        private IEnumerable<Result<TToken, TValue>> getMany<TValue>(Parser<TToken, TValue> parser, IConsList<TToken> consList)
+        {
+            Result<TToken, TValue> result;
+
+            do
+            {
+                result = parser(consList);
+
+                if (result != null)
+                {
+                    consList = result.Rest;
+                    yield return result;
+                }
+            }
+            while (result != null);
         }
 
         public Parser<TToken, IEnumerable<TValue>> Many1<TValue>(Parser<TToken, TValue> parser)

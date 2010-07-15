@@ -168,7 +168,7 @@ namespace ParserCombinators.Tests.ConsLists
             // 0    +  3.13 sec. (max =   1,000,000)
             // 0.02 + 31.63 sec. (max =  10,000,000)
             // 0.22 + ?          (max = 100,000,000)
-            // time grows liniarly with 'max'
+            // time grows linearly with 'max'
         }
 
         public static void TestEnumerableCharsWithLinkedList()
@@ -206,7 +206,7 @@ namespace ParserCombinators.Tests.ConsLists
             //  0.25 +  1.34 sec. (max =  1,000,000)
             //  5.00 + 13.39 sec. (max = 10,000,000)
             // 10.45 + 26.77 sec. (max = 20,000,000)
-            // for traversal, time grows liniarly with 'max'
+            // for traversal, time grows linearly with 'max'
         }
 
         private static void testEnumerable<T>(IEnumerable<T> items, int times)

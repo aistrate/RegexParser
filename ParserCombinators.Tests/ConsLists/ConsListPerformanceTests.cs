@@ -28,7 +28,7 @@ namespace ParserCombinators.Tests.ConsLists
             // 0.27 +  7.83 sec. (maxItemCount =  1,000,000)
             // 0.70 + 15.63 sec. (maxItemCount =  2,000,000)
             // 5.06 + 81.31 sec. (maxItemCount = 10,000,000)
-            // for traversal, time grows liniarly with 'maxItemCount';
+            // for traversal, time grows linearly with 'maxItemCount';
             // LinkedConsList<T> is about 5.8 times slower than a simple LinkedList<T> traversal
             // (EnumerablePerformanceTests.TestEnumerableCharsWithLinkedList)
         }
@@ -40,7 +40,7 @@ namespace ParserCombinators.Tests.ConsLists
             // 0.03 +  6.03 sec. (maxItemCount =  1,000,000)
             // 0.08 + 12.56 sec. (maxItemCount =  2,000,000)
             // 0.55 + 62.27 sec. (maxItemCount = 10,000,000)
-            // for traversal, time grows liniarly with 'maxItemCount';
+            // for traversal, time grows linearly with 'maxItemCount';
             // ArrayConsList<T> is about 2 times slower than using CharBuffer
             // (EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer)
         }
