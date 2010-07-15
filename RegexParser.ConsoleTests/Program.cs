@@ -9,6 +9,7 @@ using RegexParser.Matchers;
 using RegexParser.Patterns;
 using RegexParser.Tests;
 using RegexParser.Tests.Matchers;
+using RegexParser.Tests.Patterns;
 using RegexParser.Tests.Performance;
 
 using Msoft = System.Text.RegularExpressions;
@@ -21,7 +22,12 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                PatternPerformanceTests.CharClassPatternTest();
+                //new CharClassPatternMatcherTests(AlgorithmType.ImplicitDFA).Ranges();
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abca", "[]")));
+
+                displayMatches("A thing or another thing", "[a-m]");
+                displayMatches("A thing or another thing", "[A-Z]");
+                displayMatches("A thing or another thing", "[a-ae-ei-io-ou-u]");
             }
             catch (Exception ex)
             {
@@ -30,11 +36,11 @@ namespace RegexParser.ConsoleTests
 
                 if (!(ex is AssertionException))
                     Console.WriteLine();
-                
+
                 Console.WriteLine("STACK TRACE:\n");
                 Console.WriteLine(formatStackTrace(ex.StackTrace));
             }
-            
+
             Console.WriteLine();
         }
 
@@ -53,6 +59,15 @@ namespace RegexParser.ConsoleTests
             return stackTrace.Replace("\n", "\n\n")
                              .Replace(" in ", "\n   in ")
                              .Replace(".cs:line ", ".cs\n   ln ");
+        }
+
+        private static void displayMatches(string input, string pattern)
+        {
+            MatchCollection2 matches = new Regex2(pattern, AlgorithmType.ImplicitDFA).Matches(input);
+
+            Console.WriteLine("Match \"{0}\" against \"{1}\":\n", pattern, input);
+            Console.WriteLine(string.Join("\n", matches.Select(m => m.ToString()).ToArray()));
+            Console.WriteLine("\n");
         }
 
         private static string formatMsoftMatches(Msoft.MatchCollection matches)

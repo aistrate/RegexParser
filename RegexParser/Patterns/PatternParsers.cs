@@ -13,20 +13,21 @@ namespace RegexParser.Patterns
             CharPattern = from c in NoneOf(specialCharacters)
                           select (BasePattern)new CharPattern(c);
 
-            //(bool isPositive) => BareGroupPattern;
-            //CharRangePattern = from s in NoneOf("-]")
-            //                   from d in Char('-')
-            //                   from e in NoneOf("-]")
-            //                   select range(s, e);
 
-            //CharClassPattern = Between(Char('['),
-            //                           Char(']'),
-            //                           Many1(Choice(new[] { CharRangePattern,
-            //                                                from c in NoneOf("-]")
-            //                                                select new string(new[] { c }) })));
+            CharRangePattern = from start in NoneOf("-]")
+                               from d in Char('-')
+                               from end in NoneOf("-]")
+                               select new CharClassPattern.CharRange(start, end);
+
+            CharClassPattern = Between(Char('['),
+                                       Char(']'),
+                                       from ranges in Many1(CharRangePattern)
+                                       select (BasePattern)new CharClassPattern(true, ranges));
+
 
             BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
-                                                      () => CharPattern))
+                                                      () => CharPattern,
+                                                      () => CharClassPattern))
                                select (BasePattern)new GroupPattern(ps);
 
             GroupPattern = Between(Char('('),
@@ -37,22 +38,12 @@ namespace RegexParser.Patterns
         }
 
         public static Parser<char, BasePattern> CharPattern;
-        public static Parser<char, string> CharRangePattern;
+        public static Parser<char, CharClassPattern.CharRange> CharRangePattern;
         public static Parser<char, BasePattern> CharClassPattern;
 
         public static Parser<char, BasePattern> BareGroupPattern;
         public static Parser<char, BasePattern> GroupPattern;
         public static Parser<char, BasePattern> WholePattern;
-
-        private static string range(char from, char to)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            for (char c = from; c <= to; c++)
-                sb.Append(c);
-
-            return sb.ToString();
-        }
 
         private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
     }

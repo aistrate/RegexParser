@@ -11,6 +11,9 @@ namespace RegexParser.Matchers
     {
         public static Parser<char, string> CreateParser(BasePattern pattern)
         {
+            if (pattern == null)
+                throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
+
             if (pattern.GetType() == typeof(GroupPattern))
                 return consList =>
                 {
@@ -31,6 +34,10 @@ namespace RegexParser.Matchers
 
                     return new Result<char, string>(groupResult.ToString(), consList);
                 };
+
+            else if (pattern.GetType() == typeof(CharClassPattern))
+                return from c in Satisfy(((CharClassPattern)pattern).IsMatch)
+                       select new string(c, 1);
             
             else if (pattern.GetType() == typeof(CharPattern))
                 return from c in Char(((CharPattern)pattern).Value)
