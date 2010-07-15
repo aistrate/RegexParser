@@ -6,8 +6,10 @@ using NUnit.Framework;
 using ParserCombinators.Tests;
 using ParserCombinators.Tests.Performance;
 using RegexParser.Matchers;
+using RegexParser.Patterns;
 using RegexParser.Tests;
 using RegexParser.Tests.Matchers;
+using RegexParser.Tests.Performance;
 
 using Msoft = System.Text.RegularExpressions;
 
@@ -19,18 +21,7 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer();
-                //ConsListPerformanceTests.LinkedConsList();
-                CharParsersPerformanceTests.AnyCharTest();
 
-                //new GroupPatternMatcherTests(AlgorithmType.ImplicitDFA).Grouping();
-
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "alfa")));
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfa and alfa", "alfa")));
-
-                //new ParserCombinatorTests().MiniML_ArrayConsList();
-
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("This is alfalfa", "[5-4]")));
             }
             catch (Exception ex)
             {

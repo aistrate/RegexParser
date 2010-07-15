@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5A5C2DF3-04BE-44D0-A357-534CBBE1B0E6}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Matchers\GroupPatternMatcherTests.cs" />
     <Compile Include="Matchers\MatcherTests.cs" />
+    <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="Patterns\PatternTests.cs" />
@@ -63,6 +64,14 @@
     <Compile Include="Helpers\SeqAssert.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ParserCombinators.Tests\ParserCombinators.Tests.csproj">
+      <Project>{EB0E0DBE-EB79-41CB-9B3D-09A8B4CDD5B4}</Project>
+      <Name>ParserCombinators.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParserCombinators\ParserCombinators.csproj">
+      <Project>{E02FEF77-7F73-47EA-A775-4FFAAD77147B}</Project>
+      <Name>ParserCombinators</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RegexParser\RegexParser.csproj">
       <Project>{F870A64D-2B11-4804-BD5E-36D9B0984CB8}</Project>
       <Name>RegexParser</Name>

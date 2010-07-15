@@ -13,7 +13,7 @@ namespace ParserCombinators.Tests.Performance
     {
         public static void AnyCharTest()
         {
-            charParserTest(CharParsers.AnyChar,
+            CharParserTest(CharParsers.AnyChar,
                            200, 1000000);
             
             // 12.80 sec. (maxItemCount = 1,000,000)
@@ -23,7 +23,7 @@ namespace ParserCombinators.Tests.Performance
 
         public static void OneOfTest()
         {
-            charParserTest(CharParsers.OneOf("0123456789"),
+            CharParserTest(CharParsers.OneOf("0123456789"),
                            200, 1000000);
 
             // 61.08 sec. (maxItemCount = 1,000,000)
@@ -31,18 +31,22 @@ namespace ParserCombinators.Tests.Performance
 
         public static void ManyCharsTest()
         {
-            charParserTest(CharParsers.Many1(CharParsers.AnyChar),
+            CharParserTest(CharParsers.Many1(CharParsers.AnyChar),
                            200, 1000000);
 
             // 17.97 sec. (maxItemCount = 1,000,000)
             // 37.55 sec. (maxItemCount = 2,000,000)
         }
 
-        private static void charParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount)
+        public static void CharParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount)
         {
-            string str = new string(EnumerablePerformanceTests.GetDigitChars(maxItemCount).ToArray());
-            IConsList<char> consList = new ArrayConsList<char>(str);
+            CharParserTest(parser, times, maxItemCount,
+                           new string(EnumerablePerformanceTests.RepeatDigitChars(maxItemCount).ToArray()));
+        }
 
+        public static void CharParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount, string inputText)
+        {
+            IConsList<char> consList = new ArrayConsList<char>(inputText);
 
             DateTime start = DateTime.Now;
 

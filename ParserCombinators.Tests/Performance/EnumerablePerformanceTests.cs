@@ -18,10 +18,10 @@ namespace ParserCombinators.Tests.Performance
             Console.WriteLine("Initialization:");
             DateTime start = DateTime.Now;
 
-            IEnumerable<char> charEnum = GetDigitChars(max);
-            char[] charArr = GetDigitChars(max).ToArray();
-            List<char> charList = GetDigitChars(max).ToArray().ToList();
-            string charString = new string(GetDigitChars(max).ToArray());
+            IEnumerable<char> charEnum = RepeatDigitChars(max);
+            char[] charArr = RepeatDigitChars(max).ToArray();
+            List<char> charList = RepeatDigitChars(max).ToArray().ToList();
+            string charString = new string(RepeatDigitChars(max).ToArray());
 
             Console.WriteLine(DateTime.Now - start);
             Console.WriteLine();
@@ -73,8 +73,8 @@ namespace ParserCombinators.Tests.Performance
             const int times = 1;
             const int max = 700;
 
-            char[] charArr = GetDigitChars(max).ToArray();
-            string charString = new string(GetDigitChars(max).ToArray());
+            char[] charArr = RepeatDigitChars(max).ToArray();
+            string charString = new string(RepeatDigitChars(max).ToArray());
 
             Console.WriteLine("char[]:");
             testEnumerableWithSkip(charArr, times);
@@ -108,7 +108,7 @@ namespace ParserCombinators.Tests.Performance
             const int times = 1;
             const int max = 50000;
 
-            string str = new string(GetDigitChars(max).ToArray());
+            string str = new string(RepeatDigitChars(max).ToArray());
 
 
             Console.WriteLine("substring:");
@@ -138,7 +138,7 @@ namespace ParserCombinators.Tests.Performance
             const int times = 200;
             const int max = 1000000;
 
-            string str = new string(GetDigitChars(max).ToArray());
+            string str = new string(RepeatDigitChars(max).ToArray());
 
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
@@ -176,7 +176,7 @@ namespace ParserCombinators.Tests.Performance
             const int times = 200;
             const int max = 1000000;
 
-            string str = new string(GetDigitChars(max).ToArray());
+            string str = new string(RepeatDigitChars(max).ToArray());
             
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
@@ -248,11 +248,16 @@ namespace ParserCombinators.Tests.Performance
                 yield return n;
         }
 
-        public static IEnumerable<char> GetDigitChars(int max)
+        public static IEnumerable<char> RepeatDigitChars(int finalLength)
         {
-            IEnumerable<char> digitChars = Enumerable.Repeat("1234567890", (max / 10) + 1)
+            return RepeatChars("1234567890", finalLength);
+        }
+
+        public static IEnumerable<char> RepeatChars(string repeatChars, int finalLength)
+        {
+            IEnumerable<char> digitChars = Enumerable.Repeat(repeatChars, (finalLength / repeatChars.Length) + 1)
                                                      .SelectMany(s => s.ToCharArray())
-                                                     .Take(max);
+                                                     .Take(finalLength);
 
             foreach (char d in digitChars)
                 yield return d;

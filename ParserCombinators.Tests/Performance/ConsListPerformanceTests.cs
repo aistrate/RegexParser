@@ -48,7 +48,7 @@ namespace ParserCombinators.Tests.Performance
         private static void consListTest(Func<string, IConsList<char>> createConsList,
                                          int times, int maxItemCount)
         {
-            string str = new string(EnumerablePerformanceTests.GetDigitChars(maxItemCount).ToArray());
+            string str = new string(EnumerablePerformanceTests.RepeatDigitChars(maxItemCount).ToArray());
 
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
