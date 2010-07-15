@@ -76,7 +76,7 @@ namespace ParserCombinators
         {
             return from x in parser
                    from xs in Many(parser)
-                   select Enumerable.Repeat(x, 1).Concat(xs);
+                   select new[] { x }.Concat(xs);
         }
 
         public Parser<TToken, TValue> Between<TOpen, TClose, TValue>(Parser<TToken, TOpen> open,
