@@ -23,8 +23,7 @@ namespace ParserCombinators
             return consList => null;
         }
 
-        public static Parser<TToken, TValue> EitherOf<TValue>(Parser<TToken, TValue> parser1,
-                                                              Parser<TToken, TValue> parser2)
+        public static Parser<TToken, TValue> Either<TValue>(Parser<TToken, TValue> parser1, Parser<TToken, TValue> parser2)
         {
             return consList => parser1(consList) ?? parser2(consList);
         }
@@ -51,7 +50,7 @@ namespace ParserCombinators
 
         public static Parser<TToken, TValue> Option<TValue>(TValue defaultValue, Parser<TToken, TValue> parser)
         {
-            return EitherOf(parser, Succeed(defaultValue));
+            return Either(parser, Succeed(defaultValue));
         }
 
         public static Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)

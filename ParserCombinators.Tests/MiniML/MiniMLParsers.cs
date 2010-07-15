@@ -33,13 +33,13 @@ namespace ParserCombinators.Tests.MiniML
                    where s == "in"
                    select s;
 
-            Term1 = EitherOf(from x in Ident
-                             select (Term)new VarTerm(x),
-                             
-                             from u1 in WsChr('(')
-                             from t in Term
-                             from u2 in WsChr(')')
-                             select t);
+            Term1 = Either(from x in Ident
+                           select (Term)new VarTerm(x),
+
+                           from u1 in WsChr('(')
+                           from t in Term
+                           from u2 in WsChr(')')
+                           select t);
 
             Term = Choice(new[]
             {
