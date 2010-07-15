@@ -6,6 +6,9 @@ using RegexParser.Util;
 
 namespace RegexParser.Patterns
 {
+    /// <summary>
+    /// Immutable class.
+    /// </summary>
     public class CharClassPattern : BasePattern, IEquatable<CharClassPattern>
     {
         public CharClassPattern(bool isPositive, IEnumerable<char> charSet)
@@ -27,6 +30,13 @@ namespace RegexParser.Patterns
             if (charRanges != null)
                 CharRanges = charRanges.OrderBy(r => r.From)
                                        .ToArray();
+        }
+
+        private CharClassPattern(bool isPositive, CharClassPattern original)
+        {
+            IsPositive = isPositive;
+            CharSet = original.CharSet;
+            CharRanges = original.CharRanges;
         }
 
         public readonly bool IsPositive;
@@ -54,6 +64,18 @@ namespace RegexParser.Patterns
                                  string.Join("", CharRanges.Select(r => r.ToString()).ToArray()),
                                  CharSet);
         }
+
+        public CharClassPattern Negated { get { return new CharClassPattern(!IsPositive, this); } }
+
+        public static readonly CharClassPattern AnyCharacter = new CharClassPattern(false, "\n");
+
+        public static readonly CharClassPattern WhitespaceCharacter = new CharClassPattern(true, "\n\r\t \f\v");
+
+        public static readonly CharClassPattern WordCharacter = new CharClassPattern(true, "_", new[] { new CharRange('0', '9'),
+                                                                                                        new CharRange('A', 'Z'),
+                                                                                                        new CharRange('a', 'z') });
+
+        public static readonly CharClassPattern DigitCharacter = new CharClassPattern(true, new[] { new CharRange('0', '9') });
 
 
         public class CharRange : IEquatable<CharRange>

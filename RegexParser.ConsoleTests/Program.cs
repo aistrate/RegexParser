@@ -22,7 +22,9 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc^a", "[^b]")));
+                //PatternPerformanceTests.CharClassPatternTest();
+
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc^a", "[^b]")));
 
                 //displayMatches("A thing or another thing", "[A-Z]");
                 //displayMatches("A thing or another thing", "[a-ae-ei-io-ou-u]");
