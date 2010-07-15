@@ -62,8 +62,8 @@ namespace ParserCombinators
 
                     if (result != null)
                     {
-                        consList = result.Rest;
                         values.Add(result.Value);
+                        consList = result.Rest;
                     }
                 }
                 while (result != null);
