@@ -9,7 +9,7 @@ namespace RegexParser.Matchers
 {
     public class MatchParsers : CharParsers
     {
-        public Parser<char, string> CreateParser(BasePattern pattern)
+        public static Parser<char, string> CreateParser(BasePattern pattern)
         {
             if (pattern.GetType() == typeof(GroupPattern))
                 return consList =>

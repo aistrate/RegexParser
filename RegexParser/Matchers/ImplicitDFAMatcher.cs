@@ -17,7 +17,7 @@ namespace RegexParser.Matchers
 
         protected override IEnumerable<Match2> GetMatches()
         {
-            Parser<char, string> matchParser = new MatchParsers().CreateParser(Pattern);
+            Parser<char, string> matchParser = MatchParsers.CreateParser(Pattern);
             IConsList<char> consList = new ArrayConsList<char>(InputText);
             
             int index = 0;

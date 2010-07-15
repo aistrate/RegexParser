@@ -8,7 +8,7 @@ namespace ParserCombinators.Tests.MiniML
 {
     public class MiniMLParsers : CharParsers
     {
-        public MiniMLParsers()
+        static MiniMLParsers()
         {
             Whitespace = Many(OneOf(new[] {' ', '\t', '\n', '\r'}));
 
@@ -67,14 +67,14 @@ namespace ParserCombinators.Tests.MiniML
                   select t;
         }
 
-        public Parser<char, IEnumerable<char>> Whitespace;
-        public Func<char, Parser<char, char>> WsChr;
-        public Parser<char, string> Id;
-        public Parser<char, string> Ident;
-        public Parser<char, string> LetId;
-        public Parser<char, string> InId;
-        public Parser<char, Term> Term;
-        public Parser<char, Term> Term1;
-        public Parser<char, Term> All;
+        public static Parser<char, IEnumerable<char>> Whitespace;
+        public static Func<char, Parser<char, char>> WsChr;
+        public static Parser<char, string> Id;
+        public static Parser<char, string> Ident;
+        public static Parser<char, string> LetId;
+        public static Parser<char, string> InId;
+        public static Parser<char, Term> Term;
+        public static Parser<char, Term> Term1;
+        public static Parser<char, Term> All;
     }
 }

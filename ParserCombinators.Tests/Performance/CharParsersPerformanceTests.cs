@@ -13,7 +13,7 @@ namespace ParserCombinators.Tests.Performance
     {
         public static void AnyCharTest()
         {
-            charParserTest(new CharParsers().AnyChar,
+            charParserTest(CharParsers.AnyChar,
                            200, 1000000);
             
             // 12.80 sec. (maxItemCount = 1,000,000)
@@ -23,7 +23,7 @@ namespace ParserCombinators.Tests.Performance
 
         public static void OneOfTest()
         {
-            charParserTest(new CharParsers().OneOf("0123456789"),
+            charParserTest(CharParsers.OneOf("0123456789"),
                            200, 1000000);
 
             // 61.08 sec. (maxItemCount = 1,000,000)
@@ -31,7 +31,7 @@ namespace ParserCombinators.Tests.Performance
 
         public static void ManyCharsTest()
         {
-            charParserTest(new CharParsers().Many1(new CharParsers().AnyChar),
+            charParserTest(CharParsers.Many1(CharParsers.AnyChar),
                            200, 1000000);
 
             // 17.97 sec. (maxItemCount = 1,000,000)

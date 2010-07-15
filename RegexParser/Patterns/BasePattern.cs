@@ -10,7 +10,7 @@ namespace RegexParser.Patterns
     {
         public static BasePattern CreatePattern(string patternText)
         {
-            var result = new PatternParsers().WholePattern(new ArrayConsList<char>(patternText));
+            var result = PatternParsers.WholePattern(new ArrayConsList<char>(patternText));
             
             return result.Rest.IsEmpty ? result.Value : null;
         }

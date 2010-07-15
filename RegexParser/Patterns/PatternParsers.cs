@@ -8,7 +8,7 @@ namespace RegexParser.Patterns
 {
     public class PatternParsers : CharParsers
     {
-        public PatternParsers()
+        static PatternParsers()
         {
             CharPattern = from c in NoneOf(specialCharacters)
                           select (BasePattern)new CharPattern(c);
@@ -36,13 +36,13 @@ namespace RegexParser.Patterns
             WholePattern = BareGroupPattern;
         }
 
-        public Parser<char, BasePattern> CharPattern;
-        public Parser<char, string> CharRangePattern;
-        public Parser<char, BasePattern> CharGroupPattern;
+        public static Parser<char, BasePattern> CharPattern;
+        public static Parser<char, string> CharRangePattern;
+        public static Parser<char, BasePattern> CharGroupPattern;
 
-        public Parser<char, BasePattern> BareGroupPattern;
-        public Parser<char, BasePattern> GroupPattern;
-        public Parser<char, BasePattern> WholePattern;
+        public static Parser<char, BasePattern> BareGroupPattern;
+        public static Parser<char, BasePattern> GroupPattern;
+        public static Parser<char, BasePattern> WholePattern;
 
         private static string range(char from, char to)
         {
