@@ -10,10 +10,25 @@ namespace RegexParser.Patterns
     {
         static PatternParsers()
         {
+            createCharacterClassParsers();
+
             CharPattern = from c in NoneOf(specialCharacters)
                           select (BasePattern)new CharPattern(c);
 
+            BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
+                                                      () => CharPattern,
+                                                      () => CharClassPattern))
+                               select (BasePattern)new GroupPattern(ps);
 
+            GroupPattern = Between(Char('('),
+                                   Char(')'),
+                                   BareGroupPattern);
+
+            WholePattern = BareGroupPattern;
+        }
+
+        private static void createCharacterClassParsers()
+        {
             CharRangeSubclassPattern = from frm in NoneOf("-]")
                                        from d in Char('-')
                                        from to in NoneOf("-]")
@@ -34,18 +49,6 @@ namespace RegexParser.Patterns
                                        let singleChars = subclasses.OfType<SingleCharSubclass>()
                                                                    .Select(s => s.Value)
                                        select (BasePattern)new CharClassPattern(isPositive, singleChars, charRanges));
-
-
-            BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
-                                                      () => CharPattern,
-                                                      () => CharClassPattern))
-                               select (BasePattern)new GroupPattern(ps);
-
-            GroupPattern = Between(Char('('),
-                                   Char(')'),
-                                   BareGroupPattern);
-
-            WholePattern = BareGroupPattern;
         }
 
         public static Parser<char, BasePattern> CharPattern;
@@ -59,7 +62,6 @@ namespace RegexParser.Patterns
         public static Parser<char, BasePattern> WholePattern;
 
         private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
-
 
         private interface CharSubclass { }
 
