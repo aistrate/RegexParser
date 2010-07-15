@@ -53,29 +53,23 @@ namespace ParserCombinators
         {
             return consList =>
             {
-                IEnumerable<Result<TToken, TValue>> results = getMany(parser, consList);
-                Result<TToken, TValue> lastResult = results.LastOrDefault();
+                List<TValue> values = new List<TValue>();
+                Result<TToken, TValue> result;
 
-                return new Result<TToken, IEnumerable<TValue>>(results.Select(r => r.Value),
-                                                               lastResult != null ? lastResult.Rest : consList);
-            };
-        }
-
-        private IEnumerable<Result<TToken, TValue>> getMany<TValue>(Parser<TToken, TValue> parser, IConsList<TToken> consList)
-        {
-            Result<TToken, TValue> result;
-
-            do
-            {
-                result = parser(consList);
-
-                if (result != null)
+                do
                 {
-                    consList = result.Rest;
-                    yield return result;
+                    result = parser(consList);
+
+                    if (result != null)
+                    {
+                        consList = result.Rest;
+                        values.Add(result.Value);
+                    }
                 }
-            }
-            while (result != null);
+                while (result != null);
+
+                return new Result<TToken, IEnumerable<TValue>>(values, consList);
+            };
         }
 
         public Parser<TToken, IEnumerable<TValue>> Many1<TValue>(Parser<TToken, TValue> parser)

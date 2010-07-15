@@ -34,7 +34,7 @@ namespace ParserCombinators.Tests.ConsLists
             charParserTest(new CharParsers().Many1(new CharParsers().AnyChar),
                            200, 1000000);
 
-            // 18.40 sec. (maxItemCount = 1,000,000)
+            // 18.30 sec. (maxItemCount = 1,000,000)
             // 37.55 sec. (maxItemCount = 2,000,000)
         }
 
