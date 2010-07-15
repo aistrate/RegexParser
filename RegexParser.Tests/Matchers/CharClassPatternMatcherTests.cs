@@ -21,6 +21,24 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft(input, "[a-m]", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft(input, "[a-ae-ei-io-ou-u]", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, "[A-Z] [a-z]", AlgorithmType);
+        }
+
+        [Test]
+        public void CharSetsAndRanges()
+        {
+            string input = "A thing or another thing";
+
+            RegexAssert.AreMatchesSameAsMsoft(input, "[aeiou]", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, "[a-fdmzA-D]", AlgorithmType);
+        }
+
+        [Test]
+        public void NegativeRanges()
+        {
+            string input = "A thing or another thing";
+
+            RegexAssert.AreMatchesSameAsMsoft(input, "[^A-Z]", AlgorithmType);
         }
     }
 }

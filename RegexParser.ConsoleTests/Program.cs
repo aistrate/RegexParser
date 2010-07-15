@@ -22,12 +22,10 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //new CharClassPatternMatcherTests(AlgorithmType.ImplicitDFA).Ranges();
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abca", "[]")));
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc^a", "[^b]")));
 
-                displayMatches("A thing or another thing", "[a-m]");
-                displayMatches("A thing or another thing", "[A-Z]");
-                displayMatches("A thing or another thing", "[a-ae-ei-io-ou-u]");
+                //displayMatches("A thing or another thing", "[A-Z]");
+                //displayMatches("A thing or another thing", "[a-ae-ei-io-ou-u]");
             }
             catch (Exception ex)
             {

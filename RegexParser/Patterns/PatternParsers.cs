@@ -14,15 +14,23 @@ namespace RegexParser.Patterns
                           select (BasePattern)new CharPattern(c);
 
 
-            CharRangePattern = from start in NoneOf("-]")
-                               from d in Char('-')
-                               from end in NoneOf("-]")
-                               select new CharClassPattern.CharRange(start, end);
+            CharRangeSubclassPattern = from fr in NoneOf("-]")
+                                       from d in Char('-')
+                                       from to in NoneOf("-]")
+                                       select (CharSubclass)new CharRangeSubclass { From = fr, To = to };
+
+            SingleCharSubclassPattern = from c in NoneOf("-]")
+                                        select (CharSubclass)new SingleCharSubclass { Value = c };
 
             CharClassPattern = Between(Char('['),
                                        Char(']'),
-                                       from ranges in Many1(CharRangePattern)
-                                       select (BasePattern)new CharClassPattern(true, ranges));
+
+                                       from subclasses in Many1(Choice(new[] { CharRangeSubclassPattern, SingleCharSubclassPattern }))
+                                       let charRanges = subclasses.OfType<CharRangeSubclass>()
+                                                                  .Select(s => new CharClassPattern.CharRange(s.From, s.To))
+                                       let singleChars = subclasses.OfType<SingleCharSubclass>()
+                                                                   .Select(s => s.Value)
+                                       select (BasePattern)new CharClassPattern(true, singleChars, charRanges));
 
 
             BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
@@ -38,7 +46,9 @@ namespace RegexParser.Patterns
         }
 
         public static Parser<char, BasePattern> CharPattern;
-        public static Parser<char, CharClassPattern.CharRange> CharRangePattern;
+
+        private static Parser<char, CharSubclass> CharRangeSubclassPattern;
+        private static Parser<char, CharSubclass> SingleCharSubclassPattern;
         public static Parser<char, BasePattern> CharClassPattern;
 
         public static Parser<char, BasePattern> BareGroupPattern;
@@ -46,5 +56,19 @@ namespace RegexParser.Patterns
         public static Parser<char, BasePattern> WholePattern;
 
         private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
+
+
+        private interface CharSubclass { }
+
+        private struct CharRangeSubclass : CharSubclass
+        {
+            public char From;
+            public char To;
+        }
+
+        private struct SingleCharSubclass : CharSubclass
+        {
+            public char Value;
+        }
     }
 }
