@@ -35,7 +35,7 @@ namespace RegexParser.Patterns
 
         public bool IsMatch(char c)
         {
-            return IsPositive ? isPositiveMatch(c) : !isPositiveMatch(c);
+            return !IsPositive ^ isPositiveMatch(c);
         }
 
         private bool isPositiveMatch(char c)

@@ -21,7 +21,7 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-
+                PatternPerformanceTests.CharClassPatternTest();
             }
             catch (Exception ex)
             {
