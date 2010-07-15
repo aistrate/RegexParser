@@ -38,7 +38,7 @@ namespace RegexParser.Tests.Matchers
         {
             string input = "A thing or another thing";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, "[^A-Z]", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, "[^A-Z ]", AlgorithmType);
         }
     }
 }

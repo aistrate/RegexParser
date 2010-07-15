@@ -49,6 +49,11 @@ namespace ParserCombinators
             return Choice(LazySeq(choices));
         }
 
+        public static Parser<TToken, TValue> Option<TValue>(TValue defaultValue, Parser<TToken, TValue> parser)
+        {
+            return EitherOf(parser, Succeed(defaultValue));
+        }
+
         public static Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
         {
             return consList =>

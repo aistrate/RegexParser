@@ -14,10 +14,10 @@ namespace RegexParser.Patterns
                           select (BasePattern)new CharPattern(c);
 
 
-            CharRangeSubclassPattern = from fr in NoneOf("-]")
+            CharRangeSubclassPattern = from frm in NoneOf("-]")
                                        from d in Char('-')
                                        from to in NoneOf("-]")
-                                       select (CharSubclass)new CharRangeSubclass { From = fr, To = to };
+                                       select (CharSubclass)new CharRangeSubclass { From = frm, To = to };
 
             SingleCharSubclassPattern = from c in NoneOf("-]")
                                         select (CharSubclass)new SingleCharSubclass { Value = c };
@@ -25,12 +25,15 @@ namespace RegexParser.Patterns
             CharClassPattern = Between(Char('['),
                                        Char(']'),
 
-                                       from subclasses in Many1(Choice(new[] { CharRangeSubclassPattern, SingleCharSubclassPattern }))
+                                       from isPositive in Option(true, from c in Char('^')
+                                                                       select false)
+                                       from subclasses in Many1(Choice(new[] { CharRangeSubclassPattern,
+                                                                               SingleCharSubclassPattern }))
                                        let charRanges = subclasses.OfType<CharRangeSubclass>()
                                                                   .Select(s => new CharClassPattern.CharRange(s.From, s.To))
                                        let singleChars = subclasses.OfType<SingleCharSubclass>()
                                                                    .Select(s => s.Value)
-                                       select (BasePattern)new CharClassPattern(true, singleChars, charRanges));
+                                       select (BasePattern)new CharClassPattern(isPositive, singleChars, charRanges));
 
 
             BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
