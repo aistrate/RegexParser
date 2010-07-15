@@ -21,7 +21,7 @@ namespace RegexParser.ConsoleTests
             {
                 //EnumerablePerformanceTests.TestEnumerableCharsWithCharBuffer();
                 //ConsListPerformanceTests.LinkedConsList();
-                CharParsersPerformanceTests.ManyCharsTest();
+                CharParsersPerformanceTests.AnyCharTest();
 
                 //new GroupPatternMatcherTests(AlgorithmType.ImplicitDFA).Grouping();
 

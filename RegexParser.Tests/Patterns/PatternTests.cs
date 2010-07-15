@@ -57,20 +57,21 @@ namespace RegexParser.Tests.Patterns
         }
 
         [Test]
-        public void CharGroupPattern()
+        public void CharClassPattern()
         {
-            BasePattern actual = BasePattern.CreatePattern("[A-Z][a-z][0-9][A-Za-z][A-Za-z0-9][A-Z.,;:?!a-z][^x][^a-z]");
+            BasePattern actual = BasePattern.CreatePattern("[A-Z][a-z][0-9][A-Za-z][A-Za-z0-9][A-Z.,;:?!a-z][a-zxym-wA-M][^x][^a-z]");
 
             BasePattern expected = new GroupPattern(new BasePattern[] {
-                new CharGroupPattern(true, upperCase),
-                new CharGroupPattern(true, lowerCase),
-                new CharGroupPattern(true, digits),
-                new CharGroupPattern(true, lowerCase + upperCase),
-                new CharGroupPattern(true, upperCase + lowerCase + digits),
-                new CharGroupPattern(true, upperCase + lowerCase + ".,;:?!"),
+                new CharClassPattern(true, upperCase),
+                new CharClassPattern(true, lowerCase),
+                new CharClassPattern(true, digits),
+                new CharClassPattern(true, lowerCase + upperCase),
+                new CharClassPattern(true, upperCase + lowerCase),
+                new CharClassPattern(true, upperCase + lowerCase + digits),
+                new CharClassPattern(true, upperCase + lowerCase + ".,;:?!"),
 
-                new CharGroupPattern(false, "x"),
-                new CharGroupPattern(false, lowerCase)
+                new CharClassPattern(false, "x"),
+                new CharClassPattern(false, lowerCase)
             });
 
             Assert.AreEqual(expected, actual);

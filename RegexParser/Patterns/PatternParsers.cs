@@ -19,7 +19,7 @@ namespace RegexParser.Patterns
             //                   from e in NoneOf("-]")
             //                   select range(s, e);
 
-            //CharGroupPattern = Between(Char('['),
+            //CharClassPattern = Between(Char('['),
             //                           Char(']'),
             //                           Many1(Choice(new[] { CharRangePattern,
             //                                                from c in NoneOf("-]")
@@ -38,7 +38,7 @@ namespace RegexParser.Patterns
 
         public static Parser<char, BasePattern> CharPattern;
         public static Parser<char, string> CharRangePattern;
-        public static Parser<char, BasePattern> CharGroupPattern;
+        public static Parser<char, BasePattern> CharClassPattern;
 
         public static Parser<char, BasePattern> BareGroupPattern;
         public static Parser<char, BasePattern> GroupPattern;
