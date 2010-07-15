@@ -24,10 +24,9 @@ namespace RegexParser.ConsoleTests
             {
                 //PatternPerformanceTests.CharClassPatternTest();
 
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc^a", "[^b]")));
+                displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
 
-                //displayMatches("A thing or another thing", "[A-Z]");
-                //displayMatches("A thing or another thing", "[a-ae-ei-io-ou-u]");
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S")));
             }
             catch (Exception ex)
             {

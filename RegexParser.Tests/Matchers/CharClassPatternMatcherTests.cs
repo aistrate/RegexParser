@@ -40,5 +40,26 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft(input, "[^A-Z ]", AlgorithmType);
         }
+
+        [Test]
+        public void BackslashClasses()
+        {
+            string input = "Therefore they took CS101 and EE201.";
+
+            RegexAssert.AreMatchesSameAsMsoft(input, @"[A-Z][A-Z][0-9][0-9][0-9]", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"[A-Z][A-Z]\d\d\d", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\D\D\d\d\d", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"..\d\d\d", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\s..\d\d\d", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d\s", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d\S", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d.", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\d\d\d\d\d", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"..\d..", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @".\d.", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\d.", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\S\S\S", AlgorithmType);
+        }
     }
 }

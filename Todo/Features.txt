@@ -2,7 +2,7 @@ Language Elements:
 
 * ordinary characters: a, X, 1
 
-- character classes: \w, \W, \s, \S, \d, \D, [ae], [^a-z], [A-Z], .
+* character classes: \w, \W, \s, \S, \d, \D, [ae], [^a-z], [A-Z], .
 
 - character escapes: \n, \r, \t, backslash followed by . $ ^ { [ ( | ) * + ? \
 
