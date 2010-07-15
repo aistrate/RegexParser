@@ -1,14 +1,15 @@
 Language Elements:
 
-- ordinary characters: a, X, 1
+* ordinary characters: a, X, 1
+
+- character classes: \w, \W, \s, \S, \d, \D, [ae], [^a-z], [A-Z], .
 
 - character escapes: \n, \r, \t, backslash followed by . $ ^ { [ ( | ) * + ? \
 
 - quantifiers: *, +, ?, {n}, {n,}, {n,m}, *?, +?, ??, {n}?, {n,}?, {n,m}?
 
-- character classes: \w, \W, \s, \S, \d, \D, [ae], [^a-z], [A-Z], .
-
 - alternation constructs: |
+
 
 - anchors: ^, $, \b, \B
 
@@ -27,8 +28,8 @@ Regex Options:
 
 - IgnoreCase
 
+- IgnorePatternWhitespace
+
 - Multiline
 
 - Singleline
-
-- IgnorePatternWhitespace
