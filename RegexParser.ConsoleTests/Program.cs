@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using ParserCombinators.Tests;
-using ParserCombinators.Tests.ConsLists;
+using ParserCombinators.Tests.Performance;
 using RegexParser.Matchers;
 using RegexParser.Tests;
 using RegexParser.Tests.Matchers;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ParserCombinators.Tests.ConsLists
+namespace ParserCombinators.Tests.Performance
 {
     public class CharBuffer
     {

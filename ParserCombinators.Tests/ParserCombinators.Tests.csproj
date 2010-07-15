@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EB0E0DBE-EB79-41CB-9B3D-09A8B4CDD5B4}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -49,10 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsLists\CharBuffer.cs" />
-    <Compile Include="ConsLists\CharParsersPerformanceTests.cs" />
-    <Compile Include="ConsLists\ConsListPerformanceTests.cs" />
-    <Compile Include="ConsLists\EnumerablePerformanceTests.cs" />
+    <Compile Include="Performance\CharBuffer.cs" />
+    <Compile Include="Performance\CharParsersPerformanceTests.cs" />
+    <Compile Include="Performance\ConsListPerformanceTests.cs" />
+    <Compile Include="Performance\EnumerablePerformanceTests.cs" />
     <Compile Include="MiniML\MiniMLParsers.cs" />
     <Compile Include="MiniML\Terms.cs" />
     <Compile Include="ParserCombinatorTests.cs" />

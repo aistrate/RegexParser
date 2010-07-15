@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ParserCombinators.ConsLists;
 
-namespace ParserCombinators.Tests.ConsLists
+namespace ParserCombinators.Tests.Performance
 {
     /// <summary>
     /// Does NOT contain unit tests, but performance-comparison tests to be run from a console.
