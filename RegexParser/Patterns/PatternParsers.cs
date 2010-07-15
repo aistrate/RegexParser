@@ -10,7 +10,7 @@ namespace RegexParser.Patterns
     {
         static PatternParsers()
         {
-            createCharacterClassParsers();
+            characterClassParsers();
 
             CharPattern = from c in NoneOf(specialCharacters)
                           select (BasePattern)new CharPattern(c);
@@ -27,7 +27,7 @@ namespace RegexParser.Patterns
             WholePattern = BareGroupPattern;
         }
 
-        private static void createCharacterClassParsers()
+        private static void characterClassParsers()
         {
             CharRangeSubclassPattern = from frm in NoneOf("-]")
                                        from d in Char('-')
@@ -51,15 +51,16 @@ namespace RegexParser.Patterns
                                        select (BasePattern)new CharClassPattern(isPositive, singleChars, charRanges));
         }
 
-        public static Parser<char, BasePattern> CharPattern;
-
         private static Parser<char, CharSubclass> CharRangeSubclassPattern;
         private static Parser<char, CharSubclass> SingleCharSubclassPattern;
         public static Parser<char, BasePattern> CharClassPattern;
 
+        public static Parser<char, BasePattern> CharPattern;
+        
         public static Parser<char, BasePattern> BareGroupPattern;
         public static Parser<char, BasePattern> GroupPattern;
         public static Parser<char, BasePattern> WholePattern;
+
 
         private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
 
