@@ -12,10 +12,16 @@ namespace RegexParser.Patterns
     public class CharClassPattern : BasePattern, IEquatable<CharClassPattern>
     {
         public CharClassPattern(bool isPositive, IEnumerable<char> charSet)
-            : this(isPositive, charSet, null) { }
+            : this(isPositive, charSet, null)
+        {
+        }
 
-        public CharClassPattern(bool isPositive, IEnumerable<CharRange> charRanges)
-            : this(isPositive, null, charRanges) { }
+        public CharClassPattern(bool isPositive, IEnumerable<ICharClassAtom> charClassAtoms)
+            : this(isPositive, charClassAtoms.OfType<SingleChar>()
+                                             .Select(c => c.Value),
+                               charClassAtoms.OfType<CharRange>())
+        {
+        }
 
         public CharClassPattern(bool isPositive, IEnumerable<char> charSet, IEnumerable<CharRange> charRanges)
         {
@@ -63,21 +69,33 @@ namespace RegexParser.Patterns
 
         public CharClassPattern Negated { get { return new CharClassPattern(!IsPositive, this); } }
 
-        public static readonly CharClassPattern AnyCharacter = new CharClassPattern(false, "\n");
+        public static readonly CharClassPattern AnyChar = new CharClassPattern(false, "\n");
 
-        public static readonly CharClassPattern WhitespaceCharacter = new CharClassPattern(true, " \n\r\t\f\v");
+        public static readonly CharClassPattern WhitespaceChar = new CharClassPattern(true, " \n\r\t\f\v");
 
-        public static readonly CharClassPattern WordCharacter = new CharClassPattern(true, "_", new[]
-                                                                                     {
-                                                                                         new CharRange('a', 'z'),
-                                                                                         new CharRange('A', 'Z'),
-                                                                                         new CharRange('0', '9')
-                                                                                     });
+        public static readonly CharClassPattern WordChar = new CharClassPattern(true, "_", new[]
+                                                                                {
+                                                                                    new CharRange('a', 'z'),
+                                                                                    new CharRange('A', 'Z'),
+                                                                                    new CharRange('0', '9')
+                                                                                });
 
-        public static readonly CharClassPattern DigitCharacter = new CharClassPattern(true, new[] { new CharRange('0', '9') });
+        public static readonly CharClassPattern DigitChar = new CharClassPattern(true, new[] { new CharRange('0', '9') });
 
 
-        public class CharRange : IEquatable<CharRange>
+        public interface ICharClassAtom { }
+
+        public class SingleChar : ICharClassAtom
+        {
+            public SingleChar(char value)
+            {
+                Value = value;
+            }
+
+            public readonly char Value;
+        }
+
+        public class CharRange : ICharClassAtom, IEquatable<CharRange>
         {
             public CharRange(char from, char to)
             {

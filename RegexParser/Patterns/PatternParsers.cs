@@ -33,49 +33,45 @@ namespace RegexParser.Patterns
 
         private static void characterClassPatterns()
         {
-            CharRangeSubgroupPattern = from frm in NoneOf("-]")
-                                       from d in Char('-')
-                                       from to in NoneOf("-]")
-                                       select (CharSubgroup)new CharRangeSubgroup { From = frm, To = to };
+            var charRangeAtom = from frm in NoneOf("-]")
+                                from d in Char('-')
+                                from to in NoneOf("-]")
+                                select (CharClassPattern.ICharClassAtom)new CharClassPattern.CharRange(frm, to);
 
-            SingleCharSubgroupPattern = from c in NoneOf("-]")
-                                        select (CharSubgroup)new SingleCharSubgroup { Value = c };
+            var singleCharAtom = from c in NoneOf("-]")
+                                 select (CharClassPattern.ICharClassAtom)new CharClassPattern.SingleChar(c);
 
             CharGroupPattern = Between(Char('['),
                                        Char(']'),
 
                                        from isPositive in Option(true, from c in Char('^')
                                                                        select false)
-                                       from subgroups in Many1(Choice(new[] { CharRangeSubgroupPattern,
-                                                                              SingleCharSubgroupPattern }))
-                                       let charRanges = subgroups.OfType<CharRangeSubgroup>()
-                                                                 .Select(s => new CharClassPattern.CharRange(s.From, s.To))
-                                       let singleChars = subgroups.OfType<SingleCharSubgroup>()
-                                                                  .Select(s => s.Value)
-                                       select (BasePattern)new CharClassPattern(isPositive, singleChars, charRanges));
+                                       from atoms in Many1(Choice(new[] { charRangeAtom,
+                                                                          singleCharAtom }))
+                                       select (BasePattern)new CharClassPattern(isPositive, atoms));
 
             CharacterClassPattern = Choice(new[]
                                     {
                                         from c in Char('.')
-                                        select (BasePattern)CharClassPattern.AnyCharacter,
+                                        select (BasePattern)CharClassPattern.AnyChar,
 
                                         from c in WithBackslash('s')
-                                        select (BasePattern)CharClassPattern.WhitespaceCharacter,
+                                        select (BasePattern)CharClassPattern.WhitespaceChar,
 
                                         from c in WithBackslash('S')
-                                        select (BasePattern)CharClassPattern.WhitespaceCharacter.Negated,
+                                        select (BasePattern)CharClassPattern.WhitespaceChar.Negated,
 
                                         from c in WithBackslash('w')
-                                        select (BasePattern)CharClassPattern.WordCharacter,
+                                        select (BasePattern)CharClassPattern.WordChar,
 
                                         from c in WithBackslash('W')
-                                        select (BasePattern)CharClassPattern.WordCharacter.Negated,
+                                        select (BasePattern)CharClassPattern.WordChar.Negated,
 
                                         from c in WithBackslash('d')
-                                        select (BasePattern)CharClassPattern.DigitCharacter,
+                                        select (BasePattern)CharClassPattern.DigitChar,
 
                                         from c in WithBackslash('D')
-                                        select (BasePattern)CharClassPattern.DigitCharacter.Negated,
+                                        select (BasePattern)CharClassPattern.DigitChar.Negated,
 
                                         CharGroupPattern
                                     });
@@ -84,8 +80,6 @@ namespace RegexParser.Patterns
         public static Parser<char, BasePattern> CharPattern;
         public static Func<char, Parser<char, char>> WithBackslash;
 
-        private static Parser<char, CharSubgroup> CharRangeSubgroupPattern;
-        private static Parser<char, CharSubgroup> SingleCharSubgroupPattern;
         public static Parser<char, BasePattern> CharGroupPattern;
         public static Parser<char, BasePattern> CharacterClassPattern;
 
@@ -93,21 +87,6 @@ namespace RegexParser.Patterns
         public static Parser<char, BasePattern> GroupPattern;
         public static Parser<char, BasePattern> WholePattern;
 
-
         private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
-
-        // TODO: move these classes inside class CharClassPattern
-        private interface CharSubgroup { }
-
-        private struct CharRangeSubgroup : CharSubgroup
-        {
-            public char From;
-            public char To;
-        }
-
-        private struct SingleCharSubgroup : CharSubgroup
-        {
-            public char Value;
-        }
     }
 }
