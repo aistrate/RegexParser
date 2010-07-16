@@ -19,9 +19,13 @@ namespace RegexParser.Tests.Matchers
         {
             string input = "A thing or another thing";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, "[a-m]", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "[a-ae-ei-io-ou-u]", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "[A-Z] [a-z]", AlgorithmType);
+            string[] patterns = new[] {
+                "[a-m]",
+                "[a-ae-ei-io-ou-u]",
+                "[A-Z] [a-z]"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
@@ -29,8 +33,12 @@ namespace RegexParser.Tests.Matchers
         {
             string input = "A thing or another thing";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, "[aeiou]", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "[a-fdmzA-D]", AlgorithmType);
+            string[] patterns = new[] {
+                "[aeiou]",
+                "[a-fdmzA-D]"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
@@ -46,21 +54,24 @@ namespace RegexParser.Tests.Matchers
         {
             string input = "Therefore they took CS101 and EE201.";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, @"[A-Z][A-Z][0-9][0-9][0-9]", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"[A-Z][A-Z]\d\d\d", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\D\D\d\d\d", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"..\d\d\d", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\s..\d\d\d", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d\s", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d\S", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\d\d\d.", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\d\d\d\d\d", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"..\d..", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @".\d.", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\d.", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\S\S\S", AlgorithmType);
+            string[] patterns = new[] {
+                @"[A-Z][A-Z][0-9][0-9][0-9]",
+                @"[A-Z][A-Z]\d\d\d",
+                @"\w\w\d\d\d",
+                @"\D\D\d\d\d",
+                @"..\d\d\d",
+                @"\s..\d\d\d",
+                @"\w\w\d\d\d\s",
+                @"\w\w\d\d\d\S",
+                @"\w\w\d\d\d.",
+                @"\d\d\d\d\d",
+                @"..\d..",
+                @".\d.",
+                @"\d.",
+                @"\w\w\S\S\S"
+            };
 
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
@@ -69,12 +80,16 @@ namespace RegexParser.Tests.Matchers
             string input = "ID\tName\tAddress \t\t\tPhone number\n" +
                            "55\tJohn\tOaks Avenue 5\t065656565\n";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\s", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\s", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\s\s", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\s\s\s", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\w", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\s", AlgorithmType);
+            string[] patterns = new[] {
+                @"\s",
+                @"\s\s",
+                @"\s\s\s",
+                @"\s\s\s\s",
+                @"\s\w",
+                @"\w\s"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
     }
 }

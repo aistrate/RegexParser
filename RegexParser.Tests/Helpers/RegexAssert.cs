@@ -13,35 +13,15 @@ namespace RegexParser.Tests.Helpers
     {
         // TODO: add new method: ThrowsSameExceptionAsMsoft
 
-        public static void IsFirstMatchSameAsMsoft(string input, string patternText, AlgorithmType algorithmType)
+        public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType)
         {
-            IsFirstMatchSameAsMsoft(input, patternText, algorithmType, null);
+            AreMatchesSameAsMsoft(input, pattern, algorithmType, null);
         }
 
-        public static void IsFirstMatchSameAsMsoft(string input, string patternText, AlgorithmType algorithmType, string message)
+        public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
         {
-            Match2 actual = new Regex2(patternText, algorithmType).Match(input);
-            Match2 expected = createMatch(Msoft.Regex.Match(input, patternText));
-
-            try
-            {
-                Assert.AreEqual(expected, actual);
-            }
-            catch (Exception ex)
-            {
-                throw new AssertionException(formatException(message, input, patternText, ex));
-            }
-        }
-
-        public static void AreMatchesSameAsMsoft(string input, string patternText, AlgorithmType algorithmType)
-        {
-            AreMatchesSameAsMsoft(input, patternText, algorithmType, null);
-        }
-
-        public static void AreMatchesSameAsMsoft(string input, string patternText, AlgorithmType algorithmType, string message)
-        {
-            Match2[] actual = new Regex2(patternText, algorithmType).Matches(input).ToArray();
-            Match2[] expected = Msoft.Regex.Matches(input, patternText)
+            Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
+            Match2[] expected = Msoft.Regex.Matches(input, pattern)
                                            .Cast<Msoft.Match>()
                                            .Select(m => createMatch(m))
                                            .ToArray();
@@ -52,8 +32,14 @@ namespace RegexParser.Tests.Helpers
             }
             catch (Exception ex)
             {
-                throw new AssertionException(formatException(message, input, patternText, ex));
+                throw new AssertionException(formatException(message, input, pattern, ex));
             }
+        }
+
+        public static void AreMatchesSameAsMsoft(string input, string[] patterns, AlgorithmType algorithmType)
+        {
+            foreach (string pattern in patterns)
+                AreMatchesSameAsMsoft(input, pattern, algorithmType);
         }
 
         private static Match2 createMatch(Msoft.Match msoftMatch)
@@ -64,7 +50,7 @@ namespace RegexParser.Tests.Helpers
                 return Match2.Empty;
         }
 
-        private static string formatException(string message, string regexInputText, string regexPatternText, Exception ex)
+        private static string formatException(string message, string input, string pattern, Exception ex)
         {
             const string indent = "  ";
 
@@ -73,7 +59,7 @@ namespace RegexParser.Tests.Helpers
             else
                 message += "\n";
 
-            message += string.Format("Compare with .NET Regex: Input=\"{0}\", Pattern=\"{1}\"\n", regexInputText, regexPatternText) +
+            message += string.Format("Comparing with .NET Regex: Input=\"{0}\", Pattern=\"{1}\"\n", input, pattern) +
                        ex.Message;
             message = indent + message.Replace("\n", "\n" + indent);
 

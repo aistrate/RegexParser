@@ -84,7 +84,6 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft("Something or other", "xyz", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("Something or other", "thing", AlgorithmType);
 
-            RegexAssert.IsFirstMatchSameAsMsoft("A thing or another thing", "thing", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("A thing or another thing", "thing", AlgorithmType);
 
             RegexAssert.AreMatchesSameAsMsoft("Some thinthing or another", "thing", AlgorithmType);
@@ -106,18 +105,30 @@ namespace RegexParser.Tests.Matchers
         [Test]
         public void FalseStart()
         {
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "thingy", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "Somme", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "Some", AlgorithmType);
+            string input = "Something or other";
+
+            string[] patterns = new[] {
+                "thingy",
+                "Somme",
+                "Some"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
         public void WithSpaces()
         {
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", " or ", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "g o", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "g or o", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "thing or other", AlgorithmType);
+            string input = "Something or other";
+
+            string[] patterns = new[] {
+                " or ",
+                "g o",
+                "g or o",
+                "thing or other"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
     }
 }

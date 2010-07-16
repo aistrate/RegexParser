@@ -19,20 +19,30 @@ namespace RegexParser.Tests.Matchers
         {
             string input = "A thing or another thing";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, "th(in)g", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "(thing)", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "t(hi)n(g)", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "t(h(i)n)g", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft(input, "th(((((in)))))g", AlgorithmType);
+            string[] patterns = new[] {
+                "th(in)g",
+                "(thing)",
+                "t(hi)n(g)",
+                "t(h(i)n)g",
+                "th(((((in)))))g"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
         public void FalseStart()
         {
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "Som(me)", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "So(mme)", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "So(m)", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("Something or other", "So(m)e", AlgorithmType);
+            string input = "Something or other";
+
+            string[] patterns = new[] {
+                "Som(me)",
+                "So(mme)",
+                "So(m)",
+                "So(m)e"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         //[Test]
