@@ -7,7 +7,7 @@ namespace ParserCombinators.ConsLists
 {
     public static class ConsList
     {
-        public static IConsList<T> Skip<T>(this IConsList<T> source, int count)
+        public static IConsList<T> Drop<T>(this IConsList<T> source, int count)
         {
             IConsList<T> result = source;
             

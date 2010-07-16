@@ -29,7 +29,9 @@ Medium:
 
 - handle errors in the pattern string
 
-- implement all algorithms: explicit DFA, implicit DFA, backtracking
+- implement the explicit DFA algorithm
+
+- implement the backtracking algorithm
 
 
 

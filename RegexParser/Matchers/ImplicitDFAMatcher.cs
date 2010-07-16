@@ -18,19 +18,25 @@ namespace RegexParser.Matchers
         protected override IEnumerable<Match2> GetMatches()
         {
             Parser<char, string> matchParser = MatchParsers.CreateParser(Pattern);
+
             IConsList<char> consList = new ArrayConsList<char>(InputText);
-            
             int index = 0;
-            for (IConsList<char> partialList = consList; !partialList.IsEmpty; partialList = partialList.Tail, index++)
+
+            while (!consList.IsEmpty)
             {
-                Result<char, string> result = matchParser(partialList);
+                Result<char, string> result = matchParser(consList);
 
                 if (result != null)
                 {
                     yield return new Match2(index, result.Value.Length, result.Value);
 
-                    partialList = partialList.Skip(result.Value.Length - 1);
-                    index += result.Value.Length - 1;
+                    consList = result.Rest;
+                    index += result.Value.Length;
+                }
+                else
+                {
+                    consList = consList.Tail;
+                    index++;
                 }
             }
         }
