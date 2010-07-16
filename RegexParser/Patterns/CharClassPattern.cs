@@ -22,15 +22,7 @@ namespace RegexParser.Patterns
             IsPositive = isPositive;
 
             if (charSet != null)
-            {
-                var unique = new List<char>();
-
-                foreach (char c in charSet)
-                    if (!unique.Contains(c))
-                        unique.Add(c);
-
-                CharSet = new string(unique.ToArray());
-            }
+                CharSet = new string(charSet.Distinct().ToArray());
 
             if (charRanges != null)
                 CharRanges = charRanges.ToArray();
