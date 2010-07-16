@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using RegexParser.Matchers;
 using RegexParser.Util;
 using Msoft = System.Text.RegularExpressions;
-using RegexParser.Matchers;
 
 namespace RegexParser.Tests.Helpers
 {
@@ -21,6 +21,8 @@ namespace RegexParser.Tests.Helpers
         public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
         {
             Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
+            DisplayMatches(input, pattern, algorithmType, actual);
+
             Match2[] expected = Msoft.Regex.Matches(input, pattern)
                                            .Cast<Msoft.Match>()
                                            .Select(m => createMatch(m))
@@ -40,6 +42,27 @@ namespace RegexParser.Tests.Helpers
         {
             foreach (string pattern in patterns)
                 AreMatchesSameAsMsoft(input, pattern, algorithmType);
+        }
+
+        public static void DisplayMatches(string input, string pattern, AlgorithmType algorithmType, IEnumerable<Match2> matches)
+        {
+            int count = matches.Count();
+
+            Console.WriteLine("Input: \"{0}\"", input);
+            Console.WriteLine("Pattern: \"{0}\"", pattern);
+
+            Console.WriteLine("{0} match{1} ({2}){3}",
+                              count,
+                              count == 1 ? "" : "es",
+                              algorithmType.ToString(),
+                              count > 0 ? ":" : ".\n");
+
+            if (count > 0)
+                Console.WriteLine(string.Join("\n", matches.Select(m => string.Format("{0};{1};  \"{2}\"",
+                                                                                      m.Index.ToString("#0").PadLeft(4),
+                                                                                      m.Length.ToString("#0").PadLeft(3),
+                                                                                      m.Value))
+                                                           .ToArray()) + "\n");
         }
 
         private static Match2 createMatch(Msoft.Match msoftMatch)

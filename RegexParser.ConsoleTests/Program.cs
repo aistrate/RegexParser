@@ -11,7 +11,6 @@ using RegexParser.Tests;
 using RegexParser.Tests.Matchers;
 using RegexParser.Tests.Patterns;
 using RegexParser.Tests.Performance;
-
 using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.ConsoleTests

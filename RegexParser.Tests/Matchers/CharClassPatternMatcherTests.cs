@@ -46,7 +46,14 @@ namespace RegexParser.Tests.Matchers
         {
             string input = "A thing or another thing";
 
-            RegexAssert.AreMatchesSameAsMsoft(input, "[^A-Z ]", AlgorithmType);
+            string[] patterns = new[] {
+                @"[^A-Z ]",
+                @"[^ a-z]",
+                @"\W",
+                @"\S"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
