@@ -82,7 +82,7 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
-        public void WhitespaceCharacters()
+        public void WhitespaceChars()
         {
             string input = "ID\tName\tAddress \t\t\tPhone number\n" +
                            "55\tJohn\tOaks Avenue 5\t065656565\n";
