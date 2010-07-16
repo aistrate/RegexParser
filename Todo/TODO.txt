@@ -27,10 +27,14 @@ Features:
 
 Small:
 
-- A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
-
-- don't sort the CharSet and CharRanges array of the CharClassPattern (let the user optimize for speed by choosing the character order, from most frequent to least frequent in the input)
-
 - RegexAssert methods: write output to the console (input, pattern, matches)
 
-*0Rename Matcher classes to Parser.
+- move CharSubgroup classes from PatternParsers.CharClassPattern to class CharClassPattern (and eliminate the 'let' subexpressions from the pattern definition)
+
+- remove equality operator (==) overloading from classes CharClassPattern and CharRange
+
+- A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
+
+* don't sort the CharSet and CharRanges array of the CharClassPattern (let the user optimize for speed by choosing the right character order, from the most frequent in the input, to the least frequent)
+
+*oRename Matcher classes to Parser.

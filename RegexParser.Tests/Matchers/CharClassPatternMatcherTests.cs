@@ -60,6 +60,21 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, @".\d.", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft(input, @"\d.", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft(input, @"\w\w\S\S\S", AlgorithmType);
+
+        }
+
+        [Test]
+        public void WhitespaceCharacters()
+        {
+            string input = "ID\tName\tAddress \t\t\tPhone number\n" +
+                           "55\tJohn\tOaks Avenue 5\t065656565\n";
+
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\s", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\s", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\s\s", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\s\s\s", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\s\w", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft(input, @"\w\s", AlgorithmType);
         }
     }
 }

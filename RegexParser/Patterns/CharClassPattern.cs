@@ -22,14 +22,18 @@ namespace RegexParser.Patterns
             IsPositive = isPositive;
 
             if (charSet != null)
-                CharSet = new string(charSet.OrderBy(c => c)
-                                            .GroupBy(c => c)
-                                            .Select(g => g.First())
-                                            .ToArray());
+            {
+                var unique = new List<char>();
+
+                foreach (char c in charSet)
+                    if (!unique.Contains(c))
+                        unique.Add(c);
+
+                CharSet = new string(unique.ToArray());
+            }
 
             if (charRanges != null)
-                CharRanges = charRanges.OrderBy(r => r.From)
-                                       .ToArray();
+                CharRanges = charRanges.ToArray();
         }
 
         private CharClassPattern(bool isPositive, CharClassPattern original)
@@ -69,11 +73,14 @@ namespace RegexParser.Patterns
 
         public static readonly CharClassPattern AnyCharacter = new CharClassPattern(false, "\n");
 
-        public static readonly CharClassPattern WhitespaceCharacter = new CharClassPattern(true, "\n\r\t \f\v");
+        public static readonly CharClassPattern WhitespaceCharacter = new CharClassPattern(true, " \n\r\t\f\v");
 
-        public static readonly CharClassPattern WordCharacter = new CharClassPattern(true, "_", new[] { new CharRange('0', '9'),
-                                                                                                        new CharRange('A', 'Z'),
-                                                                                                        new CharRange('a', 'z') });
+        public static readonly CharClassPattern WordCharacter = new CharClassPattern(true, "_", new[]
+                                                                                     {
+                                                                                         new CharRange('a', 'z'),
+                                                                                         new CharRange('A', 'Z'),
+                                                                                         new CharRange('0', '9')
+                                                                                     });
 
         public static readonly CharClassPattern DigitCharacter = new CharClassPattern(true, new[] { new CharRange('0', '9') });
 
