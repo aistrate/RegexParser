@@ -56,7 +56,7 @@ namespace RegexParser.Patterns
                 if (charRange.From <= c && c <= charRange.To)
                     return true;
 
-            return CharSet != string.Empty && CharSet.Contains(c);
+            return CharSet.IndexOf(c) >= 0;
         }
 
         public override string ToString()
@@ -140,10 +140,8 @@ namespace RegexParser.Patterns
         {
             return other != null &&
                    this.IsPositive == other.IsPositive &&
-                   this.CharSet == other.CharSet &&
-                   this.CharRanges.Length == other.CharRanges.Length &&
-                   Enumerable.Range(0, this.CharRanges.Length)
-                             .All(i => this.CharRanges[i].Equals(other.CharRanges[i]));
+                   this.CharSet.SequenceEqual(other.CharSet) &&
+                   this.CharRanges.SequenceEqual(other.CharRanges);
         }
 
         public override int GetHashCode()

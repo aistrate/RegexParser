@@ -10,83 +10,82 @@ namespace RegexParser.Patterns
     {
         static PatternParsers()
         {
-            CharPattern = from c in NoneOf(specialCharacters)
-                          select (BasePattern)new CharPattern(c);
+            BackslashedChar = ch => (from b in Char('\\')
+                                     from c in Char(ch)
+                                     select c);
 
-            WithBackslash = ch => (from b in Char('\\')
-                                   from c in Char(ch)
-                                   select c);
+            NormalChar = from c in NoneOf(specialChars)
+                         select (BasePattern)new CharPattern(c);
 
-            characterClassPatterns();
+            charClasses();
 
-            BareGroupPattern = from ps in Many(Choice(() => GroupPattern,
-                                                      () => CharPattern,
-                                                      () => CharacterClassPattern))
-                               select (BasePattern)new GroupPattern(ps);
+            BareGroup = from ps in Many(Choice(() => Group,
+                                               () => NormalChar,
+                                               () => CharClass))
+                        select (BasePattern)new GroupPattern(ps);
 
-            GroupPattern = Between(Char('('),
-                                   Char(')'),
-                                   BareGroupPattern);
+            Group = Between(Char('('),
+                            Char(')'),
+                            BareGroup);
 
-            WholePattern = BareGroupPattern;
+            Regex = BareGroup;
         }
 
-        private static void characterClassPatterns()
+        private static void charClasses()
         {
-            var charRangeAtom = from frm in NoneOf("-]")
-                                from d in Char('-')
-                                from to in NoneOf("-]")
-                                select (CharClassPattern.ICharClassAtom)new CharClassPattern.CharRange(frm, to);
+            var charRange = from frm in NoneOf("-]")
+                            from d in Char('-')
+                            from to in NoneOf("-]")
+                            select (CharClassPattern.ICharClassAtom)new CharClassPattern.CharRange(frm, to);
 
-            var singleCharAtom = from c in NoneOf("-]")
-                                 select (CharClassPattern.ICharClassAtom)new CharClassPattern.SingleChar(c);
+            var singleChar = from c in NoneOf("-]")
+                             select (CharClassPattern.ICharClassAtom)new CharClassPattern.SingleChar(c);
 
-            CharGroupPattern = Between(Char('['),
-                                       Char(']'),
+            CharGroup = Between(Char('['),
+                                Char(']'),
 
-                                       from isPositive in Option(true, from c in Char('^')
-                                                                       select false)
-                                       from atoms in Many1(Choice(new[] { charRangeAtom,
-                                                                          singleCharAtom }))
-                                       select (BasePattern)new CharClassPattern(isPositive, atoms));
+                                from isPositive in Option(true, from c in Char('^')
+                                                                select false)
+                                from atoms in Many1(Choice(new[] { charRange, singleChar }))
+                                select (BasePattern)new CharClassPattern(isPositive, atoms));
 
-            CharacterClassPattern = Choice(new[]
-                                    {
-                                        from c in Char('.')
-                                        select (BasePattern)CharClassPattern.AnyChar,
+            CharClass = Choice(new[]
+                               {
+                                    from c in Char('.')
+                                    select (BasePattern)CharClassPattern.AnyChar,
 
-                                        from c in WithBackslash('s')
-                                        select (BasePattern)CharClassPattern.WhitespaceChar,
+                                    from c in BackslashedChar('s')
+                                    select (BasePattern)CharClassPattern.WhitespaceChar,
 
-                                        from c in WithBackslash('S')
-                                        select (BasePattern)CharClassPattern.WhitespaceChar.Negated,
+                                    from c in BackslashedChar('S')
+                                    select (BasePattern)CharClassPattern.WhitespaceChar.Negated,
 
-                                        from c in WithBackslash('w')
-                                        select (BasePattern)CharClassPattern.WordChar,
+                                    from c in BackslashedChar('w')
+                                    select (BasePattern)CharClassPattern.WordChar,
 
-                                        from c in WithBackslash('W')
-                                        select (BasePattern)CharClassPattern.WordChar.Negated,
+                                    from c in BackslashedChar('W')
+                                    select (BasePattern)CharClassPattern.WordChar.Negated,
 
-                                        from c in WithBackslash('d')
-                                        select (BasePattern)CharClassPattern.DigitChar,
+                                    from c in BackslashedChar('d')
+                                    select (BasePattern)CharClassPattern.DigitChar,
 
-                                        from c in WithBackslash('D')
-                                        select (BasePattern)CharClassPattern.DigitChar.Negated,
+                                    from c in BackslashedChar('D')
+                                    select (BasePattern)CharClassPattern.DigitChar.Negated,
 
-                                        CharGroupPattern
-                                    });
+                                    CharGroup
+                               });
         }
 
-        public static Parser<char, BasePattern> CharPattern;
-        public static Func<char, Parser<char, char>> WithBackslash;
+        public static Func<char, Parser<char, char>> BackslashedChar;
+        public static Parser<char, BasePattern> NormalChar;
 
-        public static Parser<char, BasePattern> CharGroupPattern;
-        public static Parser<char, BasePattern> CharacterClassPattern;
+        public static Parser<char, BasePattern> CharGroup;
+        public static Parser<char, BasePattern> CharClass;
 
-        public static Parser<char, BasePattern> BareGroupPattern;
-        public static Parser<char, BasePattern> GroupPattern;
-        public static Parser<char, BasePattern> WholePattern;
+        public static Parser<char, BasePattern> BareGroup;
+        public static Parser<char, BasePattern> Group;
+        public static Parser<char, BasePattern> Regex;
 
-        private static char[] specialCharacters = @".$^{[(|)*+?\".ToCharArray();
+        private static string specialChars = @".$^{[(|)*+?\";
     }
 }

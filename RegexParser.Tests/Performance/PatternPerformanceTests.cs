@@ -19,42 +19,53 @@ namespace RegexParser.Tests.Performance
 
             charClassPatternTest(new CharClassPattern(true, "0123456789"),
                                  times, maxItemCount, digitChars);
-            // 6.33 sec.
+            // 2.39 sec.
 
             charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('0', '9') }),
                                  times, maxItemCount, digitChars);
-            // 2.91 sec.
+            // 1.59 sec.
 
 
             string lowercaseChars = new string(EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).ToArray());
 
             charClassPatternTest(new CharClassPattern(true, "abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, lowercaseChars);
-            // 9.05 sec.
+            // 2.55 sec.
 
             charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
-            // 2.95 sec.
+            // 1.65 sec.
 
 
             charClassPatternTest(new CharClassPattern(true, "0123456789abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, lowercaseChars);
-            // 12.33 sec.
+            // 2.80 sec.
 
             charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('0', '9'),
                                                                     new CharClassPattern.CharRange('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
-            // 3.19 sec.
+            // 1.69 sec.
+
+
+            string repeatedChar = new string(EnumerablePerformanceTests.RepeatChars("7", maxItemCount).ToArray());
+
+            charClassPatternTest(new CharClassPattern(true, "7"),
+                                 times, maxItemCount, repeatedChar);
+            // 1.97 sec.
+
+            charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('7', '7') }),
+                                 times, maxItemCount, repeatedChar);
+            // 1.61 sec.
 
 
             // Negative character classes
             charClassPatternTest(new CharClassPattern(false, "abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, digitChars);
-            // 12.86 sec.
+            // 2.84 sec.
 
             charClassPatternTest(new CharClassPattern(false, new[] { new CharClassPattern.CharRange('a', 'z') }),
                                  times, maxItemCount, digitChars);
-            // 2.86 sec.
+            // 1.64 sec.
         }
 
         private static void charClassPatternTest(CharClassPattern charClassPattern, int times, int maxItemCount, string inputText)

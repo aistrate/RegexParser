@@ -10,7 +10,7 @@ namespace ParserCombinators.Tests.MiniML
     {
         static MiniMLParsers()
         {
-            Whitespace = Many(OneOf(new[] {' ', '\t', '\n', '\r'}));
+            Whitespace = Many(OneOf(" \t\n\r"));
 
             WsChr = chr => from w in Whitespace
                            from c in Char(chr)

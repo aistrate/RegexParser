@@ -24,14 +24,14 @@ namespace ParserCombinators
             return Satisfy(c => c == ch);
         }
 
-        public static Parser<char, char> OneOf(IEnumerable<char> chars)
+        public static Parser<char, char> OneOf(string chars)
         {
-            return Satisfy(c => chars.Contains(c));
+            return Satisfy(c => chars.IndexOf(c) >= 0);
         }
 
-        public static Parser<char, char> NoneOf(IEnumerable<char> chars)
+        public static Parser<char, char> NoneOf(string chars)
         {
-            return Satisfy(c => !chars.Contains(c));
+            return Satisfy(c => chars.IndexOf(c) < 0);
         }
     }
 }
