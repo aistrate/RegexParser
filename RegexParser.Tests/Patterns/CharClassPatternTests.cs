@@ -76,21 +76,16 @@ namespace RegexParser.Tests.Patterns
             CharClassPattern pattern1 = new CharClassPattern(true, "xy");
             CharClassPattern pattern2 = new CharClassPattern(true, "xyxyy");
             Assert.AreEqual(pattern1, pattern2, "CharSet");
-            Assert.IsTrue(pattern1 == pattern2, "CharSet/==");
 
             pattern1 = new CharClassPattern(true, new[] { uppercase, lowercase });
             pattern2 = new CharClassPattern(true, new[] { uppercase, lowercase });
             Assert.AreEqual(pattern1, pattern2, "CharRange");
-            Assert.IsTrue(pattern1 == pattern2, "CharRange/==");
 
             pattern1 = new CharClassPattern(true, "xyyx", new[] { uppercase, lowercase });
             pattern2 = new CharClassPattern(true, "xxy", new[] { uppercase, lowercase });
             Assert.AreEqual(pattern1, pattern2, "CharSet/CharRange");
-            Assert.IsTrue(pattern1 == pattern2, "CharSet/CharRange/==");
 
             Assert.AreEqual(pattern1.CharRanges[0], pattern2.CharRanges[0], "CharRange");
-            Assert.IsTrue(pattern1.CharRanges[0] == pattern2.CharRanges[0], "CharRange/==");
-
 
             pattern1 = new CharClassPattern(true, new[] { uppercase, lowercase });
             pattern2 = new CharClassPattern(true, new[] { uppercase, lowercase, digits });

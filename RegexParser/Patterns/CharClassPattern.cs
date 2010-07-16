@@ -69,6 +69,7 @@ namespace RegexParser.Patterns
 
         public CharClassPattern Negated { get { return new CharClassPattern(!IsPositive, this); } }
 
+
         public static readonly CharClassPattern AnyChar = new CharClassPattern(false, "\n");
 
         public static readonly CharClassPattern WhitespaceChar = new CharClassPattern(true, " \n\r\t\f\v");
@@ -111,6 +112,7 @@ namespace RegexParser.Patterns
                 return string.Format("{0}-{1}", From, To);
             }
 
+
             #region CharRange Equality
 
             bool IEquatable<CharRange>.Equals(CharRange other)
@@ -128,16 +130,6 @@ namespace RegexParser.Patterns
                 return ((IEquatable<CharRange>)this).Equals(obj as CharRange);
             }
 
-            public static bool operator ==(CharRange op1, CharRange op2)
-            {
-                return object.ReferenceEquals(op1, op2) || op1.Equals(op2);
-            }
-
-            public static bool operator !=(CharRange op1, CharRange op2)
-            {
-                return !(op1 == op2);
-            }
-
             #endregion
         }
 
@@ -146,7 +138,7 @@ namespace RegexParser.Patterns
 
         bool IEquatable<CharClassPattern>.Equals(CharClassPattern other)
         {
-            return !object.ReferenceEquals(other, null) &&
+            return other != null &&
                    this.IsPositive == other.IsPositive &&
                    this.CharSet == other.CharSet &&
                    this.CharRanges.Length == other.CharRanges.Length &&
@@ -163,16 +155,6 @@ namespace RegexParser.Patterns
         public override bool Equals(object obj)
         {
             return ((IEquatable<CharClassPattern>)this).Equals(obj as CharClassPattern);
-        }
-
-        public static bool operator ==(CharClassPattern op1, CharClassPattern op2)
-        {
-            return object.ReferenceEquals(op1, op2) || op1.Equals(op2);
-        }
-
-        public static bool operator !=(CharClassPattern op1, CharClassPattern op2)
-        {
-            return !(op1 == op2);
         }
 
         #endregion

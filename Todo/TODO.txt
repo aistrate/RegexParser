@@ -27,6 +27,12 @@ Features:
 
 Medium:
 
+- character escapes
+
+- quantifiers
+
+- alternation
+
 - handle errors in the pattern string
 
 - implement the explicit DFA algorithm
@@ -37,12 +43,10 @@ Medium:
 
 Small:
 
-- remove equality operator (==) overloading from classes CharClassPattern and CharRange; maybe also the IEquatable<T> interface and GetHashCode overrides (from all classes)
-
 - A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
 
+* remove equality operator (==) overloading from classes CharClassPattern and CharRange [maybe also the IEquatable<T> interface and GetHashCode overrides, from all classes]
 * move CharSubgroup classes from PatternParsers.CharClassPattern to class CharClassPattern (and eliminate the 'let' subexpressions from the pattern definition)
 * RegexAssert methods: write output to the console (input, pattern, matches)
 * do not sort the CharSet and CharRanges array of the CharClassPattern (let the user optimize for speed by choosing the right character order, from most frequent to least frequent in the input)
-
 *oRename Matcher classes to Parser.
