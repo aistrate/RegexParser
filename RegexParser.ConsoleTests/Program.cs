@@ -5,6 +5,7 @@ using System.Reflection;
 using NUnit.Framework;
 using ParserCombinators.Tests;
 using ParserCombinators.Tests.Performance;
+using ParserCombinators.Util;
 using RegexParser.Matchers;
 using RegexParser.Patterns;
 using RegexParser.Tests;
@@ -22,7 +23,7 @@ namespace RegexParser.ConsoleTests
             try
             {
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("It cost € 3,200.", @"€")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("It cost € 3,200.\nFood.", @"\012")));
 
                 //EnumerablePerformanceTests.TestContainsCharBySize();
                 //PatternPerformanceTests.CharClassPatternTest();

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using ParserCombinators;
+using ParserCombinators.Util;
 
 namespace RegexParser.Patterns
 {
@@ -19,7 +21,15 @@ namespace RegexParser.Patterns
                                     from c in OneOf(specialChars) select new CharPattern(c),
                                     from c in Char('t') select new CharPattern('\t'),
                                     from c in Char('n') select new CharPattern('\n'),
-                                    from c in Char('r') select new CharPattern('\r')
+                                    from c in Char('r') select new CharPattern('\r'),
+
+                                    from k in Either(from c in Char('x') select 2,
+                                                     from c in Char('u') select 4)
+                                    from hs in Count(k, HexDigit)
+                                    select new CharPattern((char)Numeric.ReadHex(hs)),
+
+                                    from os in Count(2, 3, OctDigit)
+                                    select new CharPattern((char)Numeric.ReadOct(os))
                                 })
                                 select (BasePattern)esc);
 

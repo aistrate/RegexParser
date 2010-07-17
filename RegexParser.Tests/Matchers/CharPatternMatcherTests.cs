@@ -172,15 +172,42 @@ namespace RegexParser.Tests.Matchers
         [Test]
         public void CharCodes()
         {
-            string input = "It cost € 3,200.";
+            string input = "It cost € 3,200.\nExpensive.";
 
             string[] patterns = new[] {
-                //@"\x20",
-                //@"\040",
-                //@"\x30",
-                //@"\060",
-                @"€"
-                //@"\u20AC"
+                @"\x20",
+                @"\x30",
+                @"\x0AE",
+                @"\x0AF",
+
+                @"\40",
+                @"\040",
+                @"\60",
+                @"\060",
+                @"\0600",   // @"\060" + "0"
+                @"\12",
+                @"\012",
+
+                @"€",
+                @"\u20ac",
+                @"\u0030"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+
+        //[Test]
+        public void CharCodes_TooShort()
+        {
+            string input = "It cost € 3,200.\nExpensive.";
+
+            string[] patterns = new[] {
+                @"\xA",
+                @"\7",
+                @"\uA",
+                @"\u30",
+                @"\u030"
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);

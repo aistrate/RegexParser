@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 
 namespace ParserCombinators
 {
@@ -22,6 +23,21 @@ namespace ParserCombinators
         public static Parser<char, char> Char(char ch)
         {
             return Satisfy(c => c == ch);
+        }
+
+        public static Parser<char, char> Digit
+        {
+            get { return Satisfy(c => c.IsDigit()); }
+        }
+
+        public static Parser<char, char> OctDigit
+        {
+            get { return Satisfy(c => c.IsOctDigit()); }
+        }
+
+        public static Parser<char, char> HexDigit
+        {
+            get { return Satisfy(c => c.IsHexDigit()); }
         }
 
         public static Parser<char, char> OneOf(string chars)

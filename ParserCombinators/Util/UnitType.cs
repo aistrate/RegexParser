@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ParserCombinators
+namespace ParserCombinators.Util
 {
     /// <summary>
     /// The unit datatype () from Haskell, with only one member, ().

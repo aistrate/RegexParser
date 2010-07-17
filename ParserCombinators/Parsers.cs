@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParserCombinators.ConsLists;
+using ParserCombinators.Util;
 
 namespace ParserCombinators
 {
@@ -76,6 +77,62 @@ namespace ParserCombinators
             return from x in parser
                    from xs in Many(parser)
                    select new[] { x }.Concat(xs);
+        }
+
+        public static Parser<TToken, IEnumerable<TValue>> Sequence<TValue>(IEnumerable<Parser<TToken, TValue>> parsers)
+        {
+            return consList =>
+            {
+                List<TValue> values = new List<TValue>();
+                Result<TToken, TValue> result;
+
+                foreach (var parser in parsers)
+                {
+                    result = parser(consList);
+
+                    if (result == null)
+                        return null;
+
+                    values.Add(result.Value);
+                    consList = result.Rest;
+                }
+
+                return new Result<TToken, IEnumerable<TValue>>(values, consList);
+            };
+        }
+
+        public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int count, Parser<TToken, TValue> parser)
+        {
+            return Sequence(Enumerable.Repeat(parser, count));
+        }
+
+        public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int from, int to, Parser<TToken, TValue> parser)
+        {
+            return consList =>
+            {
+                List<TValue> values = new List<TValue>();
+                Result<TToken, TValue> result;
+                int count = 0;
+
+                if (to > 0)
+                    do
+                    {
+                        result = parser(consList);
+
+                        if (result != null)
+                        {
+                            values.Add(result.Value);
+                            consList = result.Rest;
+                            count++;
+                        }
+                    }
+                    while (result != null && count < to);
+
+                if (count >= from)
+                    return new Result<TToken, IEnumerable<TValue>>(values, consList);
+                else
+                    return null;
+            };
         }
 
         public static Parser<TToken, TValue> Between<TOpen, TClose, TValue>(Parser<TToken, TOpen> open,
