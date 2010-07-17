@@ -10,29 +10,18 @@ namespace RegexParser.Patterns
     {
         static PatternParsers()
         {
-            // TODO: simplify
-            BackslashedChar = ch => (from b in Char('\\')
-                                     from c in Char(ch)
-                                     select c);
+            CharEscape = Either(from c in NoneOf(specialChars)
+                                select (BasePattern)new CharPattern(c),
 
-            CharEscape = Choice(new[]
+                                from b in Char('\\')
+                                from esc in Choice(new[]
                                 {
-                                    from c in NoneOf(specialChars)
-                                    select (BasePattern)new CharPattern(c),
-
-                                    from b in Char('\\')
-                                    from c in OneOf(specialChars)
-                                    select (BasePattern)new CharPattern(c),
-
-                                    from c in BackslashedChar('t')
-                                    select (BasePattern)new CharPattern('\t'),
-
-                                    from c in BackslashedChar('n')
-                                    select (BasePattern)new CharPattern('\n'),
-
-                                    from c in BackslashedChar('r')
-                                    select (BasePattern)new CharPattern('\r')
-                                });
+                                    from c in OneOf(specialChars) select new CharPattern(c),
+                                    from c in Char('t') select new CharPattern('\t'),
+                                    from c in Char('n') select new CharPattern('\n'),
+                                    from c in Char('r') select new CharPattern('\r')
+                                })
+                                select (BasePattern)esc);
 
             charClasses();
 
@@ -41,11 +30,11 @@ namespace RegexParser.Patterns
                             Lazy(() => BareGroup));
 
             BareGroup = from ps in Many(Choice(new[]
-                                               {
-                                                   Group,
-                                                   CharEscape,
-                                                   CharClass
-                                               }))
+                                        {
+                                            Group,
+                                            CharEscape,
+                                            CharClass
+                                        }))
                         select (BasePattern)new GroupPattern(ps);
 
             Regex = BareGroup;
@@ -64,40 +53,36 @@ namespace RegexParser.Patterns
             CharGroup = Between(Char('['),
                                 Char(']'),
 
-                                from isPositive in Option(true, from c in Char('^')
-                                                                select false)
-                                from atoms in Many1(Choice(new[] { charRange, singleChar }))
+                                from isPositive in Option(true,
+                                                          from c in Char('^') select false)
+                                from atoms in Many1(Choice(new[]
+                                                    {
+                                                        charRange,
+                                                        singleChar
+                                                    }))
                                 select (BasePattern)new CharClassPattern(isPositive, atoms));
 
             CharClass = Choice(new[]
-                               {
-                                    from c in Char('.')
-                                    select (BasePattern)CharClassPattern.AnyChar,
+                        {
+                            from c in Char('.')
+                            select (BasePattern)CharClassPattern.AnyChar,
 
-                                    // TODO: parse backslash only once
-                                    from c in BackslashedChar('s')
-                                    select (BasePattern)CharClassPattern.WhitespaceChar,
+                            from b in Char('\\')
+                            from cls in Choice(new[]
+                            {
+                                from c in Char('s') select CharClassPattern.WhitespaceChar,
+                                from c in Char('S') select CharClassPattern.WhitespaceChar.Negated,
+                                from c in Char('w') select CharClassPattern.WordChar,
+                                from c in Char('W') select CharClassPattern.WordChar.Negated,
+                                from c in Char('d') select CharClassPattern.DigitChar,
+                                from c in Char('D') select CharClassPattern.DigitChar.Negated
+                            })
+                            select (BasePattern)cls,
 
-                                    from c in BackslashedChar('S')
-                                    select (BasePattern)CharClassPattern.WhitespaceChar.Negated,
-
-                                    from c in BackslashedChar('w')
-                                    select (BasePattern)CharClassPattern.WordChar,
-
-                                    from c in BackslashedChar('W')
-                                    select (BasePattern)CharClassPattern.WordChar.Negated,
-
-                                    from c in BackslashedChar('d')
-                                    select (BasePattern)CharClassPattern.DigitChar,
-
-                                    from c in BackslashedChar('D')
-                                    select (BasePattern)CharClassPattern.DigitChar.Negated,
-
-                                    CharGroup
-                               });
+                            CharGroup
+                        });
         }
 
-        public static Func<char, Parser<char, char>> BackslashedChar;
         public static Parser<char, BasePattern> CharEscape;
 
         public static Parser<char, BasePattern> CharGroup;
