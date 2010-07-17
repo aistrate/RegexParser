@@ -109,12 +109,8 @@ namespace ParserCombinators.Tests.Performance
 
             TimeSpan time = DateTime.Now - start;
 
-            Console.WriteLine("{0} with {1} ({2} times, size = {3}): {4} sec.",
-                              seqName,
-                              funcName,
-                              times.ToString("#,##0").PadLeft(10),
-                              max.ToString("#,##0").PadLeft(10),
-                              (time.TotalMilliseconds / 1000).ToString("#0.000").PadLeft(8));
+            Console.WriteLine("{0} with {1} ({2,10:#,##0} times, size = {3,10:#,##0}): {4,8:#0.000} sec.",
+                              seqName, funcName, times, max, time.TotalMilliseconds / 1000);
         }
 
         public static void TestEnumerableChars()

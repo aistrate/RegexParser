@@ -45,6 +45,15 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
+        [Test]
+        public void EmptyPattern()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("", "", AlgorithmType, "Empty");
+            RegexAssert.AreMatchesSameAsMsoft("x", "", AlgorithmType, "x");
+            RegexAssert.AreMatchesSameAsMsoft("xx", "", AlgorithmType, "xx");
+            RegexAssert.AreMatchesSameAsMsoft("xyz", "", AlgorithmType, "xyz");
+        }
+
         //[Test]
         //public void Grouping_ErrorHandling()
         //{

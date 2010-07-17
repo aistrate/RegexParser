@@ -17,6 +17,13 @@ namespace RegexParser.Matchers
 
         protected override IEnumerable<Match2> GetMatches()
         {
+            if (Pattern is GroupPattern && ((GroupPattern)Pattern).Length == 0)
+            {
+                for (int i = 0; i <= InputText.Length; i++)
+                    yield return new Match2(i, 0, "");
+                yield break;
+            }
+
             Parser<char, string> matchParser = MatchParsers.CreateParser(Pattern);
 
             IConsList<char> consList = new ArrayConsList<char>(InputText);

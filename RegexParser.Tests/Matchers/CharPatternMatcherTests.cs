@@ -130,5 +130,43 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
+
+        [Test]
+        public void EscapedSpecialChars()
+        {
+            string input = @".$^{[(|)*+?\";
+
+            string[] patterns = new[] {
+                @"\.",
+                @"\$",
+                @"\^",
+                @"\{",
+                @"\[",
+                @"\(",
+                @"\|",
+                @"\)",
+                @"\*",
+                @"\+",
+                @"\?",
+                @"\\",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void CharEscapes()
+        {
+            string input = "ID\tName\tAddress \t\t\tPhone number\n" +
+                           "55\tJohn\tOaks Avenue 5\t065656565\n\r";
+
+            string[] patterns = new[] {
+                @"\t",
+                @"\n",
+                @"\r"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
     }
 }

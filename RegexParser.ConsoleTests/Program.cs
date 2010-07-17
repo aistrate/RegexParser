@@ -22,7 +22,7 @@ namespace RegexParser.ConsoleTests
             try
             {
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("x", "")));
 
                 //EnumerablePerformanceTests.TestContainsCharBySize();
                 //PatternPerformanceTests.CharClassPatternTest();

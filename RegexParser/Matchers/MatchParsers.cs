@@ -38,11 +38,11 @@ namespace RegexParser.Matchers
             else if (pattern.GetType() == typeof(CharClassPattern))
                 return from c in Satisfy(((CharClassPattern)pattern).IsMatch)
                        select new string(c, 1);
-            
+
             else if (pattern.GetType() == typeof(CharPattern))
                 return from c in Char(((CharPattern)pattern).Value)
                        select new string(c, 1);
-            
+
             else
                 return null;
         }

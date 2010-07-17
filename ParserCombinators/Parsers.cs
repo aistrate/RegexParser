@@ -43,11 +43,6 @@ namespace ParserCombinators
             };
         }
 
-        public static Parser<TToken, TValue> Choice<TValue>(params Func<Parser<TToken, TValue>>[] choices)
-        {
-            return Choice(LazySeq(choices));
-        }
-
         public static Parser<TToken, TValue> Option<TValue>(TValue defaultValue, Parser<TToken, TValue> parser)
         {
             return Either(parser, Succeed(defaultValue));
@@ -93,9 +88,24 @@ namespace ParserCombinators
                    select x;
         }
 
-        public static IEnumerable<Parser<TToken, TValue>> LazySeq<TValue>(params Func<Parser<TToken, TValue>>[] thunks)
+        public static Parser<TToken, UnitType> NotFollowedBy<TValue>(Parser<TToken, TValue> parser)
         {
-            return thunks.Select(e => e());
+            return consList => parser(consList) != null ? null : new Result<TToken, UnitType>(UnitType.Unit, consList);
+        }
+
+        public static Parser<TToken, UnitType> Eof
+        {
+            get { return NotFollowedBy(Token); }
+        }
+
+        public static Parser<TToken, TValue> Lazy<TValue>(Func<Parser<TToken, TValue>> thunk)
+        {
+            return consList => thunk()(consList);
+        }
+
+        public static IEnumerable<T> LazySeq<T>(params Func<T>[] thunks)
+        {
+            return thunks.Select(t => t());
         }
     }
 }

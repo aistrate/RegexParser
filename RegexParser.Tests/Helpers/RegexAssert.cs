@@ -48,7 +48,7 @@ namespace RegexParser.Tests.Helpers
         {
             int count = matches.Count();
 
-            Console.WriteLine("Input: \"{0}\"", input);
+            Console.WriteLine("Input: \"{0}\"", replaceWhitespace(input));
             Console.WriteLine("Pattern: \"{0}\"", pattern);
 
             Console.WriteLine("{0} match{1} ({2}){3}",
@@ -58,11 +58,16 @@ namespace RegexParser.Tests.Helpers
                               count > 0 ? ":" : ".\n");
 
             if (count > 0)
-                Console.WriteLine(string.Join("\n", matches.Select(m => string.Format("{0};{1};  \"{2}\"",
-                                                                                      m.Index.ToString("#0").PadLeft(4),
-                                                                                      m.Length.ToString("#0").PadLeft(3),
-                                                                                      m.Value))
+                Console.WriteLine(string.Join("\n", matches.Select(m => string.Format("{0,4:#0},{1,3:#0},  \"{2}\"",
+                                                                                      m.Index, m.Length, replaceWhitespace(m.Value)))
                                                            .ToArray()) + "\n");
+        }
+
+        private static string replaceWhitespace(string text)
+        {
+            return text.Replace("\t", "\\t")
+                       .Replace("\n", "\\n")
+                       .Replace("\r", "\\r");
         }
 
         private static Match2 createMatch(Msoft.Match msoftMatch)
