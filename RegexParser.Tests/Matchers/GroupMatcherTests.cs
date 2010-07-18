@@ -9,9 +9,9 @@ using RegexParser.Tests.Helpers;
 namespace RegexParser.Tests.Matchers
 {
     [TestFixture(AlgorithmType.ImplicitDFA)]
-    public class GroupPatternMatcherTests : MatcherTests
+    public class GroupMatcherTests : MatcherTests
     {
-        public GroupPatternMatcherTests(AlgorithmType algorithmType)
+        public GroupMatcherTests(AlgorithmType algorithmType)
             : base(algorithmType) { }
 
         [Test]

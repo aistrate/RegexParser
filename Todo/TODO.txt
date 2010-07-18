@@ -43,7 +43,7 @@ Medium:
 
 Small:
 
-- character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d])
+- character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d]); also, character escapes (e.g., [\t\u007c]); in fact, parsers CharEscapes and CharClass should be unified
 
 - throw an error for any 'unknown' character after backslash, both in the CharEscapes and the CharClass parsers
 

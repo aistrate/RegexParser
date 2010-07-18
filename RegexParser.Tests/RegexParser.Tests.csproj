@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5A5C2DF3-04BE-44D0-A357-534CBBE1B0E6}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -49,16 +49,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Matchers\CharClassPatternMatcherTests.cs" />
-    <Compile Include="Matchers\GroupPatternMatcherTests.cs" />
+    <Compile Include="Matchers\CharClassMatcherTests.cs" />
+    <Compile Include="Matchers\GroupMatcherTests.cs" />
     <Compile Include="Matchers\MatcherTests.cs" />
+    <Compile Include="Matchers\QuantifierMatcherTests.cs" />
     <Compile Include="Patterns\CharClassPatternTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="Patterns\PatternTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Matchers\CharPatternMatcherTests.cs" />
+    <Compile Include="Matchers\CharMatcherTests.cs" />
     <Compile Include="Helpers\ClassExtensions.cs" />
     <Compile Include="Helpers\CollAssert.cs" />
     <Compile Include="Helpers\Counter.cs" />

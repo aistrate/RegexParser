@@ -11,8 +11,16 @@ namespace RegexParser.Patterns
         public static BasePattern CreatePattern(string patternText)
         {
             var result = PatternParsers.Regex(new ArrayConsList<char>(patternText));
-            
-            return result.Rest.IsEmpty ? result.Value : null;
+
+            if (result.Rest.IsEmpty)
+                return result.Value;
+            else
+            {
+                string remaining = new string(result.Rest.AsEnumerable().ToArray());
+                throw new ArgumentException(
+                                string.Format("Could not understand part of the regex pattern: \"{0}\".", remaining),
+                                "patternText");
+            }
         }
     }
 }
