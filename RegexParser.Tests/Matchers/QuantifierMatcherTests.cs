@@ -30,12 +30,24 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
-        public void Embedded()
+        public void Nested()
         {
             RegexAssert.AreMatchesSameAsMsoft("abab", @"(aba?)+", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbab", @"(aba?)+", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbab", @"(abb?)+", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbab", @"abb?", AlgorithmType);
+        }
+
+        [Test]
+        public void Doubled()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("abab", @"((ab)+)+", AlgorithmType);
+        }
+
+        [Test]
+        public void Doubled_Error()
+        {
+            RegexAssert.ThrowsSameExceptionAsMsoft("abab", @"(ab)++", AlgorithmType);
         }
 
         //[Test]

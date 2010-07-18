@@ -28,5 +28,23 @@ namespace RegexParser.Tests.Patterns
 
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void Doubled()
+        {
+            BasePattern actual = BasePattern.CreatePattern(@"((ab)+)+");
+
+            BasePattern expected = new GroupPattern(
+                                       new QuantifierPattern(
+                                           new GroupPattern(
+                                               new QuantifierPattern(
+                                                   new GroupPattern(
+                                                       new CharPattern('a'),
+                                                       new CharPattern('b')),
+                                                   1, null, true)),
+                                           1, null, true));
+
+            Assert.AreEqual(expected, actual, "With parentheses");
+        }
     }
 }

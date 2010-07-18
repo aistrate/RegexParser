@@ -28,13 +28,21 @@ namespace RegexParser.ConsoleTests
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("bbbcc", @"b*")));
 
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abab", @"ab+?+")));
+
                 //EnumerablePerformanceTests.TestContainsCharBySize();
                 //PatternPerformanceTests.CharClassPatternTest();
 
                 //new CharPatternMatcherTests(AlgorithmType.ImplicitDFA).CharCodes();
+                new QuantifierMatcherTests(AlgorithmType.ImplicitDFA).Doubled_Error();
             }
             catch (Exception ex)
             {
+                Console.WriteLine("TYPE:\n");
+                for (Exception e = ex; e != null; e = e.InnerException)
+                    Console.WriteLine(e.GetType().FullName);
+                Console.WriteLine();
+
                 Console.WriteLine("MESSAGE:\n");
                 Console.WriteLine(ex.Message);
 

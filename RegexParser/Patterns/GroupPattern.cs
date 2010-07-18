@@ -14,6 +14,11 @@ namespace RegexParser.Patterns
             Patterns = patterns.ToArray();
         }
 
+        public GroupPattern(params BasePattern[] patterns)
+        {
+            Patterns = patterns;
+        }
+
         public BasePattern[] Patterns { get; private set; }
 
         public int Length { get { return Patterns.Length; } }
