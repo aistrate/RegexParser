@@ -70,32 +70,6 @@ namespace RegexParser.Tests.Helpers
             }
         }
 
-        private static Exception catchException(Action runRegex, string regexName, string input, string pattern, string message)
-        {
-            Exception caughtException = null;
-
-            try
-            {
-                runRegex();
-            }
-            catch (Exception ex)
-            {
-                caughtException = ex;
-            }
-
-            if (caughtException != null)
-                return caughtException;
-            else
-                throw new AssertionException(formatException(message, input, pattern,
-                      new AssertionException(regexName + " did not throw an exception, though was supposed to.")));
-        }
-
-        private static IEnumerable<Exception> exceptionChain(Exception ex)
-        {
-            for (Exception e = ex; e != null; e = e.InnerException)
-                yield return e;
-        }
-
         public static void ThrowSameExceptionsAsMsoft(string input, string[] patterns, AlgorithmType algorithmType)
         {
             foreach (string pattern in patterns)
@@ -160,6 +134,32 @@ namespace RegexParser.Tests.Helpers
             message = indent + message.Replace("\n", "\n" + indent);
 
             return message;
+        }
+
+        private static Exception catchException(Action runRegex, string regexName, string input, string pattern, string message)
+        {
+            Exception caughtException = null;
+
+            try
+            {
+                runRegex();
+            }
+            catch (Exception ex)
+            {
+                caughtException = ex;
+            }
+
+            if (caughtException != null)
+                return caughtException;
+            else
+                throw new AssertionException(formatException(message, input, pattern,
+                      new AssertionException(regexName + " did not throw an exception, though was supposed to.")));
+        }
+
+        private static IEnumerable<Exception> exceptionChain(Exception ex)
+        {
+            for (Exception e = ex; e != null; e = e.InnerException)
+                yield return e;
         }
     }
 }
