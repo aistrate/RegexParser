@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using ParserCombinators;
+using ParserCombinators.ConsLists;
 using ParserCombinators.Tests;
 using ParserCombinators.Tests.Performance;
 using ParserCombinators.Util;
@@ -27,6 +29,8 @@ namespace RegexParser.ConsoleTests
 
                 //EnumerablePerformanceTests.TestContainsCharBySize();
                 //PatternPerformanceTests.CharClassPatternTest();
+
+                new CharPatternMatcherTests(AlgorithmType.ImplicitDFA).CharCodes();
             }
             catch (Exception ex)
             {
