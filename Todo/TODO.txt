@@ -27,7 +27,7 @@ Features:
 
 Medium:
 
-- character escapes
+* character escapes
 
 - quantifiers
 
@@ -42,6 +42,12 @@ Medium:
 
 
 Small:
+
+- character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d])
+
+- throw an error for any 'unknown' character after backslash, both in the CharEscapes and the CharClass parsers
+
+- throw an error if \x, \u or \<octal> have too few digits
 
 - A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
 

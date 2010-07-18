@@ -51,25 +51,7 @@ namespace ParserCombinators
 
         public static Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
         {
-            return consList =>
-            {
-                List<TValue> values = new List<TValue>();
-                Result<TToken, TValue> result;
-
-                do
-                {
-                    result = parser(consList);
-
-                    if (result != null)
-                    {
-                        values.Add(result.Value);
-                        consList = result.Rest;
-                    }
-                }
-                while (result != null);
-
-                return new Result<TToken, IEnumerable<TValue>>(values, consList);
-            };
+            return Count(0, null, parser);
         }
 
         public static Parser<TToken, IEnumerable<TValue>> Many1<TValue>(Parser<TToken, TValue> parser)
@@ -103,7 +85,7 @@ namespace ParserCombinators
 
         public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int count, Parser<TToken, TValue> parser)
         {
-            return Sequence(Enumerable.Repeat(parser, count));
+            return Count(count, count, parser);
         }
 
         public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int min, int? max, Parser<TToken, TValue> parser)
@@ -139,28 +121,6 @@ namespace ParserCombinators
                     return null;
             };
         }
-
-        //public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int min, int max, Parser<TToken, TValue> parser)
-        //{
-        //    if (min > max)
-        //        return Fail<IEnumerable<TValue>>();
-
-        //    return from xs in Count(min, parser)
-        //           from ys in CountTo(max - min, parser)
-        //           select xs.Concat(ys);
-        //}
-
-        //public static Parser<TToken, IEnumerable<TValue>> CountTo<TValue>(int max, Parser<TToken, TValue> parser)
-        //{
-        //    if (max <= 0)
-        //        return Succeed(Enumerable.Empty<TValue>());
-        //    else
-        //        return Either(from x in parser
-        //                      from xs in CountTo(max - 1, parser)
-        //                      select new[] { x }.Concat(xs),
-
-        //                      Succeed(Enumerable.Empty<TValue>()));
-        //}
 
         public static Parser<TToken, TValue> Between<TOpen, TClose, TValue>(Parser<TToken, TOpen> open,
                                                                             Parser<TToken, TClose> close,
