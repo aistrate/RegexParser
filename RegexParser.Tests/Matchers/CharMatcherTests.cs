@@ -184,7 +184,16 @@ namespace RegexParser.Tests.Matchers
                 @"\n\r\n",
                 @"\r\n\r",
                 @"\n\n\n",
-                @"\r\r\r"
+                @"\r\r\r",
+
+                // real newlines
+                "\n",
+                "\r",
+                @"
+",
+                @"
+
+"
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);

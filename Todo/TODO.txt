@@ -43,17 +43,19 @@ Medium:
 
 Small:
 
+- {n, m} quantifier patterns
+
+- non-greedy quantifiers
+
+- zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
+
 - character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d]); also, character escapes (e.g., [\t\u007c]); in fact, parsers CharEscapes and CharClass should be unified
 
 - throw an error for any 'unknown' character after backslash, both in the CharEscapes and the CharClass parsers
 
 - throw an error if \x, \u or \<octal> have too few digits
 
-- zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
-
-- escape the dash ('-') inside a character class (e.g., "[a-zA\-Z]" shouldn't match "BCDEF")
-
-- test with a real newline ("\n") inside a pattern; also, with a verbatim string literal (@"...") that spans two or more lines (as the pattern)
+- escape the dash ('-') inside a character class (e.g., "[a-zA\-Z]" should match only the dash in "BC-DEF")
 
 - test with a char range class pattern inside another one (e.g., @"[[s\]\d]") (or at least it looks that way, even though it's not really interpreted as such)
 
@@ -61,6 +63,7 @@ Small:
 
 - A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
 
+* test with a real newline ("\n") inside a pattern; also, with a verbatim string literal (@"...") that spans two or more lines (as the pattern)
 * remove equality operator (==) overloading from classes CharClassPattern and CharRange [maybe also the IEquatable<T> interface and GetHashCode overrides, from all classes]
 * move CharSubgroup classes from PatternParsers.CharClassPattern to class CharClassPattern (and eliminate the 'let' subexpressions from the pattern definition)
 * RegexAssert methods: write output to the console (input, pattern, matches)
