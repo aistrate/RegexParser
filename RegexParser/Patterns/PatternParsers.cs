@@ -33,7 +33,26 @@ namespace RegexParser.Patterns
                                 })
                                 select (BasePattern)esc);
 
+
             charClasses();
+
+
+            Quantifier = from child in Choice(new[]
+                                       {
+                                           Lazy(() => Group),
+                                           CharEscape,
+                                           CharClass
+                                       })
+                         from quant in Choice(new[]
+                                       {
+                                           from q in Char('*') select new { Min = 0, Max = (int?)null },
+                                           from q in Char('+') select new { Min = 1, Max = (int?)null },
+                                           from q in Char('?') select new { Min = 0, Max = (int?)1 }
+                                       })
+                         from greedy in Option(true,
+                                               from c in Char('?') select false)
+                         select (BasePattern)new QuantifierPattern(child, quant.Min, quant.Max, greedy);
+
 
             Group = Between(Char('('),
                             Char(')'),
@@ -41,6 +60,7 @@ namespace RegexParser.Patterns
 
             BareGroup = from ps in Many(Choice(new[]
                                         {
+                                            Quantifier,
                                             Group,
                                             CharEscape,
                                             CharClass
@@ -63,14 +83,14 @@ namespace RegexParser.Patterns
             CharGroup = Between(Char('['),
                                 Char(']'),
 
-                                from isPositive in Option(true,
-                                                          from c in Char('^') select false)
+                                from positive in Option(true,
+                                                        from c in Char('^') select false)
                                 from atoms in Many1(Choice(new[]
                                                     {
                                                         charRange,
                                                         singleChar
                                                     }))
-                                select (BasePattern)new CharClassPattern(isPositive, atoms));
+                                select (BasePattern)new CharClassPattern(positive, atoms));
 
             CharClass = Choice(new[]
                         {
@@ -97,6 +117,8 @@ namespace RegexParser.Patterns
 
         public static Parser<char, BasePattern> CharGroup;
         public static Parser<char, BasePattern> CharClass;
+
+        public static Parser<char, BasePattern> Quantifier;
 
         public static Parser<char, BasePattern> BareGroup;
         public static Parser<char, BasePattern> Group;

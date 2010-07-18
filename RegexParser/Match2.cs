@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 using RegexParser.Util;
 
 namespace RegexParser
@@ -40,7 +41,7 @@ namespace RegexParser
         public override string ToString()
         {
             if (Success)
-                return string.Format("Match {{Index={0}, Length={1}, Value=\"{2}\"}}", Index, Length, Value);
+                return string.Format("Match {{Index={0}, Length={1}, Value={2}}}", Index, Length, Value.Show());
             else
                 return string.Format("Match {{Success={0}}}", Success);
         }

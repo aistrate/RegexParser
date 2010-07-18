@@ -7,6 +7,7 @@ using ParserCombinators;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Tests;
 using ParserCombinators.Tests.Performance;
+using ParserCombinators.Tests.Util;
 using ParserCombinators.Util;
 using RegexParser.Matchers;
 using RegexParser.Patterns;
@@ -25,9 +26,7 @@ namespace RegexParser.ConsoleTests
             try
             {
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("It cost € 3,200.\nFood.", @"\012")));
-
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abab", @"(aba?)+")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("bbbcc", @"b*")));
 
                 //EnumerablePerformanceTests.TestContainsCharBySize();
                 //PatternPerformanceTests.CharClassPatternTest();
@@ -70,7 +69,7 @@ namespace RegexParser.ConsoleTests
         {
             MatchCollection2 matches = new Regex2(pattern, AlgorithmType.ImplicitDFA).Matches(input);
 
-            Console.WriteLine("Match \"{0}\" against \"{1}\":\n", pattern, input);
+            Console.WriteLine("Match pattern {0} against {1}:\n", pattern.ShowVerbatim(), input.Show());
             Console.WriteLine(string.Join("\n", matches.Select(m => m.ToString()).ToArray()));
             Console.WriteLine("\n");
         }
@@ -86,7 +85,7 @@ namespace RegexParser.ConsoleTests
 
         private static string formatMsoftMatch(Msoft.Match match)
         {
-            return string.Format("({0}, {1}, \"{2}\")", match.Index, match.Length, match.Value);
+            return string.Format("({0}, {1}, {2})", match.Index, match.Length, match.Value.Show());
         }
     }
 }

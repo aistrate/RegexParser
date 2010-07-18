@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 
 namespace RegexParser.Patterns
 {
@@ -16,7 +17,7 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("Char {{'{0}'}}", Value);
+            return string.Format("Char {{{0}}}", Value.Show());
         }
 
         bool IEquatable<CharPattern>.Equals(CharPattern other)

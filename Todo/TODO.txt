@@ -49,6 +49,14 @@ Small:
 
 - throw an error if \x, \u or \<octal> have too few digits
 
+- zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
+
+- escape the dash ('-') inside a character class (e.g., "[a-zA\-Z]" shouldn't match "BCDEF")
+
+- test with a real newline ("\n") inside a pattern; also, with a verbatim string literal (@"...") that spans two or more lines (as the pattern)
+
+- test with a char range class pattern inside another one (e.g., @"[[s\]\d]") (or at least it looks that way, even though it's not really interpreted as such)
+
 - A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
 
 * remove equality operator (==) overloading from classes CharClassPattern and CharRange [maybe also the IEquatable<T> interface and GetHashCode overrides, from all classes]

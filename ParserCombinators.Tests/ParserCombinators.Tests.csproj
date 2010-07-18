@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EB0E0DBE-EB79-41CB-9B3D-09A8B4CDD5B4}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -57,6 +57,7 @@
     <Compile Include="MiniML\Terms.cs" />
     <Compile Include="ParserCombinatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\CharacterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParserCombinators\ParserCombinators.csproj">

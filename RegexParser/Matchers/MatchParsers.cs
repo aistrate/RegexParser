@@ -35,6 +35,14 @@ namespace RegexParser.Matchers
                     return new Result<char, string>(groupResult.ToString(), consList);
                 };
 
+            else if (pattern.GetType() == typeof(QuantifierPattern))
+            {
+                QuantifierPattern quant = (QuantifierPattern)pattern;
+
+                return from ms in Count(quant.MinOccurrences, quant.MaxOccurrences, CreateParser(quant.ChildPattern))
+                       select new string(ms.SelectMany(m => m).ToArray());
+            }
+
             else if (pattern.GetType() == typeof(CharClassPattern))
                 return from c in Satisfy(((CharClassPattern)pattern).IsMatch)
                        select new string(c, 1);

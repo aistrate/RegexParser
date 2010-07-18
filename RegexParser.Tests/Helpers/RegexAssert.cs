@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using ParserCombinators.Util;
 using RegexParser.Matchers;
 using RegexParser.Util;
 using Msoft = System.Text.RegularExpressions;
@@ -48,8 +49,8 @@ namespace RegexParser.Tests.Helpers
         {
             int count = matches.Count();
 
-            Console.WriteLine("Input: \"{0}\"", replaceWhitespace(input));
-            Console.WriteLine("Pattern: \"{0}\"", pattern);
+            Console.WriteLine("Input: {0}", input.Show());
+            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
 
             Console.WriteLine("{0} match{1} ({2}){3}",
                               count,
@@ -58,16 +59,9 @@ namespace RegexParser.Tests.Helpers
                               count > 0 ? ":" : ".\n");
 
             if (count > 0)
-                Console.WriteLine(string.Join("\n", matches.Select(m => string.Format("{0,4:#0},{1,3:#0},  \"{2}\"",
-                                                                                      m.Index, m.Length, replaceWhitespace(m.Value)))
+                Console.WriteLine(string.Join("\n", matches.Select(m => string.Format("{0,4:#0},{1,3:#0},  {2}",
+                                                                                      m.Index, m.Length, m.Value.Show()))
                                                            .ToArray()) + "\n");
-        }
-
-        private static string replaceWhitespace(string text)
-        {
-            return text.Replace("\t", "\\t")
-                       .Replace("\n", "\\n")
-                       .Replace("\r", "\\r");
         }
 
         private static Match2 createMatch(Msoft.Match msoftMatch)
@@ -87,7 +81,7 @@ namespace RegexParser.Tests.Helpers
             else
                 message += "\n";
 
-            message += string.Format("Comparing with .NET Regex: Input=\"{0}\", Pattern=\"{1}\"\n", input, pattern) +
+            message += string.Format("Comparing with .NET Regex: Input={0}, Pattern={1}\n", input.Show(), pattern.ShowVerbatim()) +
                        ex.Message;
             message = indent + message.Replace("\n", "\n" + indent);
 

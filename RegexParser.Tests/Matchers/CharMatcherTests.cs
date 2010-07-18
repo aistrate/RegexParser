@@ -170,6 +170,27 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
+        public void NewLines()
+        {
+            string input = "AB\nCD\r\nEF\n\rGH\rIJ\n\nKL\r\rMN\n\r\nOP\r\n\rQR\n";
+
+            string[] patterns = new[] {
+                @"\n",
+                @"\r\n",
+                @"\n\r",
+                @"\r",
+                @"\n\n",
+                @"\r\r",
+                @"\n\r\n",
+                @"\r\n\r",
+                @"\n\n\n",
+                @"\r\r\r"
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
         public void CharCodes()
         {
             string input = "It cost € 3,200.\nExpensive.";

@@ -54,6 +54,7 @@
     <Compile Include="Matchers\MatcherTests.cs" />
     <Compile Include="Matchers\QuantifierMatcherTests.cs" />
     <Compile Include="Patterns\CharClassPatternTests.cs" />
+    <Compile Include="Patterns\QuantifierPatternTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />

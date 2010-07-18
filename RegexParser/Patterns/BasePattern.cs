@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParserCombinators.ConsLists;
+using ParserCombinators.Util;
 
 namespace RegexParser.Patterns
 {
@@ -18,8 +19,8 @@ namespace RegexParser.Patterns
             {
                 string remaining = new string(result.Rest.AsEnumerable().ToArray());
                 throw new ArgumentException(
-                                string.Format("Could not understand part of the regex pattern: \"{0}\".", remaining),
-                                "patternText");
+                                string.Format("Could not understand part of the regex pattern: {0}.", remaining.ShowVerbatim()),
+                                "patternText.");
             }
         }
     }

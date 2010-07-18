@@ -15,16 +15,33 @@ namespace RegexParser.Tests.Matchers
             : base(algorithmType) { }
 
         [Test]
-        public void Star()
+        public void Simple()
         {
-            string input = "A thing or another thing";
+            string input = "A thing or another thing ";
 
             string[] patterns = new[] {
-                @"\w*",
-                @"\s*"
+                @"\w+",
+                @"\s+",
+                @"\w\w*",
+                @"\s\w*"
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void Embedded()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("abab", @"(aba?)+", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abbab", @"(aba?)+", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abbab", @"(abb?)+", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abbab", @"abb?", AlgorithmType);
+        }
+
+        //[Test]
+        public void ZeroWidth()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("bbbcc", @"b*", AlgorithmType);
         }
     }
 }

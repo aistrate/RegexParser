@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 using RegexParser.Util;
 
 namespace RegexParser.Patterns
@@ -61,10 +62,9 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("CharClass {{{0}\"{1}{2}\"}}",
-                                 IsPositive ? "" : "^",
-                                 string.Join("", CharRanges.Select(r => r.ToString()).ToArray()),
-                                 CharSet);
+            return string.Format("CharClass {{{0}{1}}}",
+                                 IsPositive ? "" : "^ ",
+                                 (string.Join("", CharRanges.Select(r => r.ToString()).ToArray()) + CharSet).Show());
         }
 
         public CharClassPattern Negated { get { return new CharClassPattern(!IsPositive, this); } }
