@@ -57,6 +57,8 @@ Small:
 
 - test with a char range class pattern inside another one (e.g., @"[[s\]\d]") (or at least it looks that way, even though it's not really interpreted as such)
 
+- add new method to class RegexAssert: ThrowsSameExceptionAsMsoft
+
 - A parser should be generic (type-wise) on the determinism/non-determinism of the result, similar to Haskell’s Maybe and List monads, respectively. This is needed because the pattern (the regex language) will be parsed deterministically, whereas the input string, non-deterministically.
 
 * remove equality operator (==) overloading from classes CharClassPattern and CharRange [maybe also the IEquatable<T> interface and GetHashCode overrides, from all classes]

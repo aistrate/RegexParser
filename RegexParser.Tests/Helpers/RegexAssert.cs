@@ -12,8 +12,6 @@ namespace RegexParser.Tests.Helpers
 {
     public static class RegexAssert
     {
-        // TODO: add new method: ThrowsSameExceptionAsMsoft
-
         public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType)
         {
             AreMatchesSameAsMsoft(input, pattern, algorithmType, null);
@@ -22,6 +20,7 @@ namespace RegexParser.Tests.Helpers
         public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
         {
             Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
+
             DisplayMatches(input, pattern, algorithmType, actual);
 
             Match2[] expected = Msoft.Regex.Matches(input, pattern)
