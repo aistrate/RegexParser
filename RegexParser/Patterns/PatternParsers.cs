@@ -17,21 +17,21 @@ namespace RegexParser.Patterns
                                 select (BasePattern)new CharPattern(c),
 
                                 from b in Char('\\')
-                                from esc in Choice(new[]
-                                {
-                                    from c in OneOf(specialChars) select new CharPattern(c),
-                                    from c in Char('t') select new CharPattern('\t'),
-                                    from c in Char('n') select new CharPattern('\n'),
-                                    from c in Char('r') select new CharPattern('\r'),
+                                from esc in
+                                    Choice(
+                                        from c in OneOf(specialChars) select new CharPattern(c),
+                                        from c in Char('t') select new CharPattern('\t'),
+                                        from c in Char('n') select new CharPattern('\n'),
+                                        from c in Char('r') select new CharPattern('\r'),
 
-                                    from k in Either(from c in Char('x') select 2,
-                                                     from c in Char('u') select 4)
-                                    from hs in Count(k, HexDigit)
-                                    select new CharPattern((char)Numeric.ReadHex(hs)),
+                                        from k in
+                                            Either(from c in Char('x') select 2,
+                                                   from c in Char('u') select 4)
+                                        from hs in Count(k, HexDigit)
+                                        select new CharPattern((char)Numeric.ReadHex(hs)),
 
-                                    from os in Count(2, 3, OctDigit)
-                                    select new CharPattern((char)Numeric.ReadOct(os))
-                                })
+                                        from os in Count(2, 3, OctDigit)
+                                        select new CharPattern((char)Numeric.ReadOct(os)))
                                 select (BasePattern)esc);
 
             var charRange = from frm in NoneOf("-]")
@@ -48,32 +48,25 @@ namespace RegexParser.Patterns
                                 from positive in
                                     Option(true, from c in Char('^')
                                                  select false)
-                                from atoms in Many1(Choice(new[]
-                                                    {
-                                                        charRange,
-                                                        singleChar
-                                                    }))
+                                from atoms in Many1(Choice(charRange, singleChar))
                                 select (BasePattern)new CharClassPattern(positive, atoms));
 
-            CharClass = Choice(new[]
-                        {
+            CharClass = Choice(
                             from c in Char('.')
                             select (BasePattern)CharClassPattern.AnyChar,
 
                             from b in Char('\\')
-                            from cls in Choice(new[]
-                            {
-                                from c in Char('s') select CharClassPattern.WhitespaceChar,
-                                from c in Char('S') select CharClassPattern.WhitespaceChar.Negated,
-                                from c in Char('w') select CharClassPattern.WordChar,
-                                from c in Char('W') select CharClassPattern.WordChar.Negated,
-                                from c in Char('d') select CharClassPattern.DigitChar,
-                                from c in Char('D') select CharClassPattern.DigitChar.Negated
-                            })
+                            from cls in
+                                Choice(
+                                    from c in Char('s') select CharClassPattern.WhitespaceChar,
+                                    from c in Char('S') select CharClassPattern.WhitespaceChar.Negated,
+                                    from c in Char('w') select CharClassPattern.WordChar,
+                                    from c in Char('W') select CharClassPattern.WordChar.Negated,
+                                    from c in Char('d') select CharClassPattern.DigitChar,
+                                    from c in Char('D') select CharClassPattern.DigitChar.Negated)
                             select (BasePattern)cls,
 
-                            CharGroup
-                        });
+                            CharGroup);
 
 
             // Quantifiers
@@ -91,24 +84,21 @@ namespace RegexParser.Patterns
                                                 select new { Min = min, Max = max });
 
             var QuantifierSuffix = from quant in
-                                       Choice(new[]
-                                       {
+                                       Choice(
                                            from q in Char('*') select new { Min = 0, Max = (int?)null },
                                            from q in Char('+') select new { Min = 1, Max = (int?)null },
                                            from q in Char('?') select new { Min = 0, Max = (int?)1 },
-                                           RangeQuantifierSuffix
-                                       })
+                                           RangeQuantifierSuffix)
                                    from greedy in
                                        Option(true, from c in Char('?')
                                                     select false)
                                    select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
 
-            Quantifier = from child in Choice(new[]
-                                       {
-                                           Lazy(() => Group),
-                                           CharEscape,
-                                           CharClass
-                                       })
+            Quantifier = from child in
+                             Choice(
+                                 Lazy(() => Group),
+                                 CharEscape,
+                                 CharClass)
                          from suffix in QuantifierSuffix
                          select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
 
@@ -118,13 +108,10 @@ namespace RegexParser.Patterns
                             Char(')'),
                             Lazy(() => BareGroup));
 
-            BareGroup = from ps in Many(Choice(new[]
-                                        {
-                                            Quantifier,
-                                            Group,
-                                            CharEscape,
-                                            CharClass
-                                        }))
+            BareGroup = from ps in Many(Choice(Quantifier,
+                                               Group,
+                                               CharEscape,
+                                               CharClass))
                         select (BasePattern)new GroupPattern(ps);
 
             Regex = BareGroup;

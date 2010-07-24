@@ -41,9 +41,7 @@ namespace ParserCombinators.Tests.MiniML
                            from u2 in WsChr(')')
                            select t);
 
-            Term = Choice(new[]
-            {
-                          from u1 in WsChr('\\')
+            Term = Choice(from u1 in WsChr('\\')
                           from x in Ident
                           from u2 in WsChr('.')
                           from t in Term
@@ -59,8 +57,7 @@ namespace ParserCombinators.Tests.MiniML
 
                           from t in Term1
                           from ts in Many(Term1)
-                          select (Term)new AppTerm(t, ts.ToArray())
-            });
+                          select (Term)new AppTerm(t, ts.ToArray()));
 
             All = from t in Term
                   from u in WsChr(';')
