@@ -35,7 +35,7 @@ namespace RegexParser.ConsoleTests
                 //EnumerablePerformanceTests.TestContainsCharBySize();
                 //PatternPerformanceTests.CharClassPatternTest();
 
-                //new CharPatternMatcherTests(AlgorithmType.ImplicitDFA).CharCodes();
+                //new CharEscapeMatcherTests(AlgorithmType.ImplicitDFA).CharCodes();
                 //new QuantifierMatcherTests(AlgorithmType.ImplicitDFA).Doubled_Error();
             }
             catch (Exception ex)

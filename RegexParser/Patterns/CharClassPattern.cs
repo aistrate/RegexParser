@@ -10,7 +10,7 @@ namespace RegexParser.Patterns
     /// <summary>
     /// Immutable class.
     /// </summary>
-    public class CharClassPattern : BasePattern, IEquatable<CharClassPattern>
+    public class CharClassPattern : CharPattern, IEquatable<CharClassPattern>
     {
         public CharClassPattern(bool isPositive, IEnumerable<char> charSet)
             : this(isPositive, charSet, null)
@@ -46,7 +46,7 @@ namespace RegexParser.Patterns
         public readonly string CharSet = "";
         public readonly CharRange[] CharRanges = new CharRange[] { };
 
-        public bool IsMatch(char c)
+        public override bool IsMatch(char c)
         {
             return !IsPositive ^ isPositiveMatch(c);
         }

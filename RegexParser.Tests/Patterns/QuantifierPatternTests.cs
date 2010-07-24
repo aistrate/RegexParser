@@ -21,9 +21,9 @@ namespace RegexParser.Tests.Patterns
                                        new QuantifierPattern(CharClassPattern.WhitespaceChar, 0, 1, true),
                                        new QuantifierPattern(CharClassPattern.WordChar.Negated, 1, null, true),
 
-                                       new QuantifierPattern(new CharPattern('x'), 0, null, false),
-                                       new QuantifierPattern(new CharPattern('\n'), 0, 1, false),
-                                       new QuantifierPattern(new CharPattern('y'), 1, null, false)
+                                       new QuantifierPattern(new CharEscapePattern('x'), 0, null, false),
+                                       new QuantifierPattern(new CharEscapePattern('\n'), 0, 1, false),
+                                       new QuantifierPattern(new CharEscapePattern('y'), 1, null, false)
                                    });
 
             Assert.AreEqual(expected, actual);
@@ -39,8 +39,8 @@ namespace RegexParser.Tests.Patterns
                                            new GroupPattern(
                                                new QuantifierPattern(
                                                    new GroupPattern(
-                                                       new CharPattern('a'),
-                                                       new CharPattern('b')),
+                                                       new CharEscapePattern('a'),
+                                                       new CharEscapePattern('b')),
                                                    1, null, true)),
                                            1, null, true));
 

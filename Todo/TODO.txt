@@ -20,10 +20,6 @@ Small:
 
 - character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d]); also, character escapes (e.g., [\t\u007c]); in fact, parsers CharEscapes and CharClass should be unified
 
-- make classes CharPattern (or CharEscapePattern) and CharClassPattern descend from a common class (CharPattern?); this will be the only class to be 'asked' by MatcherPatterns if a char satisfies it (virtual method: IsMatch)
-
-- rename class CharPattern to CharEscapePattern (like the parser in PatternParsers)
-
 - test with a char range class pattern inside another one (e.g., @"[[s\]\d]") (or at least it looks that way, even though it's not really interpreted as such)
 
 - escape the dash ('-') inside a character class (e.g., "[a-zA\-Z]" should match only the dash in "BC-DEF")
@@ -44,6 +40,8 @@ Small:
 - switch to Visual Studio 2010 (Express) and .NET Framework 4.0; use covariance/contravariance for the Parser delegate
 
 
+* rename class CharPattern to CharEscapePattern (like the parser in PatternParsers)
+* make classes CharPattern (or CharEscapePattern) and CharClassPattern descend from a common class (CharPattern?); this will be the only class to be 'asked' by MatcherPatterns if a char satisfies it (virtual method: IsMatch)
 * {n, m} quantifier
 * add new method to class RegexAssert: ThrowsSameExceptionAsMsoft
 * test with a real newline ("\n") inside a pattern; also, with a verbatim string literal (@"...") that spans two or more lines (as the pattern)

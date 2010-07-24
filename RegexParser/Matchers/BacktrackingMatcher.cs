@@ -15,19 +15,22 @@ namespace RegexParser.Matchers
 
         protected override IEnumerable<Match2> GetMatches()
         {
-            char[] patternText = ((GroupPattern)Pattern).Patterns.OfType<CharPattern>()
-                                                                 .Select(cp => cp.Value)
-                                                                 .ToArray();
+            CharPattern[] charPatterns = ((GroupPattern)Pattern).Patterns.Cast<CharPattern>()
+                                                                         .ToArray();
 
             for (int index = 0; index < InputText.Length; index++)
             {
+                StringBuilder match = new StringBuilder();
                 bool isMatch = true;
                 int i = index;
                 int length = 0;
 
-                foreach (char p in patternText)
-                    if (i < InputText.Length && p == InputText[i++])
+                foreach (CharPattern charPattern in charPatterns)
+                    if (i < InputText.Length && charPattern.IsMatch(InputText[i++]))
+                    {
+                        match.Append(InputText[i - 1]);
                         length++;
+                    }
                     else
                     {
                         isMatch = false;
@@ -36,7 +39,7 @@ namespace RegexParser.Matchers
 
                 if (isMatch)
                 {
-                    yield return new Match2(index, length, new string(patternText));
+                    yield return new Match2(index, length, match.ToString());
                     index = i - 1;
                 }
             }

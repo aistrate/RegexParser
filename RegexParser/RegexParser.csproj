@@ -53,6 +53,7 @@
     <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
     <Compile Include="Matchers\MatchParsers.cs" />
     <Compile Include="Patterns\CharClassPattern.cs" />
+    <Compile Include="Patterns\CharEscapePattern.cs" />
     <Compile Include="Patterns\CharPattern.cs" />
     <Compile Include="Patterns\GroupPattern.cs" />
     <Compile Include="Patterns\BasePattern.cs" />

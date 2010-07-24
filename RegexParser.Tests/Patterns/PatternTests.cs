@@ -11,21 +11,21 @@ namespace RegexParser.Tests.Patterns
     public class PatternTests
     {
         [Test]
-        public void CharPattern_Short()
+        public void CharEscapePattern_Short()
         {
             BasePattern actual = BasePattern.CreatePattern("abc");
 
             BasePattern expected = new GroupPattern(new BasePattern[] {
-                new CharPattern('a'), 
-                new CharPattern('b'),
-                new CharPattern('c')
+                new CharEscapePattern('a'),
+                new CharEscapePattern('b'),
+                new CharEscapePattern('c')
             });
 
             Assert.AreEqual(expected, actual);
         }
 
         [Test]
-        public void CharPattern_Empty()
+        public void CharEscapePattern_Empty()
         {
             BasePattern actual = BasePattern.CreatePattern("");
 
@@ -42,15 +42,15 @@ namespace RegexParser.Tests.Patterns
             BasePattern actual = BasePattern.CreatePattern(pattern);
 
             BasePattern expected = new GroupPattern(new BasePattern[] {
-                new CharPattern('t'),
+                new CharEscapePattern('t'),
                 new GroupPattern(new BasePattern[] {
-                    new CharPattern('h'),
+                    new CharEscapePattern('h'),
                     new GroupPattern(new BasePattern[] {
-                        new CharPattern('i'),
-                        new CharPattern('n')
+                        new CharEscapePattern('i'),
+                        new CharEscapePattern('n')
                     }),
                 }),
-                new CharPattern('g')
+                new CharEscapePattern('g')
             });
 
             Assert.AreEqual(expected, actual, pattern);

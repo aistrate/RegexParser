@@ -11,9 +11,9 @@ namespace RegexParser.Tests.Matchers
 {
     [TestFixture(AlgorithmType.ImplicitDFA)]
     [TestFixture(AlgorithmType.Backtracking)]
-    public class CharMatcherTests : MatcherTests
+    public class CharEscapeMatcherTests : MatcherTests
     {
-        public CharMatcherTests(AlgorithmType algorithmType)
+        public CharEscapeMatcherTests(AlgorithmType algorithmType)
             : base(algorithmType) { }
 
         [Test]
@@ -26,7 +26,7 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
-        public void OneMatch()    
+        public void OneMatch()
         {
             Regex2 regex = new Regex2("thing", AlgorithmType);
             Match2 match = regex.Match("Something or other");

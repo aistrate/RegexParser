@@ -14,24 +14,24 @@ namespace RegexParser.Patterns
         {
             // Characters
             CharEscape = Either(from c in NoneOf(specialChars)
-                                select (BasePattern)new CharPattern(c),
+                                select (BasePattern)new CharEscapePattern(c),
 
                                 from b in Char('\\')
                                 from esc in
                                     Choice(
-                                        from c in OneOf(specialChars) select new CharPattern(c),
-                                        from c in Char('t') select new CharPattern('\t'),
-                                        from c in Char('n') select new CharPattern('\n'),
-                                        from c in Char('r') select new CharPattern('\r'),
+                                        from c in OneOf(specialChars) select new CharEscapePattern(c),
+                                        from c in Char('t') select new CharEscapePattern('\t'),
+                                        from c in Char('n') select new CharEscapePattern('\n'),
+                                        from c in Char('r') select new CharEscapePattern('\r'),
 
                                         from k in
                                             Either(from c in Char('x') select 2,
                                                    from c in Char('u') select 4)
                                         from hs in Count(k, HexDigit)
-                                        select new CharPattern((char)Numeric.ReadHex(hs)),
+                                        select new CharEscapePattern((char)Numeric.ReadHex(hs)),
 
                                         from os in Count(2, 3, OctDigit)
-                                        select new CharPattern((char)Numeric.ReadOct(os)))
+                                        select new CharEscapePattern((char)Numeric.ReadOct(os)))
                                 select (BasePattern)esc);
 
             var charRange = from frm in NoneOf("-]")

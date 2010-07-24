@@ -14,7 +14,7 @@ namespace RegexParser.Matchers
             if (pattern == null)
                 throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
 
-            if (pattern.GetType() == typeof(GroupPattern))
+            if (pattern is GroupPattern)
                 return consList =>
                 {
                     StringBuilder groupResult = new StringBuilder();
@@ -35,7 +35,7 @@ namespace RegexParser.Matchers
                     return new Result<char, string>(groupResult.ToString(), consList);
                 };
 
-            else if (pattern.GetType() == typeof(QuantifierPattern))
+            else if (pattern is QuantifierPattern)
             {
                 QuantifierPattern quant = (QuantifierPattern)pattern;
 
@@ -43,12 +43,8 @@ namespace RegexParser.Matchers
                        select new string(ms.SelectMany(m => m).ToArray());
             }
 
-            else if (pattern.GetType() == typeof(CharClassPattern))
-                return from c in Satisfy(((CharClassPattern)pattern).IsMatch)
-                       select new string(c, 1);
-
-            else if (pattern.GetType() == typeof(CharPattern))
-                return from c in Char(((CharPattern)pattern).Value)
+            else if (pattern is CharPattern)
+                return from c in Satisfy(((CharPattern)pattern).IsMatch)
                        select new string(c, 1);
 
             else
