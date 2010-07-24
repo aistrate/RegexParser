@@ -41,6 +41,8 @@ Small:
 
 - deal with spaces within a {n,m} quantifier (no error thrown, but no match either)
 
+- switch to Visual Studio 2010 (Express) and .NET Framework 4.0; use covariance/contravariance for the Parser delegate
+
 
 * {n, m} quantifier
 * add new method to class RegexAssert: ThrowsSameExceptionAsMsoft
