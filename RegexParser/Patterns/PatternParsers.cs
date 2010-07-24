@@ -12,6 +12,7 @@ namespace RegexParser.Patterns
     {
         static PatternParsers()
         {
+            // Characters
             CharEscape = Either(from c in NoneOf(specialChars)
                                 select (BasePattern)new CharPattern(c),
 
@@ -33,66 +34,6 @@ namespace RegexParser.Patterns
                                 })
                                 select (BasePattern)esc);
 
-
-            charClasses();
-
-
-            // Quantifiers
-            var Natural = from ds in Many1(Digit)
-                          select Numeric.ReadDec(ds);
-
-            var RangeQuantMarker = Between(Char('{'),
-                                           Char('}'),
-
-                                           from min in Natural
-                                           from max in Option((int?)min,
-                                                              from comma in Char(',')
-                                                              from m in OptionNullable(Natural)
-                                                              select m)
-                                           select new { Min = min, Max = max });
-
-            var QuantMarker = from quant in
-                                  Choice(new[]
-                                  {
-                                      from q in Char('*') select new { Min = 0, Max = (int?)null },
-                                      from q in Char('+') select new { Min = 1, Max = (int?)null },
-                                      from q in Char('?') select new { Min = 0, Max = (int?)1 },
-                                      RangeQuantMarker
-                                  })
-                              from greedy in
-                                  Option(true,
-                                         from c in Char('?') select false)
-                              select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
-
-            Quantifier = from child in Choice(new[]
-                                       {
-                                           Lazy(() => Group),
-                                           CharEscape,
-                                           CharClass
-                                       })
-                         from marker in QuantMarker
-                         select (BasePattern)new QuantifierPattern(child, marker.Min, marker.Max, marker.Greedy);
-
-
-            // Groups
-            Group = Between(Char('('),
-                            Char(')'),
-                            Lazy(() => BareGroup));
-
-            BareGroup = from ps in Many(Choice(new[]
-                                        {
-                                            Quantifier,
-                                            Group,
-                                            CharEscape,
-                                            CharClass
-                                        }))
-                        select (BasePattern)new GroupPattern(ps);
-
-            Regex = BareGroup;
-        }
-
-        private static void charClasses()
-        {
             var charRange = from frm in NoneOf("-]")
                             from d in Char('-')
                             from to in NoneOf("-]")
@@ -104,8 +45,9 @@ namespace RegexParser.Patterns
             CharGroup = Between(Char('['),
                                 Char(']'),
 
-                                from positive in Option(true,
-                                                        from c in Char('^') select false)
+                                from positive in
+                                    Option(true, from c in Char('^')
+                                                 select false)
                                 from atoms in Many1(Choice(new[]
                                                     {
                                                         charRange,
@@ -132,7 +74,62 @@ namespace RegexParser.Patterns
 
                             CharGroup
                         });
+
+
+            // Quantifiers
+            var Natural = from ds in Many1(Digit)
+                          select Numeric.ReadDec(ds);
+
+            var RangeQuantifierSuffix = Between(Char('{'),
+                                                Char('}'),
+
+                                                from min in Natural
+                                                from max in
+                                                    Option((int?)min, from comma in Char(',')
+                                                                      from m in OptionNullable(Natural)
+                                                                      select m)
+                                                select new { Min = min, Max = max });
+
+            var QuantifierSuffix = from quant in
+                                       Choice(new[]
+                                       {
+                                           from q in Char('*') select new { Min = 0, Max = (int?)null },
+                                           from q in Char('+') select new { Min = 1, Max = (int?)null },
+                                           from q in Char('?') select new { Min = 0, Max = (int?)1 },
+                                           RangeQuantifierSuffix
+                                       })
+                                   from greedy in
+                                       Option(true, from c in Char('?')
+                                                    select false)
+                                   select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
+
+            Quantifier = from child in Choice(new[]
+                                       {
+                                           Lazy(() => Group),
+                                           CharEscape,
+                                           CharClass
+                                       })
+                         from suffix in QuantifierSuffix
+                         select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
+
+
+            // Groups
+            Group = Between(Char('('),
+                            Char(')'),
+                            Lazy(() => BareGroup));
+
+            BareGroup = from ps in Many(Choice(new[]
+                                        {
+                                            Quantifier,
+                                            Group,
+                                            CharEscape,
+                                            CharClass
+                                        }))
+                        select (BasePattern)new GroupPattern(ps);
+
+            Regex = BareGroup;
         }
+
 
         public static Parser<char, BasePattern> CharEscape;
 

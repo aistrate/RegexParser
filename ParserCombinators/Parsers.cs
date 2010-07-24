@@ -63,31 +63,7 @@ namespace ParserCombinators
 
         public static Parser<TToken, IEnumerable<TValue>> Many1<TValue>(Parser<TToken, TValue> parser)
         {
-            return from x in parser
-                   from xs in Many(parser)
-                   select new[] { x }.Concat(xs);
-        }
-
-        public static Parser<TToken, IEnumerable<TValue>> Sequence<TValue>(IEnumerable<Parser<TToken, TValue>> parsers)
-        {
-            return consList =>
-            {
-                List<TValue> values = new List<TValue>();
-                Result<TToken, TValue> result;
-
-                foreach (var parser in parsers)
-                {
-                    result = parser(consList);
-
-                    if (result == null)
-                        return null;
-
-                    values.Add(result.Value);
-                    consList = result.Rest;
-                }
-
-                return new Result<TToken, IEnumerable<TValue>>(values, consList);
-            };
+            return Count(1, null, parser);
         }
 
         public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int count, Parser<TToken, TValue> parser)
@@ -126,6 +102,28 @@ namespace ParserCombinators
                     return new Result<TToken, IEnumerable<TValue>>(values, consList);
                 else
                     return null;
+            };
+        }
+
+        public static Parser<TToken, IEnumerable<TValue>> Sequence<TValue>(IEnumerable<Parser<TToken, TValue>> parsers)
+        {
+            return consList =>
+            {
+                List<TValue> values = new List<TValue>();
+                Result<TToken, TValue> result;
+
+                foreach (var parser in parsers)
+                {
+                    result = parser(consList);
+
+                    if (result == null)
+                        return null;
+
+                    values.Add(result.Value);
+                    consList = result.Rest;
+                }
+
+                return new Result<TToken, IEnumerable<TValue>>(values, consList);
             };
         }
 
