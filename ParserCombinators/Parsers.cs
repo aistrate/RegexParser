@@ -49,6 +49,13 @@ namespace ParserCombinators
             return Either(parser, Succeed(defaultValue));
         }
 
+        public static Parser<TToken, TValue?> OptionNullable<TValue>(Parser<TToken, TValue> parser)
+            where TValue : struct
+        {
+            return Option(null,
+                          from x in parser select (TValue?)x);
+        }
+
         public static Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
         {
             return Count(0, null, parser);

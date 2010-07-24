@@ -37,23 +37,44 @@ namespace RegexParser.Patterns
             charClasses();
 
 
+            // Quantifiers
+            var Natural = from ds in Many1(Digit)
+                          select Numeric.ReadDec(ds);
+
+            var RangeQuantMarker = Between(Char('{'),
+                                           Char('}'),
+
+                                           from min in Natural
+                                           from max in Option((int?)min,
+                                                              from comma in Char(',')
+                                                              from m in OptionNullable(Natural)
+                                                              select m)
+                                           select new { Min = min, Max = max });
+
+            var QuantMarker = from quant in
+                                  Choice(new[]
+                                  {
+                                      from q in Char('*') select new { Min = 0, Max = (int?)null },
+                                      from q in Char('+') select new { Min = 1, Max = (int?)null },
+                                      from q in Char('?') select new { Min = 0, Max = (int?)1 },
+                                      RangeQuantMarker
+                                  })
+                              from greedy in
+                                  Option(true,
+                                         from c in Char('?') select false)
+                              select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
+
             Quantifier = from child in Choice(new[]
                                        {
                                            Lazy(() => Group),
                                            CharEscape,
                                            CharClass
                                        })
-                         from quant in Choice(new[]
-                                       {
-                                           from q in Char('*') select new { Min = 0, Max = (int?)null },
-                                           from q in Char('+') select new { Min = 1, Max = (int?)null },
-                                           from q in Char('?') select new { Min = 0, Max = (int?)1 }
-                                       })
-                         from greedy in Option(true,
-                                               from c in Char('?') select false)
-                         select (BasePattern)new QuantifierPattern(child, quant.Min, quant.Max, greedy);
+                         from marker in QuantMarker
+                         select (BasePattern)new QuantifierPattern(child, marker.Min, marker.Max, marker.Greedy);
 
 
+            // Groups
             Group = Between(Char('('),
                             Char(')'),
                             Lazy(() => BareGroup));

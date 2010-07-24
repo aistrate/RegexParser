@@ -16,29 +16,33 @@ Medium:
 
 Small:
 
-- throw an error for nested quantifiers (e.g., "(ab)++"); (no error when the inner quantifier is enclosed in a group, even though semantically it's the same: "((ab)+)+";) see also failing NUnit test
-
 - zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
 
-- {n, m} quantifier
+- character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d]); also, character escapes (e.g., [\t\u007c]); in fact, parsers CharEscapes and CharClass should be unified
 
-- non-greedy quantifiers
+- make classes CharPattern (or CharEscapePattern) and CharClassPattern descend from a common class (CharPattern?); this will be the only class to be 'asked' by MatcherPatterns if a char satisfies it (virtual method: IsMatch)
+
+- rename class CharPattern to CharEscapePattern (like the parser in PatternParsers)
+
+- test with a char range class pattern inside another one (e.g., @"[[s\]\d]") (or at least it looks that way, even though it's not really interpreted as such)
 
 - escape the dash ('-') inside a character class (e.g., "[a-zA\-Z]" should match only the dash in "BC-DEF")
 
 
-- character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d]); also, character escapes (e.g., [\t\u007c]); in fact, parsers CharEscapes and CharClass should be unified
+- alternation
+
+- non-greedy quantifiers
+
+- throw an error for nested quantifiers (e.g., "(ab)++"); (no error when the inner quantifier is enclosed in a group, even though semantically it's the same: "((ab)+)+";) see also failing NUnit test
 
 - throw an error if \x, \u or \<octal> have too few digits
 
-- test with a char range class pattern inside another one (e.g., @"[[s\]\d]") (or at least it looks that way, even though it's not really interpreted as such)
-
 - throw an error for any 'unknown' character after backslash, both in the CharEscapes and the CharClass parsers
 
-- rename class CharPattern to CharEscapePattern (like the parser in PatternParsers)
+- deal with spaces within a {n,m} quantifier (no error thrown, but no match either)
 
-- make classes CharPattern (or CharEscapePattern) and CharClassPattern descend from a common class (CharPattern?); this will be the only class to be 'asked' by MatcherPatterns if a char satisfies it (virtual method: IsMatch)
 
+* {n, m} quantifier
 * add new method to class RegexAssert: ThrowsSameExceptionAsMsoft
 * test with a real newline ("\n") inside a pattern; also, with a verbatim string literal (@"...") that spans two or more lines (as the pattern)
 * remove equality operator (==) overloading from classes CharClassPattern and CharRange [maybe also the IEquatable<T> interface and GetHashCode overrides, from all classes]

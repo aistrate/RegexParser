@@ -27,6 +27,8 @@ namespace RegexParser.ConsoleTests
             {
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("bbbcc", @"b*")));
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("bbb cc", @"b{0,1}")));
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("bbb cc", @"[fdasdfasdf]{0}")));
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abab", @"ab+?+")));
 
@@ -34,7 +36,7 @@ namespace RegexParser.ConsoleTests
                 //PatternPerformanceTests.CharClassPatternTest();
 
                 //new CharPatternMatcherTests(AlgorithmType.ImplicitDFA).CharCodes();
-                new QuantifierMatcherTests(AlgorithmType.ImplicitDFA).Doubled_Error();
+                //new QuantifierMatcherTests(AlgorithmType.ImplicitDFA).Doubled_Error();
             }
             catch (Exception ex)
             {
