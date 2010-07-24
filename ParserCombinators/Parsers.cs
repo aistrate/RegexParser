@@ -29,7 +29,6 @@ namespace ParserCombinators
             return consList => parser1(consList) ?? parser2(consList);
         }
 
-        //public static Parser<TToken, TValue> Choice<TValue>(IEnumerable<Parser<TToken, TValue>> choices)
         public static Parser<TToken, TValue> Choice<TValue>(params Parser<TToken, TValue>[] choices)
         {
             return consList =>
