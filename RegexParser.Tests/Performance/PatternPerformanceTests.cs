@@ -21,7 +21,7 @@ namespace RegexParser.Tests.Performance
                                  times, maxItemCount, digitChars);
             // 2.39 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('0', '9') }),
+            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('0', '9') }),
                                  times, maxItemCount, digitChars);
             // 1.59 sec.
 
@@ -32,19 +32,27 @@ namespace RegexParser.Tests.Performance
                                  times, maxItemCount, lowercaseChars);
             // 2.55 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('a', 'z') }),
+            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
             // 1.65 sec.
+
+            charTest("char.IsLetter", c => char.IsLetter(c),
+                     times, maxItemCount, lowercaseChars);
+            // 1.42 sec.
 
 
             charClassPatternTest(new CharClassPattern(true, "0123456789abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, lowercaseChars);
             // 2.80 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('0', '9'),
-                                                                    new CharClassPattern.CharRange('a', 'z') }),
+            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('0', '9'),
+                                                                    new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
             // 1.69 sec.
+
+            charTest("char.IsLetterOrDigit", c => char.IsLetterOrDigit(c),
+                     times, maxItemCount, lowercaseChars);
+            // 1.64 sec.
 
 
             string repeatedChar = new string(EnumerablePerformanceTests.RepeatChars("7", maxItemCount).ToArray());
@@ -53,7 +61,7 @@ namespace RegexParser.Tests.Performance
                                  times, maxItemCount, repeatedChar);
             // 1.97 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharClassPattern.CharRange('7', '7') }),
+            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('7', '7') }),
                                  times, maxItemCount, repeatedChar);
             // 1.61 sec.
 
@@ -63,15 +71,20 @@ namespace RegexParser.Tests.Performance
                                  times, maxItemCount, digitChars);
             // 2.84 sec.
 
-            charClassPatternTest(new CharClassPattern(false, new[] { new CharClassPattern.CharRange('a', 'z') }),
+            charClassPatternTest(new CharClassPattern(false, new[] { new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, digitChars);
             // 1.64 sec.
         }
 
         private static void charClassPatternTest(CharClassPattern charClassPattern, int times, int maxItemCount, string inputText)
         {
-            Console.WriteLine(charClassPattern);
-            CharParsersPerformanceTests.CharParserTest(CharParsers.Satisfy(c => charClassPattern.IsMatch(c)),
+            charTest(charClassPattern.ToString(), c => charClassPattern.IsMatch(c), times, maxItemCount, inputText);
+        }
+
+        private static void charTest(string testName, Func<char, bool> predicate, int times, int maxItemCount, string inputText)
+        {
+            Console.WriteLine(testName);
+            CharParsersPerformanceTests.CharParserTest(CharParsers.Satisfy(predicate),
                                                        times, maxItemCount, inputText);
 
             Console.WriteLine();

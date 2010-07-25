@@ -12,66 +12,73 @@ namespace RegexParser.Patterns
     {
         static PatternParsers()
         {
-            // Characters
-            CharEscape = Either(from c in NoneOf(specialChars)
-                                select (BasePattern)new CharEscapePattern(c),
+            // Character Escapes
+            CharEscape = (specialChars, charEscapeKeys) =>
+                            Either(from c in NoneOf(specialChars)
+                                   select new CharEscapePattern(c),
 
-                                from b in Char('\\')
-                                from esc in
-                                    Choice(
-                                        from c in OneOf(specialChars) select new CharEscapePattern(c),
-                                        from c in Char('t') select new CharEscapePattern('\t'),
-                                        from c in Char('n') select new CharEscapePattern('\n'),
-                                        from c in Char('r') select new CharEscapePattern('\r'),
+                                   from b in Char('\\')
+                                   from esc in
+                                       Choice(
+                                           OneOf(specialChars),
 
-                                        from k in
-                                            Either(from c in Char('x') select 2,
-                                                   from c in Char('u') select 4)
-                                        from hs in Count(k, HexDigit)
-                                        select new CharEscapePattern((char)Numeric.ReadHex(hs)),
+                                           from c in OneOf(charEscapeKeys)
+                                           select charEscapes[c],
 
-                                        from os in Count(2, 3, OctDigit)
-                                        select new CharEscapePattern((char)Numeric.ReadOct(os)))
-                                select (BasePattern)esc);
+                                           from k in
+                                               Either(from c in Char('x') select 2,
+                                                      from c in Char('u') select 4)
+                                           from hs in Count(k, HexDigit)
+                                           select (char)Numeric.ReadHex(hs),
 
-            var charRange = from frm in NoneOf("-]")
-                            from d in Char('-')
-                            from to in NoneOf("-]")
-                            select (CharClassPattern.ICharClassAtom)new CharClassPattern.CharRange(frm, to);
+                                           from os in Count(2, 3, OctDigit)
+                                           select (char)Numeric.ReadOct(os),
 
-            var singleChar = from c in NoneOf("-]")
-                             select (CharClassPattern.ICharClassAtom)new CharClassPattern.SingleChar(c);
+                                           Satisfy(c => !char.IsLetterOrDigit(c) && c != '_'))
+                                   select new CharEscapePattern(esc));
 
-            CharGroup = Between(Char('['),
-                                Char(']'),
+            CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass, charEscapeKeysOutsideClass);
 
-                                from positive in
-                                    Option(true, from c in Char('^')
-                                                 select false)
-                                from atoms in Many1(Choice(charRange, singleChar))
-                                select (BasePattern)new CharClassPattern(positive, atoms));
+            CharEscapeInsideClass = CharEscape(specialCharsInsideClass, charEscapeKeysInsideClass);
 
-            CharClass = Choice(
-                            from c in Char('.')
-                            select (BasePattern)CharClassPattern.AnyChar,
 
-                            from b in Char('\\')
-                            from cls in
-                                Choice(
-                                    from c in Char('s') select CharClassPattern.WhitespaceChar,
-                                    from c in Char('S') select CharClassPattern.WhitespaceChar.Negated,
-                                    from c in Char('w') select CharClassPattern.WordChar,
-                                    from c in Char('W') select CharClassPattern.WordChar.Negated,
-                                    from c in Char('d') select CharClassPattern.DigitChar,
-                                    from c in Char('D') select CharClassPattern.DigitChar.Negated)
-                            select (BasePattern)cls,
+            // Character Classes
+            CharRange = from frm in CharEscapeInsideClass
+                        from d in Char('-')
+                        from to in CharEscapeInsideClass
+                        select new CharRangePattern(frm.Value, to.Value);
 
-                            CharGroup);
+            NamedCharClass = from b in Char('\\')
+                             from cls in
+                                 Choice(
+                                     from c in Char('s') select CharClassPattern.WhitespaceChar,
+                                     from c in Char('S') select CharClassPattern.WhitespaceChar.Negated,
+                                     from c in Char('w') select CharClassPattern.WordChar,
+                                     from c in Char('W') select CharClassPattern.WordChar.Negated,
+                                     from c in Char('d') select CharClassPattern.DigitChar,
+                                     from c in Char('D') select CharClassPattern.DigitChar.Negated)
+                             select cls;
+
+            GroupCharClass = Between(Char('['),
+                                     Char(']'),
+
+                                     from positive in
+                                         Option(true, from c in Char('^')
+                                                      select false)
+                                     from childPatterns in
+                                         Many1(Choice(from p in CharRange select (CharPattern)p,
+                                                      from p in NamedCharClass select (CharPattern)p,
+                                                      from p in CharEscapeInsideClass select (CharPattern)p))
+                                     select new CharClassPattern(positive, childPatterns));
+
+            CharClass = Choice(from c in Char('.') select CharClassPattern.AnyChar,
+                               NamedCharClass,
+                               GroupCharClass);
 
 
             // Quantifiers
-            var Natural = from ds in Many1(Digit)
-                          select Numeric.ReadDec(ds);
+            Natural = from ds in Many1(Digit)
+                      select Numeric.ReadDec(ds);
 
             var RangeQuantifierSuffix = Between(Char('{'),
                                                 Char('}'),
@@ -96,11 +103,11 @@ namespace RegexParser.Patterns
 
             Quantifier = from child in
                              Choice(
-                                 Lazy(() => Group),
-                                 CharEscape,
-                                 CharClass)
+                                 from p in Lazy(() => Group) select (BasePattern)p,
+                                 from p in CharEscapeOutsideClass select (BasePattern)p,
+                                 from p in CharClass select (BasePattern)p)
                          from suffix in QuantifierSuffix
-                         select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
+                         select new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
 
 
             // Groups
@@ -108,27 +115,49 @@ namespace RegexParser.Patterns
                             Char(')'),
                             Lazy(() => BareGroup));
 
-            BareGroup = from ps in Many(Choice(Quantifier,
-                                               Group,
-                                               CharEscape,
-                                               CharClass))
-                        select (BasePattern)new GroupPattern(ps);
+            BareGroup = from ps in Many(Choice(
+                                            from p in Quantifier select (BasePattern)p,
+                                            from p in Group select (BasePattern)p,
+                                            from p in CharEscapeOutsideClass select (BasePattern)p,
+                                            from p in CharClass select (BasePattern)p))
+                        select new GroupPattern(ps);
 
             Regex = BareGroup;
         }
 
 
-        public static Parser<char, BasePattern> CharEscape;
+        public static Func<string, string, Parser<char, CharEscapePattern>> CharEscape;
+        public static Parser<char, CharEscapePattern> CharEscapeOutsideClass;
+        public static Parser<char, CharEscapePattern> CharEscapeInsideClass;
 
-        public static Parser<char, BasePattern> CharGroup;
-        public static Parser<char, BasePattern> CharClass;
+        public static Parser<char, CharRangePattern> CharRange;
+        public static Parser<char, CharClassPattern> NamedCharClass;
+        public static Parser<char, CharClassPattern> GroupCharClass;
+        public static Parser<char, CharClassPattern> CharClass;
 
-        public static Parser<char, BasePattern> Quantifier;
+        public static Parser<char, int> Natural;
+        public static Parser<char, QuantifierPattern> Quantifier;
 
-        public static Parser<char, BasePattern> BareGroup;
-        public static Parser<char, BasePattern> Group;
-        public static Parser<char, BasePattern> Regex;
+        public static Parser<char, GroupPattern> BareGroup;
+        public static Parser<char, GroupPattern> Group;
+        public static Parser<char, GroupPattern> Regex;
 
-        private static string specialChars = @".$^{[(|)*+?\";
+
+        private static Dictionary<char, char> charEscapes = new Dictionary<char, char>()
+        {
+            { 'a', '\a' },
+            { 'b', '\b' },
+            { 'f', '\f' },
+            { 'n', '\n' },
+            { 'r', '\r' },
+            { 't', '\t' },
+            { 'v', '\v' }
+        };
+
+        private static string specialCharsOutsideClass = @".$^{[(|)*+?\";
+        private static string specialCharsInsideClass  = @"]\";
+
+        private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
+        private static string charEscapeKeysInsideClass  = new string(charEscapes.Keys.ToArray());
     }
 }

@@ -155,15 +155,37 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
+        public void EscapedSymbol()
+        {
+            string input = @"abc € _ ' "" ` ! - ] 123";
+
+            string[] patterns = new[] {
+                @"\€",
+                @"\'",
+                @"\""",
+                @"\`",
+                @"\!",
+                @"\-",
+                @"\]",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
         public void CharEscapes()
         {
             string input = "ID\tName\tAddress \t\t\tPhone number\n" +
-                           "55\tJohn\tOaks Avenue 5\t065656565\n\r";
+                           "55\tJohn\tOaks Avenue 5\t065656565\n\r" +
+                           "\a\a\b\f\v\f\b\v";
 
             string[] patterns = new[] {
-                @"\t",
+                @"\a",
+                @"\f",
                 @"\n",
-                @"\r"
+                @"\r",
+                @"\t",
+                @"\v"
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
@@ -225,7 +247,6 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
-
 
         //[Test]
         public void CharCodes_TooShort()
