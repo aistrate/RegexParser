@@ -159,7 +159,7 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft("BC-DEF", @"[a-zA\-Z]", AlgorithmType);
         }
 
-        //[Test]
+        [Test]
         public void ClosingSqrBracketOnFirstPos()
         {
             string input = ".$^{[(|)*+?\\  - \b\a\n\b []";
