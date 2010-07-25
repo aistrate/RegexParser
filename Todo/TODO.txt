@@ -22,6 +22,8 @@ Small:
 
 - character class subtraction (e.g., "[a-z-[m-p]]", or "[a-z-[d-w-[m-o]]]")
 
+- improve performance of class CharClassPattern
+
 
 - alternation
 
