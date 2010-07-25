@@ -106,72 +106,6 @@ namespace RegexParser.Patterns
             //                     (string.Join("", CharRanges.Select(r => r.ToString()).ToArray()) + CharSet).Show());
         }
 
-        public CharClassPattern Negated { get { return new CharClassPattern(!IsPositive, this); } }
-
-
-        public static readonly CharClassPattern AnyChar = new CharClassPattern(false, "\n");
-
-        public static readonly CharClassPattern WhitespaceChar = new CharClassPattern(true, " \n\r\t\f\v");
-
-        public static readonly CharClassPattern WordChar = new CharClassPattern(true, "_", new[]
-                                                                                {
-                                                                                    new CharRangePattern('a', 'z'),
-                                                                                    new CharRangePattern('A', 'Z'),
-                                                                                    new CharRangePattern('0', '9')
-                                                                                });
-
-        public static readonly CharClassPattern DigitChar = new CharClassPattern(true, new[] { new CharRangePattern('0', '9') });
-
-
-        //public interface ICharClassAtom { }
-
-        //public class SingleChar : ICharClassAtom
-        //{
-        //    public SingleChar(char value)
-        //    {
-        //        Value = value;
-        //    }
-
-        //    public readonly char Value;
-        //}
-
-        //public class CharRange : IEquatable<CharRange>
-        //{
-        //    public CharRange(char from, char to)
-        //    {
-        //        From = from;
-        //        To = to;
-        //    }
-
-        //    public readonly char From;
-        //    public readonly char To;
-
-        //    public override string ToString()
-        //    {
-        //        return string.Format("{0}-{1}", From, To);
-        //    }
-
-
-        //    #region CharRange Equality
-
-        //    bool IEquatable<CharRange>.Equals(CharRange other)
-        //    {
-        //        return other != null && this.From == other.From && this.To == other.To;
-        //    }
-
-        //    public override int GetHashCode()
-        //    {
-        //        return HashCodeCombiner.Combine(From.GetHashCode(), To.GetHashCode());
-        //    }
-
-        //    public override bool Equals(object obj)
-        //    {
-        //        return ((IEquatable<CharRange>)this).Equals(obj as CharRange);
-        //    }
-
-        //    #endregion
-        //}
-
         bool IEquatable<CharClassPattern>.Equals(CharClassPattern other)
         {
             return other != null &&
@@ -195,5 +129,24 @@ namespace RegexParser.Patterns
         {
             return ((IEquatable<CharClassPattern>)this).Equals(obj as CharClassPattern);
         }
+
+
+        public CharClassPattern Negated { get { return new CharClassPattern(!IsPositive, this); } }
+
+        public static readonly CharClassPattern AnyChar = new CharClassPattern(false, "\n");
+
+        public static readonly CharClassPattern WhitespaceChar = new CharClassPattern(true, " \n\r\t\f\v");
+
+        public static readonly CharClassPattern WordChar = new CharClassPattern(true, "_", new[]
+                                                                                {
+                                                                                    new CharRangePattern('a', 'z'),
+                                                                                    new CharRangePattern('A', 'Z'),
+                                                                                    new CharRangePattern('0', '9')
+                                                                                });
+
+        public static readonly CharClassPattern DigitChar = new CharClassPattern(true, new[]
+                                                                                 {
+                                                                                     new CharRangePattern('0', '9')
+                                                                                 });
     }
 }
