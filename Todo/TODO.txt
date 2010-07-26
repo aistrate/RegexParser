@@ -29,6 +29,12 @@ Small:
 
 - switch to Visual Studio 2010 (Express) and .NET Framework 4.0; use covariance/contravariance for the Parser delegate
 
+- two types of behavior: canonical and ECMAScript (JavaScript); for example, \w is equivalent to [\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Pc}\p{Lm}] in canonical mode, and to [a-zA-Z_0-9] in ECMAScript mode; ECMAScript mode does NOT support Unicode, and language elements such as the Unicode category or block elements \p and \P; the Microsoft library has a RegexOptions.ECMAScript flag, and in its absence the default behavior is canonical
+
+- support Unicode categories (e.g., "\p{Lu}" for Letter, Uppercase)
+
+- support Unicode named blocks (e.g., "\p{IsBasicLatin}" for the range 0000 - 007F)
+
 
 * accept ']' as the first character in a character group: "[]]"
 * test with a char range class pattern inside another one (e.g., @"[[\s]\d]") (or at least it looks that way, even though it's not really interpreted as such)
