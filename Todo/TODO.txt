@@ -18,8 +18,6 @@ Small:
 
 - zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
 
-- accept ']' as the first character in a character group: "[]]"
-
 - character class subtraction (e.g., "[a-z-[m-p]]", or "[a-z-[d-w-[m-o]]]")
 
 - improve performance of class CharClassPattern
@@ -32,6 +30,7 @@ Small:
 - switch to Visual Studio 2010 (Express) and .NET Framework 4.0; use covariance/contravariance for the Parser delegate
 
 
+* accept ']' as the first character in a character group: "[]]"
 * test with a char range class pattern inside another one (e.g., @"[[\s]\d]") (or at least it looks that way, even though it's not really interpreted as such)
 * character classes (such as \s, \w, \d) inside a character group (e.g., [abA-Z\d]); also, character escapes (e.g., [\t\u007c]); in fact, parsers CharEscapes and CharClass should be unified
 * escape the dash ('-') inside a character class (e.g., "[a-zA\-Z]" should match only the dash in "BC-DEF")

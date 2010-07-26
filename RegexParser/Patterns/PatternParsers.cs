@@ -37,16 +37,18 @@ namespace RegexParser.Patterns
                                            Satisfy(c => !char.IsLetterOrDigit(c) && c != '_'))
                                    select new CharEscapePattern(esc));
 
-            CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass, charEscapeKeysOutsideClass);
+            CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass,
+                                                charEscapeKeysOutsideClass);
 
-            CharEscapeInsideClass = CharEscape(specialCharsInsideClass, charEscapeKeysInsideClass);
+            CharEscapeInsideClass = isFirst => CharEscape(isFirst ? specialCharsInsideClass_FirstPos : specialCharsInsideClass,
+                                                          charEscapeKeysInsideClass);
 
 
             // Character Classes
-            CharRange = from frm in CharEscapeInsideClass
-                        from d in Char('-')
-                        from to in CharEscapeInsideClass
-                        select new CharRangePattern(frm.Value, to.Value);
+            CharRange = isFirst => from frm in CharEscapeInsideClass(isFirst)
+                                   from d in Char('-')
+                                   from to in CharEscapeInsideClass(false)
+                                   select new CharRangePattern(frm.Value, to.Value);
 
             NamedCharClass = from b in Char('\\')
                              from cls in
@@ -59,16 +61,19 @@ namespace RegexParser.Patterns
                                      from c in Char('D') select CharClassPattern.DigitChar.Negated)
                              select cls;
 
+            GroupElement = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
+                                             from p in CharRange(isFirst) select (CharPattern)p,
+                                             from p in CharEscapeInsideClass(isFirst) select (CharPattern)p);
+
             GroupCharClass = Between(Char('['),
                                      Char(']'),
 
                                      from positive in
                                          Option(true, from c in Char('^')
                                                       select false)
-                                     from childPatterns in
-                                         Many1(Choice(from p in CharRange select (CharPattern)p,
-                                                      from p in NamedCharClass select (CharPattern)p,
-                                                      from p in CharEscapeInsideClass select (CharPattern)p))
+                                     from first in GroupElement(true)
+                                     from rest in Many(GroupElement(false))
+                                     let childPatterns = new[] { first }.Concat(rest)
                                      select new CharClassPattern(positive, childPatterns));
 
             CharClass = Choice(from c in Char('.') select CharClassPattern.AnyChar,
@@ -128,10 +133,11 @@ namespace RegexParser.Patterns
 
         public static Func<string, string, Parser<char, CharEscapePattern>> CharEscape;
         public static Parser<char, CharEscapePattern> CharEscapeOutsideClass;
-        public static Parser<char, CharEscapePattern> CharEscapeInsideClass;
+        public static Func<bool, Parser<char, CharEscapePattern>> CharEscapeInsideClass;
 
-        public static Parser<char, CharRangePattern> CharRange;
+        public static Func<bool, Parser<char, CharRangePattern>> CharRange;
         public static Parser<char, CharClassPattern> NamedCharClass;
+        public static Func<bool, Parser<char, CharPattern>> GroupElement;
         public static Parser<char, CharClassPattern> GroupCharClass;
         public static Parser<char, CharClassPattern> CharClass;
 
@@ -154,8 +160,9 @@ namespace RegexParser.Patterns
             { 'v', '\v' }
         };
 
-        private static string specialCharsOutsideClass = @".$^{[(|)*+?\";
-        private static string specialCharsInsideClass  = @"]\";
+        private const string specialCharsOutsideClass = @".$^{[(|)*+?\";
+        private const string specialCharsInsideClass_FirstPos  = @"\";
+        private const string specialCharsInsideClass = @"]\";
 
         private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
         private static string charEscapeKeysInsideClass  = new string(charEscapes.Keys.ToArray());
