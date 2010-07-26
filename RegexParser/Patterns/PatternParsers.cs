@@ -46,11 +46,6 @@ namespace RegexParser.Patterns
 
 
             // Character Classes
-            CharRange = isFirst => from frm in CharEscapeInsideClass(isFirst)
-                                   from d in Char('-')
-                                   from to in CharEscapeInsideClass(false)
-                                   select new CharRangePattern(frm.Value, to.Value);
-
             NamedCharClass = from b in Char('\\')
                              from cls in
                                  Choice(
@@ -61,6 +56,11 @@ namespace RegexParser.Patterns
                                      from c in Char('d') select CharClassPattern.DigitChar,
                                      from c in Char('D') select CharClassPattern.DigitChar.Negated)
                              select cls;
+
+            CharRange = isFirst => from frm in CharEscapeInsideClass(isFirst)
+                                   from d in Char('-')
+                                   from to in CharEscapeInsideClass(false)
+                                   select new CharRangePattern(frm.Value, to.Value);
 
             GroupCharClassElement = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
                                                       from p in CharRange(isFirst) select (CharPattern)p,
