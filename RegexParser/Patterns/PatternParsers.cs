@@ -40,7 +40,8 @@ namespace RegexParser.Patterns
             CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass,
                                                 charEscapeKeysOutsideClass);
 
-            CharEscapeInsideClass = isFirst => CharEscape(isFirst ? specialCharsInsideClass_FirstPos : specialCharsInsideClass,
+            CharEscapeInsideClass = isFirst => CharEscape(isFirst ? specialCharsInsideClass_FirstPos :
+                                                                    specialCharsInsideClass,
                                                           charEscapeKeysInsideClass);
 
 
@@ -61,9 +62,9 @@ namespace RegexParser.Patterns
                                      from c in Char('D') select CharClassPattern.DigitChar.Negated)
                              select cls;
 
-            GroupElement = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
-                                             from p in CharRange(isFirst) select (CharPattern)p,
-                                             from p in CharEscapeInsideClass(isFirst) select (CharPattern)p);
+            GroupCharClassElement = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
+                                                      from p in CharRange(isFirst) select (CharPattern)p,
+                                                      from p in CharEscapeInsideClass(isFirst) select (CharPattern)p);
 
             GroupCharClass = Between(Char('['),
                                      Char(']'),
@@ -71,8 +72,8 @@ namespace RegexParser.Patterns
                                      from positive in
                                          Option(true, from c in Char('^')
                                                       select false)
-                                     from first in GroupElement(true)
-                                     from rest in Many(GroupElement(false))
+                                     from first in GroupCharClassElement(true)
+                                     from rest in Many(GroupCharClassElement(false))
                                      let childPatterns = new[] { first }.Concat(rest)
                                      select new CharClassPattern(positive, childPatterns));
 
@@ -137,7 +138,7 @@ namespace RegexParser.Patterns
 
         public static Func<bool, Parser<char, CharRangePattern>> CharRange;
         public static Parser<char, CharClassPattern> NamedCharClass;
-        public static Func<bool, Parser<char, CharPattern>> GroupElement;
+        public static Func<bool, Parser<char, CharPattern>> GroupCharClassElement;
         public static Parser<char, CharClassPattern> GroupCharClass;
         public static Parser<char, CharClassPattern> CharClass;
 
@@ -160,9 +161,9 @@ namespace RegexParser.Patterns
             { 'v', '\v' }
         };
 
-        private const string specialCharsOutsideClass = @".$^{[(|)*+?\";
-        private const string specialCharsInsideClass_FirstPos  = @"\";
-        private const string specialCharsInsideClass = @"]\";
+        private const string specialCharsOutsideClass = ".$^{[(|)*+?\\";
+        private const string specialCharsInsideClass_FirstPos  = "\\";
+        private const string specialCharsInsideClass = "]\\";
 
         private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
         private static string charEscapeKeysInsideClass  = new string(charEscapes.Keys.ToArray());
