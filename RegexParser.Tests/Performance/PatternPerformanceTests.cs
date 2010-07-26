@@ -17,6 +17,10 @@ namespace RegexParser.Tests.Performance
 
             string digitChars = new string(EnumerablePerformanceTests.RepeatChars("0123456789", maxItemCount).ToArray());
 
+            charTest("always true", c => true,
+                     times, maxItemCount, digitChars);
+            // 1.28 sec.
+
             charClassPatternTest(new CharClassPattern(true, "0123456789"),
                                  times, maxItemCount, digitChars);
             // 2.39 sec.
@@ -24,6 +28,10 @@ namespace RegexParser.Tests.Performance
             charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('0', '9') }),
                                  times, maxItemCount, digitChars);
             // 1.59 sec.
+
+            charTest("char.IsDigit", c => char.IsDigit(c),
+                     times, maxItemCount, digitChars);
+            // 1.38 sec.
 
 
             string lowercaseChars = new string(EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).ToArray());
