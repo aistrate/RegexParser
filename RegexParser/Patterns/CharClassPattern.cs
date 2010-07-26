@@ -79,9 +79,19 @@ namespace RegexParser.Patterns
 
         public override bool IsMatch(char c)
         {
-            //return !IsPositive ^ isPositiveMatch(c);
+            return !IsPositive ^ isPositiveMatch(c);
 
-            return !IsPositive ^ ChildPatterns.Any(p => p.IsMatch(c));
+            //return !IsPositive ^ ChildPatterns.Any(p => p.IsMatch(c));
+            //return !IsPositive ^ Array.FindIndex(ChildPatterns, p => p.IsMatch(c)) >= 0;
+        }
+
+        private bool isPositiveMatch(char c)
+        {
+            foreach (var childPattern in ChildPatterns)
+                if (childPattern.IsMatch(c))
+                    return true;
+
+            return false;
         }
 
         //private bool isPositiveMatch(char c)

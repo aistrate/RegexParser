@@ -70,8 +70,8 @@ namespace ParserCombinators.Tests.Performance
 
             Console.WriteLine(time);
             Console.WriteLine();
-            Console.WriteLine("{0}  per cycle", timePerCycle);
-            Console.WriteLine();
+            //Console.WriteLine("{0}  per cycle", timePerCycle);
+            //Console.WriteLine();
         }
     }
 }
