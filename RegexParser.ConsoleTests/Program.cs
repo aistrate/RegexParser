@@ -27,7 +27,7 @@ namespace RegexParser.ConsoleTests
             {
                 //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
 
-                //PatternPerformanceTests.CharClassPatternTest();
+                PatternPerformanceTests.CharClassPatternTest();
 
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
