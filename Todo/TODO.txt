@@ -64,6 +64,8 @@ Error handling:
 
 - throw error for "[x-y] range in reverse order" (e.g., "[c-a]")
 
+- throw error for "Illegal {x,y} with x > y" (e.g., "x{5,3}")
+
 - throw error for the empty character group: "[]"
 
 - deal with spaces within a {n,m} quantifier (no error thrown, but no match either)
