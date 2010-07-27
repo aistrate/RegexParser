@@ -40,9 +40,9 @@ namespace RegexParser.Patterns
             CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass,
                                                 charEscapeKeysOutsideClass);
 
-            CharEscapeInsideClass = isFirst => CharEscape(isFirst ? specialCharsInsideClass_FirstPos :
-                                                                    specialCharsInsideClass,
-                                                          charEscapeKeysInsideClass);
+            CharEscapeInsideClass = (isFirstPos, isSubtract, isAfterDash) =>
+                                        CharEscape(getSpecialCharsInsideClass(isFirstPos, isSubtract, isAfterDash),
+                                                   charEscapeKeysInsideClass);
 
 
             // Character Classes
@@ -57,31 +57,34 @@ namespace RegexParser.Patterns
                                      from c in Char('D') select CharGroupPattern.DigitChar.Negated)
                              select (CharClassPattern)cls;
 
-            CharRange = isFirst => from frm in CharEscapeInsideClass(isFirst)
-                                   from d in Char('-')
-                                   from to in CharEscapeInsideClass(false)
-                                   select new CharRangePattern(frm.Value, to.Value);
+            CharRange = (isFirstPos, isSubtract) =>
+                            from frm in CharEscapeInsideClass(isFirstPos, isSubtract, false)
+                            from d in Char('-')
+                            from to in CharEscapeInsideClass(false, isSubtract, true)
+                            select new CharRangePattern(frm.Value, to.Value);
 
-            CharGroupElem = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
-                                              from p in CharRange(isFirst) select (CharPattern)p,
-                                              from p in CharEscapeInsideClass(isFirst) select (CharPattern)p);
+            CharGroupElem = (isFirstPos, isSubtract) =>
+                                Choice(from p in NamedCharClass select (CharPattern)p,
+                                       from p in CharRange(isFirstPos, isSubtract) select (CharPattern)p,
+                                       from p in CharEscapeInsideClass(isFirstPos, isSubtract, false) select (CharPattern)p);
 
-            BareCharGroup = from positive in
-                                Option(true, from c in Char('^')
-                                             select false)
-                            from first in CharGroupElem(true)
-                            from rest in Many(CharGroupElem(false))
-                            let childPatterns = new[] { first }.Concat(rest)
-                            select (CharClassPattern)new CharGroupPattern(positive, childPatterns);
+            BareCharGroup = isSubtract =>
+                                from positive in
+                                    Option(true, from c in Char('^')
+                                                 select false)
+                                from first in CharGroupElem(true, isSubtract)
+                                from rest in Many(CharGroupElem(false, isSubtract))
+                                let childPatterns = new[] { first }.Concat(rest)
+                                select (CharClassPattern)new CharGroupPattern(positive, childPatterns);
 
-            CharClassSubtract = from baseGroup in BareCharGroup
+            CharClassSubtract = from baseGroup in BareCharGroup(true)
                                 from d in Char('-')
                                 from excludedGroup in CharGroup
                                 select (CharClassPattern)new CharClassSubtractPattern(baseGroup, excludedGroup);
 
             CharGroup = Between(Char('['),
                                 Char(']'),
-                                Either(CharClassSubtract, BareCharGroup));
+                                Either(CharClassSubtract, BareCharGroup(false)));
 
             CharClass = Choice(from c in Char('.') select (CharClassPattern)CharGroupPattern.AnyChar,
                                NamedCharClass,
@@ -140,12 +143,12 @@ namespace RegexParser.Patterns
 
         public static Func<string, string, Parser<char, CharEscapePattern>> CharEscape;
         public static Parser<char, CharEscapePattern> CharEscapeOutsideClass;
-        public static Func<bool, Parser<char, CharEscapePattern>> CharEscapeInsideClass;
+        public static Func<bool, bool, bool, Parser<char, CharEscapePattern>> CharEscapeInsideClass;
 
         public static Parser<char, CharClassPattern> NamedCharClass;
-        public static Func<bool, Parser<char, CharRangePattern>> CharRange;
-        public static Func<bool, Parser<char, CharPattern>> CharGroupElem;
-        public static Parser<char, CharClassPattern> BareCharGroup;
+        public static Func<bool, bool, Parser<char, CharRangePattern>> CharRange;
+        public static Func<bool, bool, Parser<char, CharPattern>> CharGroupElem;
+        public static Func<bool, Parser<char, CharClassPattern>> BareCharGroup;
         public static Parser<char, CharClassPattern> CharClassSubtract;
         public static Parser<char, CharClassPattern> CharGroup;
         public static Parser<char, CharClassPattern> CharClass;
@@ -158,6 +161,21 @@ namespace RegexParser.Patterns
         public static Parser<char, GroupPattern> Regex;
 
 
+        private const string specialCharsOutsideClass = ".$^{[(|)*+?\\";
+
+        private const string specialCharsInsideClass = "]\\";
+        private const string specialCharsInsideClass_FirstPos = "\\";
+        private const string specialCharsInsideClass_Subtract = "-]\\";
+        private const string specialCharsInsideClass_Subtract_AfterDash = "[]\\";
+
+        private static string getSpecialCharsInsideClass(bool isFirstPos, bool isSubtract, bool isAfterDash)
+        {
+            return isFirstPos  ? specialCharsInsideClass_FirstPos :
+                   !isSubtract ? specialCharsInsideClass :
+                   isAfterDash ? specialCharsInsideClass_Subtract_AfterDash :
+                                 specialCharsInsideClass_Subtract;
+        }
+
         private static Dictionary<char, char> charEscapes = new Dictionary<char, char>()
         {
             { 'a', '\a' },
@@ -169,12 +187,7 @@ namespace RegexParser.Patterns
             { 'v', '\v' }
         };
 
-        private const string specialCharsOutsideClass = ".$^{[(|)*+?\\";
-        private const string specialCharsInsideClass_FirstPos  = "\\";
-        private const string specialCharsInsideClass = "]\\";
-        //private const string specialCharsInsideClass = "[-]\\";   // for char subtraction to work
-
         private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
-        private static string charEscapeKeysInsideClass  = new string(charEscapes.Keys.ToArray());
+        private static string charEscapeKeysInsideClass = new string(charEscapes.Keys.ToArray());
     }
 }

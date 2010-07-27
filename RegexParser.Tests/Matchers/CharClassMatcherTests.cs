@@ -133,7 +133,7 @@ namespace RegexParser.Tests.Matchers
         [Test]
         public void SpecialCharsForClass()
         {
-            string input = ".$^{[(|)*+?\\  - \b\a\n\b []";
+            string input = ".$^{[(|)*+?\\  - \b\a\n\b xyz []";
 
             string[] patterns = new[] {
                 @"[-]",
@@ -152,6 +152,17 @@ namespace RegexParser.Tests.Matchers
                 @"[\]]",
                 @"[xyz\]ab]",
                 @"[x\[\]\]\\]",
+
+                @"[--\[]",
+                @"[^--\[]",
+                @"[$--]",
+
+                @"[-[]",
+                @"[-[x]",
+
+                @"[--]",
+                @"[---]",
+                @"[----]",
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
@@ -230,7 +241,7 @@ namespace RegexParser.Tests.Matchers
         [Test]
         public void EscapedSymbolInClass()
         {
-            string input = @"abc € _ ' "" ` ! - ] 123";
+            string input = @"abc € _ ' XY "" ` ! - ] 123";
 
             string[] patterns = new[] {
                 @"[\€]",
@@ -240,6 +251,10 @@ namespace RegexParser.Tests.Matchers
                 @"[\!]",
 
                 @"[\`\'\!\=]",
+
+                @"[!-\[]",
+                @"[^!-\[]",
+                @"[?-\[]",
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
@@ -328,19 +343,36 @@ namespace RegexParser.Tests.Matchers
                 @"[[a-z-[a-d]]",
                 @"[x[-[a-d]]",
                 @"[x[a-z-[a-d]]",
+
+                @"[--[a-d]]",
+                @"[-a-[a-d]]",
+                @"[-x-[a-d]]",
+                @"[-[-[a-d]]",
+
+                @"[[-[a-d]]",
+                @"[[[-[a-d]]",
+
+                @"[--[-[a-d]]",
+                @"[--[-[\s]]",
+                @"[--[\s]]",
+                @"[--[[a-d]]",
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]
-        public void Subtract_Fake()
+        public void FalseSubtract()
         {
             string input = "abcdlas \b (01234)- [] xyz \x00";
 
             string[] patterns = new[] {
                 @"[\d-a]",
                 @"[\w-\d]",
+                @"[\s-\d]",
+
+                @"[-[a-d]]",
+                @"[---[a-d]]",
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);

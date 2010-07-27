@@ -16,14 +16,13 @@ Medium:
 
 Small:
 
-- character class subtraction (e.g., "[a-z-[m-p]]", or "[a-z-[d-w-[m-o]]]")
-
-- improve performance of class CharClassPattern
+- improve performance for class CharGroupPattern (and simplify it)
 
 
 - alternation
 
 - non-greedy quantifiers
+
 
 - switch to Visual Studio 2010 (Express) and .NET Framework 4.0; use covariance/contravariance for the Parser delegate
 
@@ -34,6 +33,7 @@ Small:
 - support Unicode named blocks (e.g., "\p{IsBasicLatin}" for the range 0000 - 007F)
 
 
+* character class subtraction (e.g., "[a-z-[m-p]]", or "[a-z-[d-w-[m-o]]]")
 * zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
 * accept ']' as the first character in a character group: "[]]"
 * test with a char range class pattern inside another one (e.g., @"[[\s]\d]") (or at least it looks that way, even though it's not really interpreted as such)

@@ -32,7 +32,8 @@ namespace RegexParser.ConsoleTests
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
 
-                //Console.WriteLine(new string(".$^{[(|)*+?\\  - \b\n\b []0azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
+                //Console.WriteLine(new string(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
+                // "\b\n !$()*+-.09?AZ[\\]^az{|}"
             }
             catch (Exception ex)
             {
