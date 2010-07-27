@@ -15,32 +15,15 @@ namespace RegexParser.Matchers
                 throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
 
             if (pattern is GroupPattern)
-                return consList =>
-                {
-                    StringBuilder groupResult = new StringBuilder();
-
-                    foreach (Parser<char, string> parser in ((GroupPattern)pattern).Patterns.Select(p => CreateParser(p)))
-                    {
-                        Result<char, string> result = parser(consList);
-
-                        if (result != null)
-                        {
-                            groupResult.Append(result.Value);
-                            consList = result.Rest;
-                        }
-                        else
-                            return null;
-                    }
-
-                    return new Result<char, string>(groupResult.ToString(), consList);
-                };
+                return from vs in Sequence(((GroupPattern)pattern).Patterns.Select(p => CreateParser(p)))
+                       select new string(vs.SelectMany(v => v).ToArray());
 
             else if (pattern is QuantifierPattern)
             {
                 QuantifierPattern quant = (QuantifierPattern)pattern;
 
-                return from ms in Count(quant.MinOccurrences, quant.MaxOccurrences, CreateParser(quant.ChildPattern))
-                       select new string(ms.SelectMany(m => m).ToArray());
+                return from vs in Count(quant.MinOccurrences, quant.MaxOccurrences, CreateParser(quant.ChildPattern))
+                       select new string(vs.SelectMany(v => v).ToArray());
             }
 
             else if (pattern is CharPattern)
