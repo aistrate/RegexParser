@@ -56,17 +56,17 @@ namespace RegexParser.Patterns
                             from to in CharEscapeInsideClass(false, isSubtract, true)
                             select new CharRangePattern(frm.Value, to.Value);
 
-            CharGroupElem = (isFirstPos, isSubtract) =>
-                                Choice(from p in NamedCharClass select (CharPattern)p,
-                                       from p in CharRange(isFirstPos, isSubtract) select (CharPattern)p,
-                                       from p in CharEscapeInsideClass(isFirstPos, isSubtract, false) select (CharPattern)p);
+            CharGroupElement = (isFirstPos, isSubtract) =>
+                                    Choice(from p in NamedCharClass select (CharPattern)p,
+                                           from p in CharRange(isFirstPos, isSubtract) select (CharPattern)p,
+                                           from p in CharEscapeInsideClass(isFirstPos, isSubtract, false) select (CharPattern)p);
 
             BareCharGroup = isSubtract =>
                                 from positive in
                                     Option(true, from c in Char('^')
                                                  select false)
-                                from first in CharGroupElem(true, isSubtract)
-                                from rest in Many(CharGroupElem(false, isSubtract))
+                                from first in CharGroupElement(true, isSubtract)
+                                from rest in Many(CharGroupElement(false, isSubtract))
                                 let childPatterns = new[] { first }.Concat(rest)
                                 select (CharClassPattern)new CharGroupPattern(positive, childPatterns);
 
@@ -141,7 +141,7 @@ namespace RegexParser.Patterns
 
         public static Parser<char, CharClassPattern> NamedCharClass;
         public static Func<bool, bool, Parser<char, CharRangePattern>> CharRange;
-        public static Func<bool, bool, Parser<char, CharPattern>> CharGroupElem;
+        public static Func<bool, bool, Parser<char, CharPattern>> CharGroupElement;
         public static Func<bool, Parser<char, CharClassPattern>> BareCharGroup;
         public static Parser<char, CharClassPattern> CharClassSubtract;
         public static Parser<char, CharClassPattern> CharGroup;
