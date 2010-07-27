@@ -85,8 +85,8 @@ namespace RegexParser.Tests.Patterns
             pattern2 = new CharGroupPattern(true, "xxy", new[] { uppercase, lowercase });
             Assert.AreEqual(pattern1, pattern2, "CharSet/CharRange");
 
-            Assert.AreEqual(pattern1.ChildPatterns[0], pattern2.ChildPatterns[0], "CharEscape");
-            Assert.AreEqual(pattern1.ChildPatterns[2], pattern2.ChildPatterns[2], "CharRange");
+            Assert.AreEqual(pattern1.CharSet, pattern2.CharSet, "CharRange");
+            Assert.AreEqual(pattern1.ChildPatterns[0], pattern2.ChildPatterns[0], "CharRange");
 
             pattern1 = new CharGroupPattern(true, new[] { uppercase, lowercase });
             pattern2 = new CharGroupPattern(true, new[] { uppercase, lowercase, digits });

@@ -16,9 +16,6 @@ Medium:
 
 Small:
 
-- improve performance for class CharGroupPattern (and simplify it)
-
-
 - alternation
 
 - non-greedy quantifiers
@@ -33,6 +30,7 @@ Small:
 - support Unicode named blocks (e.g., "\p{IsBasicLatin}" for the range 0000 - 007F)
 
 
+* improve performance for class CharGroupPattern (and simplify it)
 * character class subtraction (e.g., "[a-z-[m-p]]", or "[a-z-[d-w-[m-o]]]")
 * zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
 * accept ']' as the first character in a character group: "[]]"

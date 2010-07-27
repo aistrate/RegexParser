@@ -38,6 +38,10 @@ namespace RegexParser.Tests.Performance
                                  times, maxItemCount, digitChars);
             //  sec.
 
+            charClassPatternTest(parseCharClass(@"[\d]"),
+                                 times, maxItemCount, digitChars);
+            //  sec.
+
 
             string lowercaseChars = new string(EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).ToArray());
 
@@ -52,6 +56,18 @@ namespace RegexParser.Tests.Performance
             charClassPatternTest(new CharGroupPattern(true, new[] { new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
             // 1.65 sec.
+
+            charClassPatternTest(parseCharClass(@"\w"),
+                                 times, maxItemCount, digitChars);
+            //  sec.
+
+            charClassPatternTest(parseCharClass(@"[\w]"),
+                                 times, maxItemCount, digitChars);
+            //  sec.
+
+            charClassPatternTest(parseCharClass(@"[\s\x00-\x1F\d\w]"),
+                                 times, maxItemCount, digitChars);
+            //  sec.
 
 
             charTest("char.IsLetterOrDigit", c => char.IsLetterOrDigit(c),

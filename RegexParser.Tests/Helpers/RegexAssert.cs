@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 using RegexParser.Matchers;
+using RegexParser.Patterns;
 using RegexParser.Util;
 using Msoft = System.Text.RegularExpressions;
 
@@ -20,6 +22,8 @@ namespace RegexParser.Tests.Helpers
         public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
         {
             Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
+
+            //DisplayPattern(pattern);
 
             DisplayMatches(input, pattern, algorithmType, actual);
 
@@ -76,9 +80,22 @@ namespace RegexParser.Tests.Helpers
                 ThrowsSameExceptionAsMsoft(input, pattern, algorithmType);
         }
 
+        public static void DisplayPattern(string pattern)
+        {
+            var result = PatternParsers.Regex(new ArrayConsList<char>(pattern));
+
+            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+            Console.WriteLine("Parsed:  {0}", result.Value);
+
+            if (!result.Rest.IsEmpty)
+                Console.WriteLine("Rest:    {0}", result.Rest.AsEnumerable().AsString().ShowVerbatim());
+
+            Console.Write("\n");
+        }
+
         public static void DisplayMatches(string input, string pattern, AlgorithmType algorithmType, IEnumerable<Match2> matches)
         {
-            Console.WriteLine("Input: {0}", input.Show());
+            Console.WriteLine("Input:    {0}", input.Show());
             Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
 
             int count = matches.Count();
@@ -86,12 +103,14 @@ namespace RegexParser.Tests.Helpers
                               count,
                               count == 1 ? "" : "es",
                               algorithmType.ToString(),
-                              count > 0 ? ":" : ".\n");
+                              count > 0 ? ":" : ".");
 
             if (count > 0)
-                Console.WriteLine(string.Join("\n", matches.Select(m => string.Format("{0,4:#0},{1,3:#0},  {2}",
-                                                                                      m.Index, m.Length, m.Value.Show()))
-                                                           .ToArray()) + "\n");
+                Console.WriteLine(matches.Select(m => string.Format("{0,4:#0},{1,3:#0},  {2}",
+                                                                    m.Index, m.Length, m.Value.Show()))
+                                         .ConcatStrings("\n"));
+
+            Console.Write("\n");
         }
 
         public static void DisplayExpectedException(string input, string pattern, AlgorithmType algorithmType, Exception ex)

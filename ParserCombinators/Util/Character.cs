@@ -22,6 +22,21 @@ namespace ParserCombinators.Util
             return char.IsDigit(c) || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f');
         }
 
+        public static string AsString(this IEnumerable<char> chars)
+        {
+            return new string(chars.ToArray());
+        }
+
+        public static string ConcatStrings(this IEnumerable<string> strings)
+        {
+            return strings.SelectMany(s => s).AsString();
+        }
+
+        public static string ConcatStrings(this IEnumerable<string> strings, string separator)
+        {
+            return string.Join(separator, strings.ToArray());
+        }
+
         /// <summary>
         /// Converts a character into C# character-literal format (ready to be pasted into a program), including the single quotes.
         /// </summary>

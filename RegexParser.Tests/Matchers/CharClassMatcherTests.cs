@@ -166,8 +166,21 @@ namespace RegexParser.Tests.Matchers
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
 
-            RegexAssert.AreMatchesSameAsMsoft("BC-DEF", @"[a-zA\-Z]", AlgorithmType);
+        [Test]
+        public void DashesInsideClass()
+        {
+            string input = "abc-def mnpqrstu [].";
+
+            string[] patterns = new[] {
+                @"[A-Za\-z]",
+                @"[a-d-n]",
+                @"[a-d-n-s]",
+                @"[a-d-.]",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
         [Test]

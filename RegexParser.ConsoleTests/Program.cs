@@ -12,6 +12,7 @@ using ParserCombinators.Util;
 using RegexParser.Matchers;
 using RegexParser.Patterns;
 using RegexParser.Tests;
+using RegexParser.Tests.Helpers;
 using RegexParser.Tests.Matchers;
 using RegexParser.Tests.Patterns;
 using RegexParser.Tests.Performance;
@@ -28,6 +29,8 @@ namespace RegexParser.ConsoleTests
                 //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
 
                 PatternPerformanceTests.CharClassPatternTest();
+
+                //RegexAssert.DisplayPattern(@"[a-z]");
 
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
