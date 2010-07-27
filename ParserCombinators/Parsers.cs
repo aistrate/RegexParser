@@ -85,18 +85,19 @@ namespace ParserCombinators
                 Result<TToken, TValue> result;
                 int count = 0;
 
-                do
-                {
-                    result = parser(consList);
-
-                    if (result != null)
+                if (max > 0)
+                    do
                     {
-                        values.Add(result.Value);
-                        consList = result.Rest;
-                        count++;
+                        result = parser(consList);
+
+                        if (result != null)
+                        {
+                            values.Add(result.Value);
+                            consList = result.Rest;
+                            count++;
+                        }
                     }
-                }
-                while (result != null && count < max);
+                    while (result != null && count < max);
 
                 if (count >= min)
                     return new Result<TToken, IEnumerable<TValue>>(values, consList);

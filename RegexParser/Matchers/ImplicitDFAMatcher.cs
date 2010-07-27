@@ -17,19 +17,12 @@ namespace RegexParser.Matchers
 
         protected override IEnumerable<Match2> GetMatches()
         {
-            if (Pattern is GroupPattern && ((GroupPattern)Pattern).Length == 0)
-            {
-                for (int i = 0; i <= InputText.Length; i++)
-                    yield return new Match2(i, 0, "");
-                yield break;
-            }
-
             Parser<char, string> matchParser = MatchParsers.CreateParser(Pattern);
 
             IConsList<char> consList = new ArrayConsList<char>(InputText);
             int index = 0;
 
-            while (!consList.IsEmpty)
+            while (index <= InputText.Length)
             {
                 Result<char, string> result = matchParser(consList);
 
@@ -37,14 +30,16 @@ namespace RegexParser.Matchers
                 {
                     yield return new Match2(index, result.Value.Length, result.Value);
 
-                    consList = result.Rest;
-                    index += result.Value.Length;
+                    if (result.Value.Length > 0)
+                    {
+                        consList = result.Rest;
+                        index += result.Value.Length;
+                        continue;
+                    }
                 }
-                else
-                {
-                    consList = consList.Tail;
-                    index++;
-                }
+
+                consList = consList.Tail;
+                index++;
             }
         }
     }

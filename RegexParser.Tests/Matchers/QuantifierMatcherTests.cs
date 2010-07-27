@@ -50,7 +50,7 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.ThrowsSameExceptionAsMsoft("abab", @"(ab)++", AlgorithmType);
         }
 
-        //[Test]
+        [Test]
         public void ZeroWidth()
         {
             RegexAssert.AreMatchesSameAsMsoft("bbbcc", @"b*", AlgorithmType);
@@ -113,7 +113,7 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
-        //[Test]
+        [Test]
         public void FromNToM_ZeroWidth()
         {
             string input = "abbcccddddeeeee 122333444455555666666";
