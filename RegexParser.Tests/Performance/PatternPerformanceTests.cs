@@ -36,11 +36,11 @@ namespace RegexParser.Tests.Performance
 
             charClassPatternTest(parseCharClass(@"\d"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 1.80 sec.
 
             charClassPatternTest(parseCharClass(@"[\d]"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 2.19 sec.
 
 
             string lowercaseChars = new string(EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).ToArray());
@@ -59,15 +59,15 @@ namespace RegexParser.Tests.Performance
 
             charClassPatternTest(parseCharClass(@"\w"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 2.06 sec.
 
             charClassPatternTest(parseCharClass(@"[\w]"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 2.42 sec.
 
             charClassPatternTest(parseCharClass(@"[\s\x00-\x1F\d\w]"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 3.05 sec.
 
 
             charTest("char.IsLetterOrDigit", c => char.IsLetterOrDigit(c),
@@ -85,11 +85,11 @@ namespace RegexParser.Tests.Performance
 
             charClassPatternTest(parseCharClass(@"\w"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 2.02 sec.
 
             charClassPatternTest(parseCharClass(@"[\w-[A-Z]]"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 3.42 sec.
 
 
             string repeatedChar = new string(EnumerablePerformanceTests.RepeatChars("7", maxItemCount).ToArray());
@@ -114,7 +114,7 @@ namespace RegexParser.Tests.Performance
 
             charClassPatternTest(parseCharClass(@"[^a-z]"),
                                  times, maxItemCount, digitChars);
-            //  sec.
+            // 2.09 sec.
         }
 
         private static CharClassPattern parseCharClass(string pattern)
