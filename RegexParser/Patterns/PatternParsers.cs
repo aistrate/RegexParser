@@ -47,15 +47,8 @@ namespace RegexParser.Patterns
 
             // Character Classes
             NamedCharClass = from b in Char('\\')
-                             from cls in
-                                 Choice(
-                                     from c in Char('s') select CharGroupPattern.WhitespaceChar,
-                                     from c in Char('S') select CharGroupPattern.WhitespaceChar.Negated,
-                                     from c in Char('w') select CharGroupPattern.WordChar,
-                                     from c in Char('W') select CharGroupPattern.WordChar.Negated,
-                                     from c in Char('d') select CharGroupPattern.DigitChar,
-                                     from c in Char('D') select CharGroupPattern.DigitChar.Negated)
-                             select (CharClassPattern)cls;
+                             from cls in OneOf(namedCharClassKeys)
+                             select namedCharClasses[cls];
 
             CharRange = (isFirstPos, isSubtract) =>
                             from frm in CharEscapeInsideClass(isFirstPos, isSubtract, false)
@@ -77,14 +70,15 @@ namespace RegexParser.Patterns
                                 let childPatterns = new[] { first }.Concat(rest)
                                 select (CharClassPattern)new CharGroupPattern(positive, childPatterns);
 
-            CharClassSubtract = from baseGroup in BareCharGroup(true)
+            CharClassSubtract = from baseGrp in BareCharGroup(true)
                                 from d in Char('-')
-                                from excludedGroup in CharGroup
-                                select (CharClassPattern)new CharClassSubtractPattern(baseGroup, excludedGroup);
+                                from excludedGrp in CharGroup
+                                select (CharClassPattern)new CharClassSubtractPattern(baseGrp, excludedGrp);
 
             CharGroup = Between(Char('['),
                                 Char(']'),
-                                Either(CharClassSubtract, BareCharGroup(false)));
+                                Either(CharClassSubtract,
+                                       BareCharGroup(false)));
 
             CharClass = Choice(from c in Char('.') select (CharClassPattern)CharGroupPattern.AnyChar,
                                NamedCharClass,
@@ -176,18 +170,34 @@ namespace RegexParser.Patterns
                                  specialCharsInsideClass_Subtract;
         }
 
-        private static Dictionary<char, char> charEscapes = new Dictionary<char, char>()
-        {
-            { 'a', '\a' },
-            { 'b', '\b' },
-            { 'f', '\f' },
-            { 'n', '\n' },
-            { 'r', '\r' },
-            { 't', '\t' },
-            { 'v', '\v' }
-        };
+
+        private static Dictionary<char, char> charEscapes =
+            new Dictionary<char, char>()
+            {
+                { 'a', '\a' },
+                { 'b', '\b' },
+                { 'f', '\f' },
+                { 'n', '\n' },
+                { 'r', '\r' },
+                { 't', '\t' },
+                { 'v', '\v' },
+            };
 
         private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
         private static string charEscapeKeysInsideClass = new string(charEscapes.Keys.ToArray());
+
+
+        private static Dictionary<char, CharClassPattern> namedCharClasses =
+            new Dictionary<char, CharClassPattern>()
+            {
+                { 's', CharGroupPattern.WhitespaceChar },
+                { 'S', CharGroupPattern.WhitespaceChar.Negated },
+                { 'w', CharGroupPattern.WordChar },
+                { 'W', CharGroupPattern.WordChar.Negated },
+                { 'd', CharGroupPattern.DigitChar },
+                { 'D', CharGroupPattern.DigitChar.Negated },
+            };
+
+        private static string namedCharClassKeys = new string(namedCharClasses.Keys.ToArray());
     }
 }
