@@ -25,21 +25,14 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //new CharEscapeMatcherTests(AlgorithmType.ImplicitDFA).CharCodes();
-                PatternPerformanceTests.CharClassPatternTest();
+                //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
+
+                //PatternPerformanceTests.CharClassPatternTest();
 
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
 
                 //Console.WriteLine(new string(".$^{[(|)*+?\\  - \b\n\b []0azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
-
-
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcdlas (01234)", @"[(\w-[0-9]]")));
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcdlas (01234)", @"[(\w-[\d]]")));
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcdlas (01234)-", @"[\d-a]")));
-
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcdlas \b (01234)- [] xyz", @"[\b-[x]]")));
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcdlas \b (01234)- [] xyz \x00", @"[abcdefgh-[d-z]]")));
             }
             catch (Exception ex)
             {

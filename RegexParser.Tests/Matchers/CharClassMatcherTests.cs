@@ -171,6 +171,7 @@ namespace RegexParser.Tests.Matchers
                 @"[]-]",
                 @"[]-}]",
                 @"[x]-}]",
+                @"[^]]",
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
@@ -290,6 +291,59 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft("abcdlas \b 01234 [] xyz", @"[\d[\s]]", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abcdlas \b 01234 [7] xyz", @"[\d[\s]]", AlgorithmType);
+        }
+
+        [Test]
+        public void Subtract()
+        {
+            string input = "abcdlas \b (01234)- AB MNP [] xyz \x00";
+
+            string[] patterns = new[] {
+                @"[\w-[x]]",
+                @"[\w-[0-9]]",
+                @"[(\w-[0-9]]",
+                @"[\w-[\d]]",
+                @"[\b-[x]]",
+                @"[b-[x]]",
+                @"[xyz-[x]]",
+                @"[xyz-[^x]]",
+                @"[abcdefgh-[d-z]]",
+
+                @"[a-m0-2-[d-z]]",
+                @"[^a-m0-2-[d-z]]",
+                @"[\x00-\xFF-[a-m0-2-[d-z]]]",
+
+                @"[a-z-[d-z]]",
+                @"[a-z-[d-z-[t-z]]]",
+                @"[a-z-[d-z-[t-z-[x]]]]",
+
+                @"[\W-[\s]]",
+                @"[\w-[^a-z]]",
+                @"[\S-[\w]]",
+                @"[\S-[^\w]]",
+                @"[\S-[\W]]",
+                @"[\S-[^\W]]",
+
+                @"[-a-z-[a-d]]",
+                @"[[a-z-[a-d]]",
+                @"[x[-[a-d]]",
+                @"[x[a-z-[a-d]]",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void Subtract_Fake()
+        {
+            string input = "abcdlas \b (01234)- [] xyz \x00";
+
+            string[] patterns = new[] {
+                @"[\d-a]",
+                @"[\w-\d]",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
     }
 }

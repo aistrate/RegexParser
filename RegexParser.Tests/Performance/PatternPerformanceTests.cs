@@ -21,11 +21,11 @@ namespace RegexParser.Tests.Performance
                      times, maxItemCount, digitChars);
             // 1.28 sec.
 
-            charClassPatternTest(new CharClassPattern(true, "0123456789"),
+            charClassPatternTest(new CharGroupPattern(true, "0123456789"),
                                  times, maxItemCount, digitChars);
             // 2.39 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('0', '9') }),
+            charClassPatternTest(new CharGroupPattern(true, new[] { new CharRangePattern('0', '9') }),
                                  times, maxItemCount, digitChars);
             // 1.59 sec.
 
@@ -36,11 +36,11 @@ namespace RegexParser.Tests.Performance
 
             string lowercaseChars = new string(EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).ToArray());
 
-            charClassPatternTest(new CharClassPattern(true, "abcdefghijklmnopqrstuvwxyz"),
+            charClassPatternTest(new CharGroupPattern(true, "abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, lowercaseChars);
             // 2.55 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('a', 'z') }),
+            charClassPatternTest(new CharGroupPattern(true, new[] { new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
             // 1.65 sec.
 
@@ -49,11 +49,11 @@ namespace RegexParser.Tests.Performance
             // 1.42 sec.
 
 
-            charClassPatternTest(new CharClassPattern(true, "0123456789abcdefghijklmnopqrstuvwxyz"),
+            charClassPatternTest(new CharGroupPattern(true, "0123456789abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, lowercaseChars);
             // 2.80 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('0', '9'),
+            charClassPatternTest(new CharGroupPattern(true, new[] { new CharRangePattern('0', '9'),
                                                                     new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, lowercaseChars);
             // 1.69 sec.
@@ -65,26 +65,26 @@ namespace RegexParser.Tests.Performance
 
             string repeatedChar = new string(EnumerablePerformanceTests.RepeatChars("7", maxItemCount).ToArray());
 
-            charClassPatternTest(new CharClassPattern(true, "7"),
+            charClassPatternTest(new CharGroupPattern(true, "7"),
                                  times, maxItemCount, repeatedChar);
             // 1.97 sec.
 
-            charClassPatternTest(new CharClassPattern(true, new[] { new CharRangePattern('7', '7') }),
+            charClassPatternTest(new CharGroupPattern(true, new[] { new CharRangePattern('7', '7') }),
                                  times, maxItemCount, repeatedChar);
             // 1.61 sec.
 
 
             // Negative character classes
-            charClassPatternTest(new CharClassPattern(false, "abcdefghijklmnopqrstuvwxyz"),
+            charClassPatternTest(new CharGroupPattern(false, "abcdefghijklmnopqrstuvwxyz"),
                                  times, maxItemCount, digitChars);
             // 2.84 sec.
 
-            charClassPatternTest(new CharClassPattern(false, new[] { new CharRangePattern('a', 'z') }),
+            charClassPatternTest(new CharGroupPattern(false, new[] { new CharRangePattern('a', 'z') }),
                                  times, maxItemCount, digitChars);
             // 1.64 sec.
         }
 
-        private static void charClassPatternTest(CharClassPattern charClassPattern, int times, int maxItemCount, string inputText)
+        private static void charClassPatternTest(CharGroupPattern charClassPattern, int times, int maxItemCount, string inputText)
         {
             charTest(charClassPattern.ToString(), c => charClassPattern.IsMatch(c), times, maxItemCount, inputText);
         }

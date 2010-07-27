@@ -8,25 +8,25 @@ using RegexParser.Patterns;
 namespace RegexParser.Tests.Patterns
 {
     [TestFixture]
-    public class CharClassPatternTests
+    public class CharGroupPatternTests
     {
         [Test]
         public void Ranges()
         {
             BasePattern actual = BasePattern.CreatePattern("[A-Z]");
-            BasePattern expected = new GroupPattern(new BasePattern[] { new CharClassPattern(true, new[] { uppercase }) });
+            BasePattern expected = new GroupPattern(new BasePattern[] { new CharGroupPattern(true, new[] { uppercase }) });
             Assert.AreEqual(expected, actual, "One Range");
 
 
             actual = BasePattern.CreatePattern("[A-Z][a-z][0-9][a-zA-Z][A-Za-z0-9][a-zm-wA-M]");
 
             expected = new GroupPattern(new BasePattern[] {
-                new CharClassPattern(true, new[] { uppercase }),
-                new CharClassPattern(true, new[] { lowercase }),
-                new CharClassPattern(true, new[] { digits }),
-                new CharClassPattern(true, new[] { lowercase, uppercase }),
-                new CharClassPattern(true, new[] { uppercase, lowercase, digits }),
-                new CharClassPattern(true, new[] { lowercase,
+                new CharGroupPattern(true, new[] { uppercase }),
+                new CharGroupPattern(true, new[] { lowercase }),
+                new CharGroupPattern(true, new[] { digits }),
+                new CharGroupPattern(true, new[] { lowercase, uppercase }),
+                new CharGroupPattern(true, new[] { uppercase, lowercase, digits }),
+                new CharGroupPattern(true, new[] { lowercase,
                                                    new CharRangePattern('m', 'w'),
                                                    new CharRangePattern('A', 'M') })
             });
@@ -39,18 +39,18 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern("[A-Z]");
 
-            BasePattern expected = new GroupPattern(new BasePattern[] { new CharClassPattern(true, new[] { uppercase }) });
+            BasePattern expected = new GroupPattern(new BasePattern[] { new CharGroupPattern(true, new[] { uppercase }) });
             Assert.AreEqual(expected, actual, "One Range");
 
 
             actual = BasePattern.CreatePattern("[.,;:?!A-Za-z][xya-zm-wA-M][msabcdm ;xyz]");
 
             expected = new GroupPattern(new BasePattern[] {
-                new CharClassPattern(true, ".,;:?!", new[] { uppercase, lowercase }),
-                new CharClassPattern(true, "xy", new[] { lowercase,
+                new CharGroupPattern(true, ".,;:?!", new[] { uppercase, lowercase }),
+                new CharGroupPattern(true, "xy", new[] { lowercase,
                                                          new CharRangePattern('m', 'w'),
                                                          new CharRangePattern('A', 'M') }),
-                new CharClassPattern(true, "msabcd ;xyz")
+                new CharGroupPattern(true, "msabcd ;xyz")
             });
             Assert.AreEqual(expected, actual);
         }
@@ -61,10 +61,10 @@ namespace RegexParser.Tests.Patterns
             BasePattern actual = BasePattern.CreatePattern("[A-Z][^x][^a-z][0-9]");
 
             BasePattern expected = new GroupPattern(new BasePattern[] {
-                new CharClassPattern(true, new[] { uppercase }),
-                new CharClassPattern(false, "x"),
-                new CharClassPattern(false, new[] { lowercase }),
-                new CharClassPattern(true, new[] { digits })
+                new CharGroupPattern(true, new[] { uppercase }),
+                new CharGroupPattern(false, "x"),
+                new CharGroupPattern(false, new[] { lowercase }),
+                new CharGroupPattern(true, new[] { digits })
             });
 
             Assert.AreEqual(expected, actual);
@@ -73,23 +73,23 @@ namespace RegexParser.Tests.Patterns
         [Test]
         public void Equality()
         {
-            CharClassPattern pattern1 = new CharClassPattern(true, "xy");
-            CharClassPattern pattern2 = new CharClassPattern(true, "xyxyy");
+            CharGroupPattern pattern1 = new CharGroupPattern(true, "xy");
+            CharGroupPattern pattern2 = new CharGroupPattern(true, "xyxyy");
             Assert.AreEqual(pattern1, pattern2, "CharSet");
 
-            pattern1 = new CharClassPattern(true, new[] { uppercase, lowercase });
-            pattern2 = new CharClassPattern(true, new[] { uppercase, lowercase });
+            pattern1 = new CharGroupPattern(true, new[] { uppercase, lowercase });
+            pattern2 = new CharGroupPattern(true, new[] { uppercase, lowercase });
             Assert.AreEqual(pattern1, pattern2, "CharRange");
 
-            pattern1 = new CharClassPattern(true, "xyyx", new[] { uppercase, lowercase });
-            pattern2 = new CharClassPattern(true, "xxy", new[] { uppercase, lowercase });
+            pattern1 = new CharGroupPattern(true, "xyyx", new[] { uppercase, lowercase });
+            pattern2 = new CharGroupPattern(true, "xxy", new[] { uppercase, lowercase });
             Assert.AreEqual(pattern1, pattern2, "CharSet/CharRange");
 
             Assert.AreEqual(pattern1.ChildPatterns[0], pattern2.ChildPatterns[0], "CharEscape");
             Assert.AreEqual(pattern1.ChildPatterns[2], pattern2.ChildPatterns[2], "CharRange");
 
-            pattern1 = new CharClassPattern(true, new[] { uppercase, lowercase });
-            pattern2 = new CharClassPattern(true, new[] { uppercase, lowercase, digits });
+            pattern1 = new CharGroupPattern(true, new[] { uppercase, lowercase });
+            pattern2 = new CharGroupPattern(true, new[] { uppercase, lowercase, digits });
             Assert.AreNotEqual(pattern1, pattern2, "NotEqual");
             Assert.IsTrue(pattern1 != pattern2, "!=");
         }

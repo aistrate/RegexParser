@@ -49,37 +49,43 @@ namespace RegexParser.Patterns
             NamedCharClass = from b in Char('\\')
                              from cls in
                                  Choice(
-                                     from c in Char('s') select CharClassPattern.WhitespaceChar,
-                                     from c in Char('S') select CharClassPattern.WhitespaceChar.Negated,
-                                     from c in Char('w') select CharClassPattern.WordChar,
-                                     from c in Char('W') select CharClassPattern.WordChar.Negated,
-                                     from c in Char('d') select CharClassPattern.DigitChar,
-                                     from c in Char('D') select CharClassPattern.DigitChar.Negated)
-                             select cls;
+                                     from c in Char('s') select CharGroupPattern.WhitespaceChar,
+                                     from c in Char('S') select CharGroupPattern.WhitespaceChar.Negated,
+                                     from c in Char('w') select CharGroupPattern.WordChar,
+                                     from c in Char('W') select CharGroupPattern.WordChar.Negated,
+                                     from c in Char('d') select CharGroupPattern.DigitChar,
+                                     from c in Char('D') select CharGroupPattern.DigitChar.Negated)
+                             select (CharClassPattern)cls;
 
             CharRange = isFirst => from frm in CharEscapeInsideClass(isFirst)
                                    from d in Char('-')
                                    from to in CharEscapeInsideClass(false)
                                    select new CharRangePattern(frm.Value, to.Value);
 
-            GroupCharClassElement = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
-                                                      from p in CharRange(isFirst) select (CharPattern)p,
-                                                      from p in CharEscapeInsideClass(isFirst) select (CharPattern)p);
+            CharGroupElem = isFirst => Choice(from p in NamedCharClass select (CharPattern)p,
+                                              from p in CharRange(isFirst) select (CharPattern)p,
+                                              from p in CharEscapeInsideClass(isFirst) select (CharPattern)p);
 
-            GroupCharClass = Between(Char('['),
-                                     Char(']'),
+            BareCharGroup = from positive in
+                                Option(true, from c in Char('^')
+                                             select false)
+                            from first in CharGroupElem(true)
+                            from rest in Many(CharGroupElem(false))
+                            let childPatterns = new[] { first }.Concat(rest)
+                            select (CharClassPattern)new CharGroupPattern(positive, childPatterns);
 
-                                     from positive in
-                                         Option(true, from c in Char('^')
-                                                      select false)
-                                     from first in GroupCharClassElement(true)
-                                     from rest in Many(GroupCharClassElement(false))
-                                     let childPatterns = new[] { first }.Concat(rest)
-                                     select new CharClassPattern(positive, childPatterns));
+            CharClassSubtract = from baseGroup in BareCharGroup
+                                from d in Char('-')
+                                from excludedGroup in CharGroup
+                                select (CharClassPattern)new CharClassSubtractPattern(baseGroup, excludedGroup);
 
-            CharClass = Choice(from c in Char('.') select CharClassPattern.AnyChar,
+            CharGroup = Between(Char('['),
+                                Char(']'),
+                                Either(CharClassSubtract, BareCharGroup));
+
+            CharClass = Choice(from c in Char('.') select (CharClassPattern)CharGroupPattern.AnyChar,
                                NamedCharClass,
-                               GroupCharClass);
+                               CharGroup);
 
 
             // Quantifiers
@@ -136,10 +142,12 @@ namespace RegexParser.Patterns
         public static Parser<char, CharEscapePattern> CharEscapeOutsideClass;
         public static Func<bool, Parser<char, CharEscapePattern>> CharEscapeInsideClass;
 
-        public static Func<bool, Parser<char, CharRangePattern>> CharRange;
         public static Parser<char, CharClassPattern> NamedCharClass;
-        public static Func<bool, Parser<char, CharPattern>> GroupCharClassElement;
-        public static Parser<char, CharClassPattern> GroupCharClass;
+        public static Func<bool, Parser<char, CharRangePattern>> CharRange;
+        public static Func<bool, Parser<char, CharPattern>> CharGroupElem;
+        public static Parser<char, CharClassPattern> BareCharGroup;
+        public static Parser<char, CharClassPattern> CharClassSubtract;
+        public static Parser<char, CharClassPattern> CharGroup;
         public static Parser<char, CharClassPattern> CharClass;
 
         public static Parser<char, int> Natural;
@@ -164,6 +172,7 @@ namespace RegexParser.Patterns
         private const string specialCharsOutsideClass = ".$^{[(|)*+?\\";
         private const string specialCharsInsideClass_FirstPos  = "\\";
         private const string specialCharsInsideClass = "]\\";
+        //private const string specialCharsInsideClass = "[-]\\";   // for char subtraction to work
 
         private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
         private static string charEscapeKeysInsideClass  = new string(charEscapes.Keys.ToArray());

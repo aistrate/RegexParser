@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5A5C2DF3-04BE-44D0-A357-534CBBE1B0E6}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,7 +54,7 @@
     <Compile Include="Matchers\GroupMatcherTests.cs" />
     <Compile Include="Matchers\MatcherTests.cs" />
     <Compile Include="Matchers\QuantifierMatcherTests.cs" />
-    <Compile Include="Patterns\CharClassPatternTests.cs" />
+    <Compile Include="Patterns\CharGroupPatternTests.cs" />
     <Compile Include="Patterns\QuantifierPatternTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />

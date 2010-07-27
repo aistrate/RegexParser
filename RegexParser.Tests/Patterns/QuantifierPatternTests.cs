@@ -17,9 +17,9 @@ namespace RegexParser.Tests.Patterns
 
             BasePattern expected = new GroupPattern(new BasePattern[]
                                    {
-                                       new QuantifierPattern(CharClassPattern.DigitChar, 0, null, true),
-                                       new QuantifierPattern(CharClassPattern.WhitespaceChar, 0, 1, true),
-                                       new QuantifierPattern(CharClassPattern.WordChar.Negated, 1, null, true),
+                                       new QuantifierPattern(CharGroupPattern.DigitChar, 0, null, true),
+                                       new QuantifierPattern(CharGroupPattern.WhitespaceChar, 0, 1, true),
+                                       new QuantifierPattern(CharGroupPattern.WordChar.Negated, 1, null, true),
 
                                        new QuantifierPattern(new CharEscapePattern('x'), 0, null, false),
                                        new QuantifierPattern(new CharEscapePattern('\n'), 0, 1, false),
