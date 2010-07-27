@@ -96,7 +96,7 @@ namespace RegexParser.Tests.Performance
                                  times, maxItemCount, digitChars);
             // 1.64 sec.
 
-            charClassPatternTest(parseCharClass(@"\W"),
+            charClassPatternTest(parseCharClass(@"[^a-z]"),
                                  times, maxItemCount, digitChars);
             //  sec.
         }
