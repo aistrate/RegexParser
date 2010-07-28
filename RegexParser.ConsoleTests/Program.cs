@@ -38,7 +38,7 @@ namespace RegexParser.ConsoleTests
                 //Console.WriteLine(new string(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
                 // "\b\n !$()*+-.09?AZ[\\]^az{|}"
 
-                testBacktracking();
+                testBacktracking2();
             }
             catch (Exception ex)
             {
@@ -62,16 +62,42 @@ namespace RegexParser.ConsoleTests
 
         private static void testBacktracking()
         {
-            Func<string, Parser<char, IEnumerable<char>>> stringParser = s => CharParsers.Sequence(s.Select(c => CharParsers.Char(c)));
-
             var letExpr = stringParser("let");
             var identifier = CharParsers.Many1(CharParsers.Satisfy(c => char.IsLetter(c)));
 
             var expr = CharParsers.Either(letExpr, identifier);
 
-            var result = expr(new ArrayConsList<char>("lexical"));
+            displayResult(runParser(expr, "lexical"));
+        }
 
-            displayResult(result);
+        private static void testBacktracking2()
+        {
+            var alternatives = CharParsers.Choice(
+                                    stringParser("a"),
+                                    stringParser("ab")
+                               );
+
+            var pattern = from ss in CharParsers.Sequence(new[]
+                                     {
+                                         alternatives,
+                                         stringParser("bbb"),
+                                         stringParser("c")
+                                     })
+                          select ss.SelectMany(s => s);
+
+            displayResult(runParser(pattern, "abbbc"));
+            displayResult(runParser(pattern, "abbbbc"));
+        }
+
+        private static Parser<char, IEnumerable<char>> stringParser(string s)
+        {
+            return CharParsers.Sequence(s.Select(c => CharParsers.Char(c)));
+        }
+
+        private static Result<char, TValue> runParser<TValue>(Parser<char, TValue> parser, string input)
+        {
+            Console.WriteLine("Input:  {0}", input.Show());
+            return parser(new ArrayConsList<char>(input));
         }
 
         private static void displayResult(Result<char, string> result)
@@ -86,8 +112,13 @@ namespace RegexParser.ConsoleTests
 
         private static void displayResult<TValue>(Result<char, TValue> result, Func<TValue, string> toString)
         {
-            Console.WriteLine("Value: {0}", toString(result.Value));
-            Console.WriteLine("Rest:  {0}", result.Rest.AsEnumerable().AsString().Show());
+            if (result != null)
+            {
+                Console.WriteLine("Result: {0}", toString(result.Value));
+                Console.WriteLine("Rest:   {0}\n", result.Rest.AsEnumerable().AsString().Show());
+            }
+            else
+                Console.WriteLine("Result: null\n");
         }
 
         private static string formatStackTrace(string stackTrace)
