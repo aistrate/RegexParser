@@ -30,11 +30,12 @@ namespace RegexParser.ConsoleTests
 
                 //PatternPerformanceTests.CharClassPatternTest();
 
-                RegexAssert.DisplayPattern(@"a|x[abc0-9]|c*");
-                RegexAssert.DisplayPattern(@"(a|b)|c");
-                RegexAssert.DisplayPattern(@"abcd|defgh|012");
+                //RegexAssert.DisplayPattern(@"a|x[abc0-9]|c*");
+                //RegexAssert.DisplayPattern(@"(a|b)x|c");
+                //RegexAssert.DisplayPattern(@"abcd|defgh|012");
 
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
+                displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.ImplicitDFA);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(abb?b?b?c)|(bc)")));
 

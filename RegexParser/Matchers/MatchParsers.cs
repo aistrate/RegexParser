@@ -16,7 +16,8 @@ namespace RegexParser.Matchers
                 throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
 
             if (pattern is GroupPattern)
-                return from vs in Sequence(((GroupPattern)pattern).Patterns.Select(p => CreateParser(p)))
+                return from vs in Sequence(((GroupPattern)pattern).Patterns
+                                                                  .Select(p => CreateParser(p)))
                        select vs.JoinStrings();
 
             else if (pattern is QuantifierPattern)
@@ -26,6 +27,11 @@ namespace RegexParser.Matchers
                 return from vs in Count(quant.MinOccurrences, quant.MaxOccurrences, CreateParser(quant.ChildPattern))
                        select vs.JoinStrings();
             }
+
+            else if (pattern is AlternationPattern)
+                return Choice(((AlternationPattern)pattern).Alternatives
+                                                           .Select(p => CreateParser(p))
+                                                           .ToArray());
 
             else if (pattern is CharPattern)
                 return from c in Satisfy(((CharPattern)pattern).IsMatch)
