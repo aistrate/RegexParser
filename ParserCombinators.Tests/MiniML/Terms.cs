@@ -62,7 +62,7 @@ namespace ParserCombinators.Tests.MiniML
         public override string ToString()
         {
             //return string.Format("Apply {{Func={0}, Args=[{1}]}}", Func, string.Join(", ", Args.Select(a => a.ToString()).ToArray()));
-            return string.Format("({0} {1})", Func, Args.Select(a => a.ToString()).ConcatStrings(" "));
+            return string.Format("({0} {1})", Func, Args.Select(a => a.ToString()).JoinStrings(" "));
         }
     }
 

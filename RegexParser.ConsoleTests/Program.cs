@@ -153,7 +153,7 @@ namespace RegexParser.ConsoleTests
             return string.Format("{0} matches: [{1}]",
                                  matchArr.Length,
                                  matchArr.Select(m => formatMsoftMatch(m))
-                                         .ConcatStrings());
+                                         .JoinStrings());
         }
 
         private static string formatMsoftMatch(Msoft.Match match)

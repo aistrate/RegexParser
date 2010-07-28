@@ -108,7 +108,7 @@ namespace RegexParser.Tests.Helpers
             if (count > 0)
                 Console.WriteLine(matches.Select(m => string.Format("{0,4:#0},{1,3:#0},  {2}",
                                                                     m.Index, m.Length, m.Value.Show()))
-                                         .ConcatStrings("\n"));
+                                         .JoinStrings("\n"));
 
             Console.Write("\n");
         }

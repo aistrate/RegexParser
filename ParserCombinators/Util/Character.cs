@@ -27,12 +27,12 @@ namespace ParserCombinators.Util
             return new string(chars.ToArray());
         }
 
-        public static string ConcatStrings(this IEnumerable<string> strings)
+        public static string JoinStrings(this IEnumerable<string> strings)
         {
             return strings.SelectMany(s => s).AsString();
         }
 
-        public static string ConcatStrings(this IEnumerable<string> strings, string separator)
+        public static string JoinStrings(this IEnumerable<string> strings, string separator)
         {
             return string.Join(separator, strings.ToArray());
         }

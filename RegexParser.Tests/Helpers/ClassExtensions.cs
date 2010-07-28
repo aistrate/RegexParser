@@ -122,7 +122,7 @@ namespace RegexParser.Tests.Helpers
                 string parameters = paramTypes.Length == 0 ?
                                         "with no parameters" :
                                         "with parameter types " + paramTypes.Select(t => "<" + t.FullName + ">")
-                                                                            .ConcatStrings(", ");
+                                                                            .JoinStrings(", ");
 
                 throw new ApplicationException(string.Format("Constructor not found for class <{0}> ({1}).",
                                                              objType.FullName,

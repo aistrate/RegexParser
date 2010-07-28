@@ -71,13 +71,13 @@ namespace RegexParser.Patterns
             var otherPatterns = ChildPatterns.Except(charRanges.Cast<CharPattern>());
 
             string charRangesAndEscapes = (charRanges.Select(r => string.Format("{0}-{1}", r.From, r.To))
-                                                     .ConcatStrings() +
+                                                     .JoinStrings() +
                                            CharSet).Show();
 
             string patternString = (charRangesAndEscapes != "\"\"" ? new string[] { charRangesAndEscapes } :
                                                                      new string[] { })
                                         .Concat(otherPatterns.Select(p => p.ToString()))
-                                        .ConcatStrings(", ");
+                                        .JoinStrings(", ");
 
             return string.Format("CharGroup {0}{{{1}}}",
                                  IsPositive ? "" : "^",
@@ -87,7 +87,7 @@ namespace RegexParser.Patterns
             //                     IsPositive ? "" : "^",
             //                     new[] { CharSet.Show() }
             //                        .Concat(ChildPatterns.Select(r => r.ToString()))
-            //                        .ConcatStrings(", "));
+            //                        .JoinStrings(", "));
         }
 
         bool IEquatable<CharGroupPattern>.Equals(CharGroupPattern other)

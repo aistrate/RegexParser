@@ -17,14 +17,14 @@ namespace RegexParser.Matchers
 
             if (pattern is GroupPattern)
                 return from vs in Sequence(((GroupPattern)pattern).Patterns.Select(p => CreateParser(p)))
-                       select vs.ConcatStrings();
+                       select vs.JoinStrings();
 
             else if (pattern is QuantifierPattern)
             {
                 QuantifierPattern quant = (QuantifierPattern)pattern;
 
                 return from vs in Count(quant.MinOccurrences, quant.MaxOccurrences, CreateParser(quant.ChildPattern))
-                       select vs.ConcatStrings();
+                       select vs.JoinStrings();
             }
 
             else if (pattern is CharPattern)
