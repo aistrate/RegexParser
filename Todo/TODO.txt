@@ -21,6 +21,15 @@ Small:
 - non-greedy quantifiers
 
 
+- (idea:) change the Choice parser to work like Parsec: the first parser looks ahead one char (or is it one 'atom', or subparser?), and if that succeeds, the whole sequence of parsers succeeds or fails based on the success of the first; if the look-ahead fails, the second parser is tried, and so on; (the way Choice works now is like the 'try' parser of Parsec;) OR, alternatively: add a "modifier" parser that works like the default in Parsec, and use it only when needed (sort of like 'try' in reverse)
+
+- make the Alternation parser use the (yet unwritten) SepBy parser
+
+- 'unify' the code in the group parsers of PatternParsers (i.e., AlternationGroup, BareGroup, and part of Quantifier)
+
+- write a ChoiceSeq parser that takes an IEnumerable<Parser<TToken, TValue>> as argument, instead of 'params Parser<TToken, TValue>[]', like the Choice parser
+
+
 - switch to Visual Studio 2010 (Express) and .NET Framework 4.0; use covariance/contravariance for the Parser delegate
 
 - two types of behavior: canonical and ECMAScript (JavaScript); for example, \w is equivalent to [\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Pc}\p{Lm}] in canonical mode, and to [a-zA-Z_0-9] in ECMAScript mode; ECMAScript mode does NOT support Unicode, and language elements such as the Unicode category or block elements \p and \P; the Microsoft library has a RegexOptions.ECMAScript flag, and in its absence the default behavior is canonical
