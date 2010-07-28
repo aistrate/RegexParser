@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\ExceptionWrapper.cs" />
+    <Compile Include="Matchers\AlternationMatcherTests.cs" />
     <Compile Include="Matchers\CharClassMatcherTests.cs" />
     <Compile Include="Matchers\GroupMatcherTests.cs" />
     <Compile Include="Matchers\MatcherTests.cs" />

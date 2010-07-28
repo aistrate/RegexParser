@@ -33,11 +33,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"[a-z-[m-x]-]");
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
 
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(a|ab)bbbc")));
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbbc", @"(a|ab)bbbc")));
-
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(ab|a)bbbc")));
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbbc", @"(ab|a)bbbc")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(a|ab)bbbc")));
 
                 //Console.WriteLine(new string(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
                 // "\b\n !$()*+-.09?AZ[\\]^az{|}"
