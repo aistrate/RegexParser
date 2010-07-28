@@ -26,8 +26,8 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("Group <{0}>", Patterns.Select(p => p.ToString())
-                                                        .JoinStrings(", "));
+            return string.Format("<{0}>", Patterns.Select(p => p.ToString())
+                                                  .JoinStrings(", "));
         }
 
         bool IEquatable<GroupPattern>.Equals(GroupPattern other)

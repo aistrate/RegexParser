@@ -25,7 +25,7 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("CharRange {{{0}-{1}}}", From.Show(), To.Show());
+            return string.Format("{{{0}-{1}}}", From.Show(), To.Show());
         }
 
         bool IEquatable<CharRangePattern>.Equals(CharRangePattern other)

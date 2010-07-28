@@ -119,17 +119,37 @@ namespace RegexParser.Patterns
                          select new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
 
 
-            // Groups
-            Group = Between(Char('('),
-                            Char(')'),
-                            Lazy(() => BareGroup));
-
-            BareGroup = from ps in Many(Choice(
+            // Alternations
+            AlternationGroup = from ps in
+                                   Many(Choice(
                                             from p in Quantifier select (BasePattern)p,
-                                            from p in Group select (BasePattern)p,
+                                            from p in Lazy(() => Group) select (BasePattern)p,
+                                            from p in CharEscapeOutsideClass select (BasePattern)p,
+                                            from p in CharClass select (BasePattern)p))
+                               select ps.Count() == 1 ? ps.First() :
+                                                        (BasePattern)new GroupPattern(ps);
+
+            Alternation = from first in AlternationGroup
+                          from rest in
+                              Many1(from b in Char('|')
+                                    from alt in AlternationGroup
+                                    select alt)
+                          let alts = new[] { first }.Concat(rest)
+                          select new AlternationPattern(alts);
+
+
+            // Groups
+            BareGroup = from ps in Many(Choice(
+                                            from p in Alternation select (BasePattern)p,
+                                            from p in Quantifier select (BasePattern)p,
+                                            from p in Lazy(() => Group) select (BasePattern)p,
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
                         select new GroupPattern(ps);
+
+            Group = Between(Char('('),
+                            Char(')'),
+                            BareGroup);
 
             Regex = BareGroup;
         }
@@ -149,6 +169,9 @@ namespace RegexParser.Patterns
 
         public static Parser<char, int> Natural;
         public static Parser<char, QuantifierPattern> Quantifier;
+
+        public static Parser<char, BasePattern> AlternationGroup;
+        public static Parser<char, AlternationPattern> Alternation;
 
         public static Parser<char, GroupPattern> BareGroup;
         public static Parser<char, GroupPattern> Group;

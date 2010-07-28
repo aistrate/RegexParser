@@ -22,7 +22,7 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("Char {{{0}}}", Value.Show());
+            return Value.Show();
         }
 
         bool IEquatable<CharEscapePattern>.Equals(CharEscapePattern other)

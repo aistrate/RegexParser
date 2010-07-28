@@ -67,27 +67,11 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            var charRanges = ChildPatterns.OfType<CharRangePattern>();
-            var otherPatterns = ChildPatterns.Except(charRanges.Cast<CharPattern>());
-
-            string charRangesAndEscapes = (charRanges.Select(r => string.Format("{0}-{1}", r.From, r.To))
-                                                     .JoinStrings() +
-                                           CharSet).Show();
-
-            string patternString = (charRangesAndEscapes != "\"\"" ? new string[] { charRangesAndEscapes } :
-                                                                     new string[] { })
-                                        .Concat(otherPatterns.Select(p => p.ToString()))
-                                        .JoinStrings(", ");
-
-            return string.Format("CharGroup {0}{{{1}}}",
-                                 IsPositive ? "" : "^",
-                                 patternString);
-
-            //return string.Format("CharGroup {0}{{{1}}}",
-            //                     IsPositive ? "" : "^",
-            //                     new[] { CharSet.Show() }
-            //                        .Concat(ChildPatterns.Select(r => r.ToString()))
-            //                        .JoinStrings(", "));
+            return string.Format("CharClass {{{0}{1}}}",
+                                 IsPositive ? "" : "^Neg: ",
+                                 Enumerable.Repeat(CharSet.Show(), CharSet != "" ? 1 : 0)
+                                           .Concat(ChildPatterns.Select(p => p.ToString()))
+                                           .JoinStrings(", "));
         }
 
         bool IEquatable<CharGroupPattern>.Equals(CharGroupPattern other)

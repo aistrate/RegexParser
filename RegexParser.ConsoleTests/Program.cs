@@ -30,10 +30,13 @@ namespace RegexParser.ConsoleTests
 
                 //PatternPerformanceTests.CharClassPatternTest();
 
-                //RegexAssert.DisplayPattern(@"[a-z-[m-x]-]");
+                RegexAssert.DisplayPattern(@"a|x[abc0-9]|c*");
+                RegexAssert.DisplayPattern(@"(a|b)|c");
+                RegexAssert.DisplayPattern(@"abcd|defgh|012");
+
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
 
-                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(a|ab)bbbc")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(abb?b?b?c)|(bc)")));
 
                 //Console.WriteLine(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).AsString().Show());
                 // "\b\n !$()*+-.09?AZ[\\]^az{|}"

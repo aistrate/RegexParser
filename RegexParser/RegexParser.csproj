@@ -52,6 +52,7 @@
     <Compile Include="Matchers\ExplicitDFAMatcher.cs" />
     <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
     <Compile Include="Matchers\MatchParsers.cs" />
+    <Compile Include="Patterns\AlternationPattern.cs" />
     <Compile Include="Patterns\CharClassPattern.cs" />
     <Compile Include="Patterns\CharGroupPattern.cs" />
     <Compile Include="Patterns\CharClassSubtractPattern.cs" />
