@@ -31,9 +31,9 @@ namespace RegexParser.ConsoleTests
                 //PatternPerformanceTests.CharClassPatternTest();
 
                 //RegexAssert.DisplayPattern(@"[a-z-[m-x]-]");
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"[a-z-[d-x]-]")));
 
-                //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
+                displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
+
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
 
                 //Console.WriteLine(new string(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
@@ -76,13 +76,12 @@ namespace RegexParser.ConsoleTests
                              .Replace(".cs:line ", ".cs\n   ln ");
         }
 
-        private static void displayMatches(string input, string pattern)
+        private static void displayMatches(string input, string pattern, AlgorithmType algorithmType)
         {
-            MatchCollection2 matches = new Regex2(pattern, AlgorithmType.ImplicitDFA).Matches(input);
+            //RegexAssert.DisplayPattern(pattern);
 
-            Console.WriteLine("Match pattern {0} against {1}:\n", pattern.ShowVerbatim(), input.Show());
-            Console.WriteLine(string.Join("\n", matches.Select(m => m.ToString()).ToArray()));
-            Console.WriteLine("\n");
+            var matches = new Regex2(pattern, algorithmType).Matches(input);
+            RegexAssert.DisplayMatches(input, pattern, algorithmType, matches);
         }
 
         private static string formatMsoftMatches(Msoft.MatchCollection matches)
