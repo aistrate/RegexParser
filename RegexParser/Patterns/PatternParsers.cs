@@ -14,7 +14,7 @@ namespace RegexParser.Patterns
         {
             // Character Escapes
             CharEscape = (specialChars, charEscapeKeys) =>
-                            Either(from c in NoneOf(specialChars)
+                            Choice(from c in NoneOf(specialChars)
                                    select new CharEscapePattern(c),
 
                                    from b in Char('\\')
@@ -26,7 +26,7 @@ namespace RegexParser.Patterns
                                            select charEscapes[c],
 
                                            from k in
-                                               Either(from c in Char('x') select 2,
+                                               Choice(from c in Char('x') select 2,
                                                       from c in Char('u') select 4)
                                            from hs in Count(k, HexDigit)
                                            select (char)Numeric.ReadHex(hs),
@@ -77,7 +77,7 @@ namespace RegexParser.Patterns
 
             CharGroup = Between(Char('['),
                                 Char(']'),
-                                Either(CharClassSubtract,
+                                Choice(CharClassSubtract,
                                        BareCharGroup(false)));
 
             CharClass = Choice(from c in Char('.') select (CharClassPattern)CharGroupPattern.AnyChar,
@@ -183,8 +183,8 @@ namespace RegexParser.Patterns
                 { 'v', '\v' },
             };
 
-        private static string charEscapeKeysOutsideClass = new string(charEscapes.Keys.Except("b").ToArray());
-        private static string charEscapeKeysInsideClass = new string(charEscapes.Keys.ToArray());
+        private static string charEscapeKeysOutsideClass = charEscapes.Keys.Except("b").AsString();
+        private static string charEscapeKeysInsideClass = charEscapes.Keys.AsString();
 
 
         private static Dictionary<char, CharClassPattern> namedCharClasses =
@@ -198,6 +198,6 @@ namespace RegexParser.Patterns
                 { 'D', CharGroupPattern.DigitChar.Negated },
             };
 
-        private static string namedCharClassKeys = new string(namedCharClasses.Keys.ToArray());
+        private static string namedCharClassKeys = namedCharClasses.Keys.AsString();
     }
 }

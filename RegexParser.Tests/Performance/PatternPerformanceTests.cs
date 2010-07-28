@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParserCombinators;
+using ParserCombinators.Util;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Tests.Performance;
 using RegexParser.Patterns;
@@ -16,7 +17,7 @@ namespace RegexParser.Tests.Performance
             const int times = 200, maxItemCount = 100000;
 
 
-            string digitChars = new string(EnumerablePerformanceTests.RepeatChars("0123456789", maxItemCount).ToArray());
+            string digitChars = EnumerablePerformanceTests.RepeatChars("0123456789", maxItemCount).AsString();
 
             charTest("always true", c => true,
                      times, maxItemCount, digitChars);
@@ -43,7 +44,7 @@ namespace RegexParser.Tests.Performance
             // 2.19 sec.
 
 
-            string lowercaseChars = new string(EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).ToArray());
+            string lowercaseChars = EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", maxItemCount).AsString();
 
             charTest("char.IsLetter", c => char.IsLetter(c),
                      times, maxItemCount, lowercaseChars);
@@ -92,7 +93,7 @@ namespace RegexParser.Tests.Performance
             // 3.42 sec.
 
 
-            string repeatedChar = new string(EnumerablePerformanceTests.RepeatChars("7", maxItemCount).ToArray());
+            string repeatedChar = EnumerablePerformanceTests.RepeatChars("7", maxItemCount).AsString();
 
             charClassPatternTest(new CharGroupPattern(true, "7"),
                                  times, maxItemCount, repeatedChar);

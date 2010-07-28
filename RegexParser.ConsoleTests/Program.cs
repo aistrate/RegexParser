@@ -35,7 +35,7 @@ namespace RegexParser.ConsoleTests
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(a|ab)bbbc")));
 
-                //Console.WriteLine(new string(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
+                //Console.WriteLine(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).AsString().Show());
                 // "\b\n !$()*+-.09?AZ[\\]^az{|}"
 
                 //testBacktracking2();
@@ -65,7 +65,7 @@ namespace RegexParser.ConsoleTests
             var letExpr = stringParser("let");
             var identifier = CharParsers.Many1(CharParsers.Satisfy(c => char.IsLetter(c)));
 
-            var expr = CharParsers.Either(letExpr, identifier);
+            var expr = CharParsers.Choice(letExpr, identifier);
 
             displayResult(runParser(expr, "lexical"));
         }
@@ -150,9 +150,10 @@ namespace RegexParser.ConsoleTests
         {
             Msoft.Match[] matchArr = matches.Cast<Msoft.Match>().ToArray();
 
-            return string.Format("{0} matches: [", matchArr.Length) +
-                   string.Join(", ", matchArr.Select(m => formatMsoftMatch(m)).ToArray()) +
-                   "]";
+            return string.Format("{0} matches: [{1}]",
+                                 matchArr.Length,
+                                 matchArr.Select(m => formatMsoftMatch(m))
+                                         .ConcatStrings());
         }
 
         private static string formatMsoftMatch(Msoft.Match match)

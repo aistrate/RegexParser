@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 
 namespace ParserCombinators.Tests.Performance
 {
@@ -39,7 +40,7 @@ namespace ParserCombinators.Tests.Performance
 
         public string FromCurrent
         {
-            get { return new string(buffer.Skip(index).ToArray()); }
+            get { return buffer.Skip(index).AsString(); }
         }
 
         public override string ToString()

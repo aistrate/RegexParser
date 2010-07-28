@@ -53,7 +53,9 @@ namespace ParserCombinators.Util
         /// </summary>
         public static string Show(this string s)
         {
-            return string.Format("\"{0}\"", new string(s.SelectMany(c => c.ShowLitChar()).ToArray()).Replace("\"", "\\\""));
+            return string.Format("\"{0}\"", s.SelectMany(c => c.ShowLitChar())
+                                             .AsString()
+                                             .Replace("\"", "\\\""));
         }
 
         /// <summary>

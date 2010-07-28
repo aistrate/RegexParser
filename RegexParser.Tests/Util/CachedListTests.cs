@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using ParserCombinators.Util;
 using RegexParser.Tests.Helpers;
 using RegexParser.Util;
 
@@ -139,7 +140,7 @@ namespace RegexParser.Tests.Util
 
         private string[] threeLetterStrings = Enumerable.Range(0, 26)
                                                         .Select(i => (char)(i + (byte)'a'))
-                                                        .Select(c => new string(Enumerable.Repeat(c, 3).ToArray()))
+                                                        .Select(c => Enumerable.Repeat(c, 3).AsString())
                                                         .ToArray();
 
         #endregion

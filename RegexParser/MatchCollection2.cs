@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 using RegexParser.Util;
 
 namespace RegexParser
@@ -23,9 +24,8 @@ namespace RegexParser
 
         public override string ToString()
         {
-            return string.Format("MatchColl <{0}>", 
-                                 this.FirstOrDefault() != null ? string.Join(", ", this.Select(m => m.ToString()).ToArray()) :
-                                                                 "empty");
+            return string.Format("MatchColl <{0}>",
+                                 this.Select(m => m.ToString()).ConcatStrings(", "));
         }
     }
 }

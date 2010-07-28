@@ -28,7 +28,7 @@ namespace ParserCombinators.Util
 
             if (intDigits.Any(d => d >= numBase))
                 throw new ApplicationException(string.Format("Could not read '{0}' as a number in base {1}.",
-                                                             new string(digits.ToArray()), numBase));
+                                                             digits.AsString(), numBase));
 
             int result = 0;
             foreach (int d in intDigits)

@@ -53,7 +53,7 @@ namespace ParserCombinators
         public static Parser<char, string> String(string s)
         {
             return from cs in Sequence(s.Select(c => Char(c)))
-                   select new string(cs.ToArray());
+                   select cs.AsString();
         }
     }
 }

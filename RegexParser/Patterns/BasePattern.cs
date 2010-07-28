@@ -16,12 +16,10 @@ namespace RegexParser.Patterns
             if (result.Rest.IsEmpty)
                 return result.Value;
             else
-            {
-                string remaining = new string(result.Rest.AsEnumerable().ToArray());
                 throw new ArgumentException(
-                                string.Format("Could not understand part of the regex pattern: {0}.", remaining.ShowVerbatim()),
+                                string.Format("Could not understand part of the regex pattern: {0}.",
+                                              result.Rest.AsEnumerable().AsString().ShowVerbatim()),
                                 "patternText.");
-            }
         }
     }
 }

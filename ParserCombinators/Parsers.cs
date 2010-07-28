@@ -24,11 +24,6 @@ namespace ParserCombinators
             return consList => null;
         }
 
-        public static Parser<TToken, TValue> Either<TValue>(Parser<TToken, TValue> parser1, Parser<TToken, TValue> parser2)
-        {
-            return consList => parser1(consList) ?? parser2(consList);
-        }
-
         public static Parser<TToken, TValue> Choice<TValue>(params Parser<TToken, TValue>[] choices)
         {
             return consList =>
@@ -46,7 +41,7 @@ namespace ParserCombinators
 
         public static Parser<TToken, TValue> Option<TValue>(TValue defaultValue, Parser<TToken, TValue> parser)
         {
-            return Either(parser, Succeed(defaultValue));
+            return Choice(parser, Succeed(defaultValue));
         }
 
         public static Parser<TToken, TValue?> OptionNullable<TValue>(Parser<TToken, TValue> parser)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParserCombinators.ConsLists;
+using ParserCombinators.Util;
 
 namespace ParserCombinators.Tests.Performance
 {
@@ -41,7 +42,7 @@ namespace ParserCombinators.Tests.Performance
         public static void CharParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount)
         {
             CharParserTest(parser, times, maxItemCount,
-                           new string(EnumerablePerformanceTests.RepeatDigitChars(maxItemCount).ToArray()));
+                           EnumerablePerformanceTests.RepeatDigitChars(maxItemCount).AsString());
         }
 
         public static void CharParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount, string inputText)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using RegexParser.Util;
+using ParserCombinators.Util;
 
 namespace RegexParser.Patterns
 {
@@ -25,7 +26,8 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("Group <{0}>", string.Join(", ", Patterns.Select(p => p.ToString()).ToArray()));
+            return string.Format("Group <{0}>", Patterns.Select(p => p.ToString())
+                                                        .ConcatStrings(", "));
         }
 
         bool IEquatable<GroupPattern>.Equals(GroupPattern other)

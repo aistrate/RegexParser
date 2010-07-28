@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.Util;
 
 namespace ParserCombinators.Tests.Performance
 {
@@ -124,7 +125,7 @@ namespace ParserCombinators.Tests.Performance
             IEnumerable<char> charEnum = RepeatDigitChars(max);
             char[] charArr = RepeatDigitChars(max).ToArray();
             List<char> charList = RepeatDigitChars(max).ToArray().ToList();
-            string charString = new string(RepeatDigitChars(max).ToArray());
+            string charString = RepeatDigitChars(max).AsString();
 
             Console.WriteLine(DateTime.Now - start);
             Console.WriteLine();
@@ -177,7 +178,7 @@ namespace ParserCombinators.Tests.Performance
             const int max = 700;
 
             char[] charArr = RepeatDigitChars(max).ToArray();
-            string charString = new string(RepeatDigitChars(max).ToArray());
+            string charString = RepeatDigitChars(max).AsString();
 
             Console.WriteLine("char[]:");
             testEnumerableWithSkip(charArr, times);
@@ -211,7 +212,7 @@ namespace ParserCombinators.Tests.Performance
             const int times = 1;
             const int max = 50000;
 
-            string str = new string(RepeatDigitChars(max).ToArray());
+            string str = RepeatDigitChars(max).AsString();
 
 
             Console.WriteLine("substring:");
@@ -241,7 +242,7 @@ namespace ParserCombinators.Tests.Performance
             const int times = 200;
             const int max = 1000000;
 
-            string str = new string(RepeatDigitChars(max).ToArray());
+            string str = RepeatDigitChars(max).AsString();
 
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
@@ -279,7 +280,7 @@ namespace ParserCombinators.Tests.Performance
             const int times = 200;
             const int max = 1000000;
 
-            string str = new string(RepeatDigitChars(max).ToArray());
+            string str = RepeatDigitChars(max).AsString();
             
             Console.WriteLine("Init:");
             DateTime start = DateTime.Now;
