@@ -66,6 +66,8 @@ Error handling:
 
 - throw error for the empty character group: "[]"
 
+- throw error: "A subtraction must be the last element in a character class." (e.g., "[a-z-[d-x]-]")
+
 - deal with spaces within a {n,m} quantifier (no error thrown, but no match either)
 
 

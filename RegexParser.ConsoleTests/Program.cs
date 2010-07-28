@@ -28,9 +28,10 @@ namespace RegexParser.ConsoleTests
             {
                 //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
 
-                PatternPerformanceTests.CharClassPatternTest();
+                //PatternPerformanceTests.CharClassPatternTest();
 
-                //RegexAssert.DisplayPattern(@"[a-z]");
+                //RegexAssert.DisplayPattern(@"[a-z-[m-x]-]");
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"[a-z-[d-x]-]")));
 
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S");
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
