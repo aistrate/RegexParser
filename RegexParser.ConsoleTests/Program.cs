@@ -31,13 +31,14 @@ namespace RegexParser.ConsoleTests
                 //PatternPerformanceTests.CharClassPatternTest();
 
                 //RegexAssert.DisplayPattern(@"[a-z-[m-x]-]");
-
-                displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
+                //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abcd", @"\w")));
 
                 //Console.WriteLine(new string(".$^{[(|)*+!?\\  - \b\n\b []09azAZ}".Distinct().OrderBy(c => c).ToArray()).Show());
                 // "\b\n !$()*+-.09?AZ[\\]^az{|}"
+
+                testBacktracking();
             }
             catch (Exception ex)
             {
@@ -57,6 +58,36 @@ namespace RegexParser.ConsoleTests
             }
 
             Console.WriteLine();
+        }
+
+        private static void testBacktracking()
+        {
+            Func<string, Parser<char, IEnumerable<char>>> stringParser = s => CharParsers.Sequence(s.Select(c => CharParsers.Char(c)));
+
+            var letExpr = stringParser("let");
+            var identifier = CharParsers.Many1(CharParsers.Satisfy(c => char.IsLetter(c)));
+
+            var expr = CharParsers.Either(letExpr, identifier);
+
+            var result = expr(new ArrayConsList<char>("lexical"));
+
+            displayResult(result);
+        }
+
+        private static void displayResult(Result<char, string> result)
+        {
+            displayResult(result, v => v.Show());
+        }
+
+        private static void displayResult(Result<char, IEnumerable<char>> result)
+        {
+            displayResult(result, v => v.AsString().Show());
+        }
+
+        private static void displayResult<TValue>(Result<char, TValue> result, Func<TValue, string> toString)
+        {
+            Console.WriteLine("Value: {0}", toString(result.Value));
+            Console.WriteLine("Rest:  {0}", result.Rest.AsEnumerable().AsString().Show());
         }
 
         private static string formatStackTrace(string stackTrace)
