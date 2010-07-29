@@ -35,7 +35,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"abcd|defgh|012");
 
                 //displayMatches("Therefore they took CS101 and EE201.", @"\w\w\S\S\S", AlgorithmType.ImplicitDFA);
-                displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.ImplicitDFA);
+                //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.ImplicitDFA);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(abb?b?b?c)|(bc)")));
 
@@ -43,6 +43,8 @@ namespace RegexParser.ConsoleTests
                 // "\b\n !$()*+-.09?AZ[\\]^az{|}"
 
                 //testBacktracking2();
+
+                testStringConcat();
             }
             catch (Exception ex)
             {
@@ -62,6 +64,45 @@ namespace RegexParser.ConsoleTests
             }
 
             Console.WriteLine();
+        }
+
+        private static void testStringConcat()
+        {
+            DateTime start = DateTime.Now;
+
+            const int strCount = 1000, charCount = 5000;
+            string[] ss = Enumerable.Range(0, strCount)
+                                    .Select(i => Enumerable.Repeat(i.ToString().PadLeft(4, ' '), charCount / 4)
+                                                           .JoinStrings())
+                                    .ToArray();
+
+            Console.WriteLine("Create: {0}", DateTime.Now - start);
+            start = DateTime.Now;
+
+            string result = "";
+            for (int i = 0; i < strCount; i++)
+                result += ss[i];
+
+            Console.WriteLine("Append: {0}", DateTime.Now - start);
+
+            // strCount = 1000, charCount = 1000
+            //Create: 00:00:00.0624996
+            //Append: 00:00:01.2656169
+
+            // strCount = 1000, charCount = 5000
+            //Create: 00:00:00.2656233
+            //Append: 00:00:06.4687086
+
+            // strCount = 1000, charCount = 10000
+            //Create: 00:00:00.5312466
+            //Append: 00:00:12.9217923
+
+            // strCount = 5000, charCount = 1000
+            //Create: 00:00:00.2656233
+            //Append: 00:00:32.7810402
+
+            // Create: O(n) for strCount and charCount
+            // Create: O(n^2) for strCount, O(n) for charCount
         }
 
         private static void testBacktracking()
