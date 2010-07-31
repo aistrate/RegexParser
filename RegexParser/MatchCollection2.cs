@@ -17,7 +17,8 @@ namespace RegexParser
 
         protected override void OnNextOriginal(Match2 match, int originalIndex)
         {
-            match.NextMatchFunc = () => IsValidIndex(originalIndex + 1) ? this[originalIndex + 1] : Match2.Empty;
+            match.Parent = this;
+            match.ParentIndex = originalIndex;
         }
 
         public int Count { get { return this.Count(); } }

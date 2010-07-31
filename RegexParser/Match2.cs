@@ -29,12 +29,13 @@ namespace RegexParser
         public int Length { get; private set; }
         public string Value { get; private set; }
 
+        public MatchCollection2 Parent { get; internal set; }
+        public int ParentIndex { get; internal set; }
+
         public Match2 NextMatch()
         {
-            return NextMatchFunc != null ? NextMatchFunc() : Match2.Empty;
+            return Parent.IsValidIndex(ParentIndex + 1) ? Parent[ParentIndex + 1] : Match2.Empty;
         }
-
-        internal Func<Match2> NextMatchFunc { get; set; }
 
         public static Match2 Empty = new Match2();
 

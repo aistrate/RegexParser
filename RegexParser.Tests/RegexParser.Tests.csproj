@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5A5C2DF3-04BE-44D0-A357-534CBBE1B0E6}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -50,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\ExceptionWrapper.cs" />
+    <Compile Include="Helpers\MemoryProfiler.cs" />
     <Compile Include="Matchers\AlternationMatcherTests.cs" />
     <Compile Include="Matchers\CharClassMatcherTests.cs" />
     <Compile Include="Matchers\GroupMatcherTests.cs" />
@@ -57,6 +60,8 @@
     <Compile Include="Matchers\QuantifierMatcherTests.cs" />
     <Compile Include="Patterns\CharGroupPatternTests.cs" />
     <Compile Include="Patterns\QuantifierPatternTests.cs" />
+    <Compile Include="Performance\GeneralPerformanceTests.cs" />
+    <Compile Include="Performance\MatcherPerformanceTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
