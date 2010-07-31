@@ -133,6 +133,35 @@ namespace ParserCombinators
                    select x;
         }
 
+        public static Parser<TToken, IEnumerable<TValue>> SepBy<TValue, TSep>(Parser<TToken, TValue> parser,
+                                                                              Parser<TToken, TSep> sep)
+        {
+            return SepBy(0, parser, sep);
+        }
+
+        public static Parser<TToken, IEnumerable<TValue>> SepBy1<TValue, TSep>(Parser<TToken, TValue> parser,
+                                                                               Parser<TToken, TSep> sep)
+        {
+            return SepBy(1, parser, sep);
+        }
+
+        public static Parser<TToken, IEnumerable<TValue>> SepBy<TValue, TSep>(int minItemCount,
+                                                                              Parser<TToken, TValue> parser,
+                                                                              Parser<TToken, TSep> sep)
+        {
+            if (minItemCount <= 0)
+                return Choice(SepBy(1, parser, sep),
+                              Succeed(Enumerable.Empty<TValue>()));
+            else
+                return from first in parser
+                       from rest in
+                           Count(minItemCount - 1,
+                                 from s in sep
+                                 from v in parser
+                                 select v)
+                       select new[] { first }.Concat(rest);
+        }
+
         public static Parser<TToken, UnitType> NotFollowedBy<TValue>(Parser<TToken, TValue> parser)
         {
             return consList => parser(consList) != null ? null : new Result<TToken, UnitType>(UnitType.Unit, consList);

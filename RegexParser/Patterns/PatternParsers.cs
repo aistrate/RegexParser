@@ -129,12 +129,7 @@ namespace RegexParser.Patterns
                                select ps.Count() == 1 ? ps.First() :
                                                         (BasePattern)new GroupPattern(ps);
 
-            Alternation = from first in AlternationGroup
-                          from rest in
-                              Many1(from b in Char('|')
-                                    from alt in AlternationGroup
-                                    select alt)
-                          let alts = new[] { first }.Concat(rest)
+            Alternation = from alts in SepBy(2, AlternationGroup, Char('|'))
                           select new AlternationPattern(alts);
 
 

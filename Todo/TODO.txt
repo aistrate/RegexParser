@@ -23,8 +23,6 @@ Small:
 
 - (idea:) change the Choice parser to work like Parsec: the first parser looks ahead one char (or is it one 'atom', or subparser?), and if that succeeds, the whole sequence of parsers succeeds or fails based on the success of the first; if the look-ahead fails, the second parser is tried, and so on; (the way Choice works now is like the 'try' parser of Parsec;) OR, alternatively: add a "modifier" parser that works like the default in Parsec, and use it only when needed (sort of like 'try' in reverse)
 
-- make the Alternation parser use the (yet unwritten) SepBy parser
-
 - 'unify' the code in the group parsers of PatternParsers (i.e., AlternationGroup, BareGroup, and part of Quantifier)
 
 - write a ChoiceSeq parser that takes an IEnumerable<Parser<TToken, TValue>> as argument, instead of 'params Parser<TToken, TValue>[]', like the Choice parser
@@ -39,6 +37,7 @@ Small:
 - support Unicode named blocks (e.g., "\p{IsBasicLatin}" for the range 0000 - 007F)
 
 
+* make the Alternation parser use the (yet unwritten) SepBy parser
 * improve performance for class CharGroupPattern (and simplify it)
 * character class subtraction (e.g., "[a-z-[m-p]]", or "[a-z-[d-w-[m-o]]]")
 * zero-width patterns (for example, "b*" matched against "bbbcc" should return [(0, 3, "bbb"), (3, 0, ""), (4, 0, ""), (5, 0, "")])
