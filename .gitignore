@@ -11,3 +11,4 @@
 *.rdl.data
 *.user
 Visual Studio*/
+*.stackdump

@@ -7,28 +7,43 @@ using System.Text;
 
 namespace RegexParser.Tests.Helpers
 {
+    public enum MemoryCounterType
+    {
+        NrOfBytesInAllHeaps,
+        Gen0HeapSize,
+        Gen1HeapSize,
+        Gen2HeapSize,
+        LargeObjectHeapSize,
+        NrOfTotalCommittedBytes,
+        NrOfTotalReservedBytes,
+        NrOfInducedGC,
+    }
+
     public class MemoryProfiler
     {
         public MemoryProfiler()
+            : this(MemoryCounterType.NrOfBytesInAllHeaps) { }
+
+        public MemoryProfiler(MemoryCounterType counterType)
         {
             string callingAssemblyName = Assembly.GetEntryAssembly().GetName().Name;
 
-            bytesInAllHeapsPC = new PerformanceCounter(
+            performanceCounter = new PerformanceCounter(
                                         ".NET CLR Memory",
-                                        "# Bytes in all Heaps",
+                                        counterNames[counterType],
                                         callingAssemblyName,
                                         true);
 
             Reset();
         }
 
-        private PerformanceCounter bytesInAllHeapsPC;
+        private PerformanceCounter performanceCounter;
 
         public long StartingValue { get; private set; }
 
         public long CurrentValue
         {
-            get { return bytesInAllHeapsPC.RawValue; }
+            get { return performanceCounter.RawValue; }
         }
 
         public long DeltaValue
@@ -39,7 +54,7 @@ namespace RegexParser.Tests.Helpers
         public void Reset()
         {
             CollectGC();
-            StartingValue = bytesInAllHeapsPC.RawValue;
+            StartingValue = performanceCounter.RawValue;
         }
 
         public void CollectGC()
@@ -51,5 +66,23 @@ namespace RegexParser.Tests.Helpers
         {
             return new MemoryProfiler();
         }
+
+        public static MemoryProfiler StartNew(MemoryCounterType counterType)
+        {
+            return new MemoryProfiler(counterType);
+        }
+
+        private Dictionary<MemoryCounterType, string> counterNames =
+            new Dictionary<MemoryCounterType, string>()
+            {
+                { MemoryCounterType.NrOfBytesInAllHeaps, "# Bytes in all Heaps" },
+                { MemoryCounterType.Gen0HeapSize, "Gen 0 heap size" },
+                { MemoryCounterType.Gen1HeapSize, "Gen 1 heap size" },
+                { MemoryCounterType.Gen2HeapSize, "Gen 2 heap size" },
+                { MemoryCounterType.LargeObjectHeapSize, "Large Object Heap size" },
+                { MemoryCounterType.NrOfTotalCommittedBytes, "# Total committed Bytes" },
+                { MemoryCounterType.NrOfTotalReservedBytes, "# Total reserved Bytes" },
+                { MemoryCounterType.NrOfInducedGC, "# Induced GC" },
+            };
     }
 }
