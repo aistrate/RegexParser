@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators;
+using ParserCombinators.ConsLists;
 using RegexParser.Patterns;
 
 namespace RegexParser.Matchers
@@ -42,17 +44,45 @@ namespace RegexParser.Matchers
             }
         }
 
+        protected abstract Parser<char, string> CreateParser(BasePattern pattern);
+
         public MatchCollection2 Matches
         {
             get
             {
                 if (matches == null)
-                    matches = new MatchCollection2(GetMatches());
+                    matches = new MatchCollection2(getMatches());
                 return matches;
             }
         }
         private MatchCollection2 matches;
 
-        protected abstract IEnumerable<Match2> GetMatches();
+        private IEnumerable<Match2> getMatches()
+        {
+            Parser<char, string> matchParser = CreateParser(Pattern);
+
+            IConsList<char> consList = new ArrayConsList<char>(InputText);
+            int index = 0;
+
+            while (index <= InputText.Length)
+            {
+                Result<char, string> result = matchParser(consList);
+
+                if (result != null)
+                {
+                    yield return new Match2(index, result.Value.Length, result.Value);
+
+                    if (result.Value.Length > 0)
+                    {
+                        consList = result.Rest;
+                        index += result.Value.Length;
+                        continue;
+                    }
+                }
+
+                consList = consList.Tail;
+                index++;
+            }
+        }
     }
 }

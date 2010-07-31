@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ParserCombinators;
 using ParserCombinators.ConsLists;
+using ParserCombinators.Util;
 using RegexParser.Patterns;
 
 namespace RegexParser.Matchers
@@ -15,32 +16,35 @@ namespace RegexParser.Matchers
         {
         }
 
-        protected override IEnumerable<Match2> GetMatches()
+        protected override Parser<char, string> CreateParser(BasePattern pattern)
         {
-            Parser<char, string> matchParser = MatchParsers.CreateParser(Pattern);
+            if (pattern == null)
+                throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
 
-            IConsList<char> consList = new ArrayConsList<char>(InputText);
-            int index = 0;
+            if (pattern is GroupPattern)
+                return from vs in CharParsers.Sequence(((GroupPattern)pattern).Patterns
+                                                                              .Select(p => CreateParser(p)))
+                       select vs.JoinStrings();
 
-            while (index <= InputText.Length)
+            else if (pattern is QuantifierPattern)
             {
-                Result<char, string> result = matchParser(consList);
+                QuantifierPattern quant = (QuantifierPattern)pattern;
 
-                if (result != null)
-                {
-                    yield return new Match2(index, result.Value.Length, result.Value);
-
-                    if (result.Value.Length > 0)
-                    {
-                        consList = result.Rest;
-                        index += result.Value.Length;
-                        continue;
-                    }
-                }
-
-                consList = consList.Tail;
-                index++;
+                return from vs in CharParsers.Count(quant.MinOccurrences, quant.MaxOccurrences, CreateParser(quant.ChildPattern))
+                       select vs.JoinStrings();
             }
+
+            else if (pattern is AlternationPattern)
+                return CharParsers.Choice(((AlternationPattern)pattern).Alternatives
+                                                                       .Select(p => CreateParser(p))
+                                                                       .ToArray());
+
+            else if (pattern is CharPattern)
+                return from c in CharParsers.Satisfy(((CharPattern)pattern).IsMatch)
+                       select new string(c, 1);
+
+            else
+                return null;
         }
     }
 }

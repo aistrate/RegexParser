@@ -30,9 +30,9 @@ namespace ParserCombinators
             {
                 foreach (var parser in choices)
                 {
-                    var value = parser(consList);
-                    if (value != null)
-                        return value;
+                    var result = parser(consList);
+                    if (result != null)
+                        return result;
                 }
 
                 return null;

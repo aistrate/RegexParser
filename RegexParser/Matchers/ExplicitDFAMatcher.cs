@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators;
 using RegexParser.Patterns;
 
 namespace RegexParser.Matchers
@@ -13,9 +14,9 @@ namespace RegexParser.Matchers
         {
         }
 
-        protected override IEnumerable<Match2> GetMatches()
+        protected override Parser<char, string> CreateParser(BasePattern pattern)
         {
-            return new Match2[] {};
+            return null;
         }
     }
 }
