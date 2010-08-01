@@ -11,7 +11,7 @@ namespace RegexParser.Patterns
     {
         public static BasePattern CreatePattern(string patternText)
         {
-            var result = PatternParsers.Regex(new ArrayConsList<char>(patternText));
+            var result = PatternParsers.Regex(new ArrayConsList<char>(patternText)).FirstOrDefault();
 
             if (result.Rest.IsEmpty)
                 return result.Value;

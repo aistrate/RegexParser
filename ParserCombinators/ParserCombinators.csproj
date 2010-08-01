@@ -56,6 +56,7 @@
     <Compile Include="Parsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="ResultSet.cs" />
     <Compile Include="Util\Character.cs" />
     <Compile Include="Util\Numeric.cs" />
     <Compile Include="Util\UnitType.cs" />

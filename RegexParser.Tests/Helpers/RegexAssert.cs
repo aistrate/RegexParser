@@ -21,9 +21,9 @@ namespace RegexParser.Tests.Helpers
 
         public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
         {
-            Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
+            DisplayPattern(pattern);
 
-            //DisplayPattern(pattern);
+            Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
 
             DisplayMatches(input, pattern, algorithmType, actual);
 
@@ -82,7 +82,7 @@ namespace RegexParser.Tests.Helpers
 
         public static void DisplayPattern(string pattern)
         {
-            var result = PatternParsers.Regex(new ArrayConsList<char>(pattern));
+            var result = PatternParsers.Regex(new ArrayConsList<char>(pattern)).First();
 
             Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
             Console.WriteLine("Parsed:  {0}", result.Value);

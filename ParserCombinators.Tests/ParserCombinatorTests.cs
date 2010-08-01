@@ -37,7 +37,7 @@ namespace ParserCombinators.Tests
                                   let if = \b.\l.\r.(b l) r in
                                   if true false true;";
 
-            Result<char, Term> result = MiniMLParsers.All(createConsList(sourceCode));
+            Result<char, Term> result = MiniMLParsers.All(createConsList(sourceCode)).FirstOrDefault();
 
             string expected = @"
 let true = \x. \y. (x ) in

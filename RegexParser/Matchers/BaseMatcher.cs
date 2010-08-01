@@ -66,7 +66,7 @@ namespace RegexParser.Matchers
 
             while (index <= InputText.Length)
             {
-                Result<char, string> result = matchParser(consList);
+                Result<char, string> result = matchParser(consList).FirstOrDefault();
 
                 if (result != null)
                 {

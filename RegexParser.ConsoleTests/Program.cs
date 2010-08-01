@@ -103,7 +103,7 @@ namespace RegexParser.ConsoleTests
         private static Result<char, TValue> runParser<TValue>(Parser<char, TValue> parser, string input)
         {
             Console.WriteLine("Input:  {0}", input.Show());
-            return parser(new ArrayConsList<char>(input));
+            return parser(new ArrayConsList<char>(input)).FirstOrDefault();
         }
 
         private static void displayResult(Result<char, string> result)

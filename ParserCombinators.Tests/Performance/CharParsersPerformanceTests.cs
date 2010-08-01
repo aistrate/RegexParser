@@ -54,12 +54,12 @@ namespace ParserCombinators.Tests.Performance
             IConsList<char> rest = null;
             for (int i = 0; i < times; i++)
             {
-                Result<char, TValue> result = parser(consList);
+                Result<char, TValue> result = parser(consList).FirstOrDefault();
 
                 while (result != null)
                 {
                     rest = result.Rest;
-                    result = parser(result.Rest);
+                    result = parser(result.Rest).FirstOrDefault();
                 }
             }
             

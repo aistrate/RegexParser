@@ -6,5 +6,5 @@ using ParserCombinators.ConsLists;
 
 namespace ParserCombinators
 {
-    public delegate Result<TToken, TValue> Parser<TToken, TValue>(IConsList<TToken> consList);
+    public delegate ResultSet<TToken, TValue> Parser<TToken, TValue>(IConsList<TToken> consList);
 }
