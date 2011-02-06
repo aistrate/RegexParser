@@ -66,6 +66,8 @@
     <Compile Include="Patterns\StringPattern.cs" />
     <Compile Include="Regex2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transforms\BaseTransform.cs" />
+    <Compile Include="Transforms\StringTransform.cs" />
     <Compile Include="Util\CachedList.cs" />
     <Compile Include="Util\Factory.cs" />
     <Compile Include="Util\HashCodeCombiner.cs" />

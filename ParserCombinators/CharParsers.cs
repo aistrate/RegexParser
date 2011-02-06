@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 
 namespace ParserCombinators
@@ -55,12 +52,18 @@ namespace ParserCombinators
         {
             return consList =>
             {
-                string value = consList.AsEnumerable().Take(s.Length).AsString();
+                StringBuilder sb = new StringBuilder();
 
-                if (value == s)
-                    return new Result<char, string>(value, consList.Drop(s.Length));
-                else
-                    return null;
+                foreach (char c in s)
+                {
+                    if (consList.IsEmpty || consList.Head != c)
+                        return null;
+
+                    sb.Append(consList.Head);
+                    consList = consList.Tail;
+                }
+
+                return new Result<char, string>(sb.ToString(), consList);
             };
         }
     }
