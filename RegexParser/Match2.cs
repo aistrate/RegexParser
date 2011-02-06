@@ -34,7 +34,7 @@ namespace RegexParser
 
         public Match2 NextMatch()
         {
-            return Parent.IsValidIndex(ParentIndex + 1) ? Parent[ParentIndex + 1] : Match2.Empty;
+            return Parent != null && Parent.IsValidIndex(ParentIndex + 1) ? Parent[ParentIndex + 1] : Match2.Empty;
         }
 
         public static Match2 Empty = new Match2();

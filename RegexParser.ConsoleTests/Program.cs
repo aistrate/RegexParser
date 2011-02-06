@@ -27,13 +27,14 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
+                //MatcherPerformanceTests.VeryLongMatches();
+
+                new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
+
                 //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
 
                 //GeneralPerformanceTests.MatchCollections();
-                MatcherPerformanceTests.VeryLongMatches();
-
                 //testBacktracking2();
-
 
                 //RegexAssert.DisplayPattern(@"a|x[abc0-9]|c*");
                 //RegexAssert.DisplayPattern(@"(a|b)x|c");
