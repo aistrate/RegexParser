@@ -38,6 +38,9 @@ namespace RegexParser.Matchers
                                                                        .Select(p => CreateParser(p))
                                                                        .ToArray());
 
+            else if (pattern is StringPattern)
+                return CharParsers.String(((StringPattern)pattern).Value);
+
             else if (pattern is CharPattern)
                 return from c in CharParsers.Satisfy(((CharPattern)pattern).IsMatch)
                        select new string(c, 1);

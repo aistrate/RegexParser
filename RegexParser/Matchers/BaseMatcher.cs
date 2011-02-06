@@ -19,7 +19,7 @@ namespace RegexParser.Matchers
     {
         protected BaseMatcher(BasePattern pattern, string inputText)
         {
-            Pattern = pattern;
+            Pattern = TransformPattern(pattern);
             InputText = inputText;
         }
 
@@ -45,6 +45,63 @@ namespace RegexParser.Matchers
         }
 
         protected abstract Parser<char, string> CreateParser(BasePattern pattern);
+
+        protected virtual BasePattern TransformPattern(BasePattern pattern)
+        {
+            return transformCharSeq2String(pattern);
+        }
+
+        private BasePattern transformCharSeq2String(BasePattern pattern)
+        {
+            if (pattern is GroupPattern)
+            {
+                BasePattern[] oldChildPatterns = ((GroupPattern)pattern).Patterns;
+                List<BasePattern> newChildPatterns = new List<BasePattern>();
+                StringBuilder currentString = new StringBuilder();
+
+                foreach (BasePattern oldChildPattern in oldChildPatterns)
+                    if (oldChildPattern is CharEscapePattern)
+                        currentString.Append(((CharEscapePattern)oldChildPattern).Value);
+                    else
+                    {
+                        if (currentString.Length > 0)
+                        {
+                            addStringPattern(newChildPatterns, currentString.ToString());
+                            currentString = new StringBuilder();
+                        }
+
+                        newChildPatterns.Add(transformCharSeq2String(oldChildPattern));
+                    }
+
+                if (currentString.Length > 0)
+                    addStringPattern(newChildPatterns, currentString.ToString());
+
+                return new GroupPattern(newChildPatterns);
+            }
+
+            else if (pattern is QuantifierPattern)
+            {
+                QuantifierPattern quant = (QuantifierPattern)pattern;
+
+                return new QuantifierPattern(transformCharSeq2String(quant.ChildPattern),
+                                             quant.MinOccurrences, quant.MaxOccurrences, quant.IsGreedy);
+            }
+
+            else if (pattern is AlternationPattern)
+                return new AlternationPattern(((AlternationPattern)pattern).Alternatives
+                                                                           .Select(a => transformCharSeq2String(a)));
+
+            else
+                return pattern;
+        }
+
+        private void addStringPattern(List<BasePattern> patterns, string s)
+        {
+            if (s.Length > 1)
+                patterns.Add(new StringPattern(s));
+            else
+                patterns.Add(new CharEscapePattern(s[0]));
+        }
 
         public MatchCollection2 Matches
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 
 namespace ParserCombinators
@@ -52,8 +53,15 @@ namespace ParserCombinators
 
         public static Parser<char, string> String(string s)
         {
-            return from cs in Sequence(s.Select(c => Char(c)))
-                   select cs.AsString();
+            return consList =>
+            {
+                string value = consList.AsEnumerable().Take(s.Length).AsString();
+
+                if (value == s)
+                    return new Result<char, string>(value, consList.Drop(s.Length));
+                else
+                    return null;
+            };
         }
     }
 }
