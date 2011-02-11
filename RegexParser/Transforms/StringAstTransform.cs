@@ -7,7 +7,7 @@ namespace RegexParser.Transforms
     /// <summary>
     /// An Abstract Syntax Tree (AST) transform in which every sequence of CharEscapePatterns becomes a StringPattern.
     /// </summary>
-    public class StringAstTransform : BaseAstTransform
+    public class StringASTTransform : BaseASTTransform
     {
         public override BasePattern Transform(BasePattern pattern)
         {

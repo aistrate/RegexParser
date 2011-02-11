@@ -6,7 +6,7 @@ namespace RegexParser.Transforms
     /// <summary>
     /// Class representing an Abstract Syntax Tree (AST) transform.
     /// </summary>
-    public abstract class BaseAstTransform
+    public abstract class BaseASTTransform
     {
         public virtual BasePattern Transform(BasePattern pattern)
         {

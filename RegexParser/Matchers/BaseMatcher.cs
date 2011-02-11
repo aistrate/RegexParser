@@ -45,7 +45,7 @@ namespace RegexParser.Matchers
 
         protected virtual BasePattern TransformPattern(BasePattern pattern)
         {
-            return new StringAstTransform().Transform(pattern);
+            return new StringASTTransform().Transform(pattern);
         }
 
         public IEnumerable<Match2> GetMatches(string inputText)

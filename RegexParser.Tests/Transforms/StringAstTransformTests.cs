@@ -7,9 +7,9 @@ namespace RegexParser.Tests.Transforms
 {
     //[TestFixture(AlgorithmType.ExplicitDFA)]
     [TestFixture(AlgorithmType.Backtracking)]
-    public class StringAstTransformTests : AlgorithmTests
+    public class StringASTTransformTests : AlgorithmTests
     {
-        public StringAstTransformTests(AlgorithmType algorithmType)
+        public StringASTTransformTests(AlgorithmType algorithmType)
             : base(algorithmType) { }
 
         [Test]
@@ -63,7 +63,7 @@ namespace RegexParser.Tests.Transforms
 
         private BasePattern getTransformedPattern(string patternText)
         {
-            RegexAssert.DisplayAstTransform(patternText, AlgorithmType);
+            RegexAssert.DisplayASTTransform(patternText, AlgorithmType);
 
             return BaseMatcher.CreateMatcher(AlgorithmType, patternText).Pattern;
         }

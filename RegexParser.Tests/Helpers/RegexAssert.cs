@@ -92,7 +92,7 @@ namespace RegexParser.Tests.Helpers
             Console.Write("\n");
         }
 
-        public static void DisplayAstTransform(string pattern, AlgorithmType algorithmType)
+        public static void DisplayASTTransform(string pattern, AlgorithmType algorithmType)
         {
             BasePattern beforePattern = BasePattern.CreatePattern(pattern);
             BasePattern afterPattern = BaseMatcher.CreateMatcher(algorithmType, pattern).Pattern;

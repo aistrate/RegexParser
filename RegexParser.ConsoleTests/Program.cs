@@ -31,7 +31,7 @@ namespace RegexParser.ConsoleTests
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
 
-                RegexAssert.DisplayAstTransform(@"(a|ab)bbbc", AlgorithmType.Backtracking);
+                RegexAssert.DisplayASTTransform(@"(a|ab)bbbc", AlgorithmType.Backtracking);
 
                 //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);
