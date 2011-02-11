@@ -4,29 +4,29 @@ using RegexParser.Patterns;
 namespace RegexParser.Transforms
 {
     /// <summary>
-    /// Class representing a pattern tree transform.
+    /// Class representing an Abstract Syntax Tree (AST) transform.
     /// </summary>
-    public abstract class BaseTransform
+    public abstract class BaseAstTransform
     {
-        public virtual BasePattern RunTransform(BasePattern pattern)
+        public virtual BasePattern Transform(BasePattern pattern)
         {
             // The identity transform
 
             if (pattern is GroupPattern)
                 return new GroupPattern(((GroupPattern)pattern).Patterns
-                                                               .Select(a => RunTransform(a)));
+                                                               .Select(a => Transform(a)));
 
             else if (pattern is QuantifierPattern)
             {
                 QuantifierPattern quant = (QuantifierPattern)pattern;
 
-                return new QuantifierPattern(RunTransform(quant.ChildPattern),
+                return new QuantifierPattern(Transform(quant.ChildPattern),
                                              quant.MinOccurrences, quant.MaxOccurrences, quant.IsGreedy);
             }
 
             else if (pattern is AlternationPattern)
                 return new AlternationPattern(((AlternationPattern)pattern).Alternatives
-                                                                           .Select(a => RunTransform(a)));
+                                                                           .Select(a => Transform(a)));
 
             else
                 return pattern;

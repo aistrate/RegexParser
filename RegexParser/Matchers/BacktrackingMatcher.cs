@@ -10,8 +10,8 @@ namespace RegexParser.Matchers
 {
     public class BacktrackingMatcher : BaseMatcher
     {
-        public BacktrackingMatcher(BasePattern pattern, string inputText)
-            : base(pattern, inputText)
+        public BacktrackingMatcher(string patternText)
+            : base(patternText)
         {
         }
 

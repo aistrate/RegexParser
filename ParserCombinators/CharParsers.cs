@@ -50,11 +50,13 @@ namespace ParserCombinators
 
         public static Parser<char, string> String(string s)
         {
+            // TODO: implement IgnoreCase flag
+
             return consList =>
             {
                 StringBuilder sb = new StringBuilder();
 
-                foreach (char c in s)
+                foreach (char c in s.ToCharArray())
                 {
                     if (consList.IsEmpty || consList.Head != c)
                         return null;

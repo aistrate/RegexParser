@@ -56,13 +56,14 @@
     <Compile Include="Matchers\AlternationMatcherTests.cs" />
     <Compile Include="Matchers\CharClassMatcherTests.cs" />
     <Compile Include="Matchers\GroupMatcherTests.cs" />
-    <Compile Include="Matchers\MatcherTests.cs" />
+    <Compile Include="AlgorithmTests.cs" />
     <Compile Include="Matchers\QuantifierMatcherTests.cs" />
     <Compile Include="Patterns\CharGroupPatternTests.cs" />
     <Compile Include="Patterns\QuantifierPatternTests.cs" />
     <Compile Include="Performance\GeneralPerformanceTests.cs" />
     <Compile Include="Performance\MatcherPerformanceTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
+    <Compile Include="Transforms\StringAstTransformTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="Patterns\PatternTests.cs" />

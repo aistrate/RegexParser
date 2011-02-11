@@ -9,8 +9,8 @@ namespace RegexParser.Matchers
 {
     public class ExplicitDFAMatcher : BaseMatcher
     {
-        public ExplicitDFAMatcher(BasePattern pattern, string inputText)
-            : base(pattern, inputText)
+        public ExplicitDFAMatcher(string patternText)
+            : base(patternText)
         {
         }
 

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using RegexParser.Matchers;
-using RegexParser.Patterns;
 
 namespace RegexParser
 {
@@ -18,22 +14,15 @@ namespace RegexParser
         {
             PatternText = patternText;
             AlgorithmType = algorithmType;
+
+            Matcher = BaseMatcher.CreateMatcher(AlgorithmType, PatternText);
         }
 
         public string PatternText { get; private set; }
         public AlgorithmType AlgorithmType { get; private set; }
 
-        protected BasePattern Pattern
-        {
-            get
-            {
-                if (pattern == null)
-                    pattern = BasePattern.CreatePattern(PatternText);
-                return pattern;
-            }
-        }
-        private BasePattern pattern;
-        
+        public BaseMatcher Matcher { get; private set; }
+
         public override string ToString() { return PatternText; }
 
         public Match2 Match(string input)
@@ -43,7 +32,7 @@ namespace RegexParser
 
         public MatchCollection2 Matches(string input)
         {
-            return BaseMatcher.CreateMatcher(AlgorithmType, Pattern, input).Matches;
+            return new MatchCollection2(Matcher.GetMatches(input));
         }
 
         public bool IsMatch(string input)

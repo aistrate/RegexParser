@@ -29,7 +29,13 @@ namespace RegexParser.ConsoleTests
             {
                 //MatcherPerformanceTests.VeryLongMatches();
 
-                new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
+                //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
+
+                RegexAssert.DisplayAstTransform(@"(a|ab)bbbc", AlgorithmType.ImplicitDFA);
+
+                //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
+                //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);
+                //RegexAssert.AreMatchesSameAsMsoft("aaax", @"\S*\wx", AlgorithmType.Backtracking);
 
                 //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
 

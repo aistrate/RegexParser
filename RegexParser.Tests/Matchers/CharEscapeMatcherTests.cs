@@ -11,7 +11,7 @@ namespace RegexParser.Tests.Matchers
 {
     //[TestFixture(AlgorithmType.ImplicitDFA)]
     [TestFixture(AlgorithmType.Backtracking)]
-    public class CharEscapeMatcherTests : MatcherTests
+    public class CharEscapeMatcherTests : AlgorithmTests
     {
         public CharEscapeMatcherTests(AlgorithmType algorithmType)
             : base(algorithmType) { }

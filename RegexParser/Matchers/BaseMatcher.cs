@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ParserCombinators;
 using ParserCombinators.ConsLists;
 using RegexParser.Patterns;
@@ -18,27 +16,25 @@ namespace RegexParser.Matchers
 
     public abstract class BaseMatcher
     {
-        protected BaseMatcher(BasePattern pattern, string inputText)
+        protected BaseMatcher(string patternText)
         {
-            Pattern = TransformPattern(pattern);
-            InputText = inputText;
+            Pattern = TransformPattern(BasePattern.CreatePattern(patternText));
         }
 
-        protected BasePattern Pattern { get; private set; }
-        protected string InputText { get; private set; }
+        public BasePattern Pattern { get; private set; }
 
-        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, BasePattern pattern, string inputText)
+        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, string patternText)
         {
             switch (algorithmType)
             {
                 case AlgorithmType.ExplicitDFA:
-                    return new ExplicitDFAMatcher(pattern, inputText);
+                    return new ExplicitDFAMatcher(patternText);
 
                 case AlgorithmType.ImplicitDFA:
-                    return new ImplicitDFAMatcher(pattern, inputText);
+                    return new ImplicitDFAMatcher(patternText);
 
                 case AlgorithmType.Backtracking:
-                    return new BacktrackingMatcher(pattern, inputText);
+                    return new BacktrackingMatcher(patternText);
 
                 default:
                     throw new NotImplementedException("Algorithm not yet implemented.");
@@ -49,28 +45,17 @@ namespace RegexParser.Matchers
 
         protected virtual BasePattern TransformPattern(BasePattern pattern)
         {
-            return new StringTransform().RunTransform(pattern);
+            return new StringAstTransform().Transform(pattern);
         }
 
-        public MatchCollection2 Matches
-        {
-            get
-            {
-                if (matches == null)
-                    matches = new MatchCollection2(getMatches());
-                return matches;
-            }
-        }
-        private MatchCollection2 matches;
-
-        private IEnumerable<Match2> getMatches()
+        public IEnumerable<Match2> GetMatches(string inputText)
         {
             Parser<char, string> matchParser = CreateParser(Pattern);
 
-            IConsList<char> consList = new ArrayConsList<char>(InputText);
+            IConsList<char> consList = new ArrayConsList<char>(inputText);
             int index = 0;
 
-            while (index <= InputText.Length)
+            while (index <= inputText.Length)
             {
                 Result<char, string> result = matchParser(consList);
 

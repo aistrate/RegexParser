@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
@@ -89,6 +88,18 @@ namespace RegexParser.Tests.Helpers
 
             if (!result.Rest.IsEmpty)
                 Console.WriteLine("Rest:    {0}", result.Rest.AsEnumerable().AsString().ShowVerbatim());
+
+            Console.Write("\n");
+        }
+
+        public static void DisplayAstTransform(string pattern, AlgorithmType algorithmType)
+        {
+            BasePattern beforePattern = BasePattern.CreatePattern(pattern);
+            BasePattern afterPattern = BaseMatcher.CreateMatcher(algorithmType, pattern).Pattern;
+
+            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+            Console.WriteLine("Before Transform: {0}", beforePattern);
+            Console.WriteLine("After  Transform: {0}", afterPattern);
 
             Console.Write("\n");
         }

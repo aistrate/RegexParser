@@ -10,7 +10,7 @@ namespace RegexParser.Tests.Matchers
 {
     //[TestFixture(AlgorithmType.ImplicitDFA)]
     [TestFixture(AlgorithmType.Backtracking)]
-    public class GroupMatcherTests : MatcherTests
+    public class GroupMatcherTests : AlgorithmTests
     {
         public GroupMatcherTests(AlgorithmType algorithmType)
             : base(algorithmType) { }

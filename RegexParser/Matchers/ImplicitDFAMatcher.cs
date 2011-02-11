@@ -11,8 +11,8 @@ namespace RegexParser.Matchers
 {
     public class ImplicitDFAMatcher : BaseMatcher
     {
-        public ImplicitDFAMatcher(BasePattern pattern, string inputText)
-            : base(pattern, inputText)
+        public ImplicitDFAMatcher(string patternText)
+            : base(patternText)
         {
         }
 
