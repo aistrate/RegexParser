@@ -8,7 +8,7 @@ using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ImplicitDFA)]
+    //[TestFixture(AlgorithmType.ExplicitDFA)]
     [TestFixture(AlgorithmType.Backtracking)]
     public class AlternationMatcherTests : AlgorithmTests
     {

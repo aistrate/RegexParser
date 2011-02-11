@@ -31,13 +31,13 @@ namespace RegexParser.ConsoleTests
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
 
-                RegexAssert.DisplayAstTransform(@"(a|ab)bbbc", AlgorithmType.ImplicitDFA);
+                RegexAssert.DisplayAstTransform(@"(a|ab)bbbc", AlgorithmType.Backtracking);
 
                 //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"\S*\wx", AlgorithmType.Backtracking);
 
-                //new CharClassMatcherTests(AlgorithmType.ImplicitDFA).Subtract();
+                //new CharClassMatcherTests(AlgorithmType.Backtracking).Subtract();
 
                 //GeneralPerformanceTests.MatchCollections();
                 //testBacktracking2();
@@ -46,7 +46,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"(a|b)x|c");
                 //RegexAssert.DisplayPattern(@"abcd|defgh|012");
 
-                //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.ImplicitDFA);
+                //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(abb?b?b?c)|(bc)")));
 

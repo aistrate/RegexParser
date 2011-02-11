@@ -74,7 +74,7 @@ namespace RegexParser.Tests.Performance
             MatchCollection2 matches = null;
             
             for (int i = 0; i < times; i++)
-                matches = new Regex2(pattern, AlgorithmType.ImplicitDFA).Matches(input);
+                matches = new Regex2(pattern, AlgorithmType.Backtracking).Matches(input);
 
             memoryProfiler.Reset();
 

@@ -9,7 +9,7 @@ using RegexParser.Matchers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ImplicitDFA)]
+    //[TestFixture(AlgorithmType.ExplicitDFA)]
     [TestFixture(AlgorithmType.Backtracking)]
     public class CharEscapeMatcherTests : AlgorithmTests
     {
