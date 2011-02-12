@@ -1,6 +1,7 @@
 [Dd]ebug/
 [Rr]elease/
 [Oo]bj/
+.gitk
 *.suo
 *.sln.cache
 *.vssscc
