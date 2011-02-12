@@ -41,23 +41,21 @@ namespace RegexParser.Matchers
             }
         }
 
-        protected abstract Parser<char, string> CreateParser(BasePattern pattern);
-
         protected virtual BasePattern TransformPattern(BasePattern pattern)
         {
             return new StringASTTransform().Transform(pattern);
         }
 
+        protected abstract Result<char, string> Parse(IConsList<char> consList);
+
         public IEnumerable<Match2> GetMatches(string inputText)
         {
-            Parser<char, string> matchParser = CreateParser(Pattern);
-
             IConsList<char> consList = new ArrayConsList<char>(inputText);
             int index = 0;
 
             while (index <= inputText.Length)
             {
-                Result<char, string> result = matchParser(consList);
+                Result<char, string> result = Parse(consList);
 
                 if (result != null)
                 {

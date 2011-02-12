@@ -1,5 +1,5 @@
 ﻿using ParserCombinators;
-using RegexParser.Patterns;
+using ParserCombinators.ConsLists;
 
 namespace RegexParser.Matchers
 {
@@ -10,7 +10,7 @@ namespace RegexParser.Matchers
         {
         }
 
-        protected override Parser<char, string> CreateParser(BasePattern pattern)
+        protected override Result<char, string> Parse(IConsList<char> consList)
         {
             return null;
         }

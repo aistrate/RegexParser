@@ -9,8 +9,8 @@ using RegexParser.Matchers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ExplicitDFA)]
-    [TestFixture(AlgorithmType.Backtracking)]
+    [TestFixture(AlgorithmType.ExplicitDFA)]
+    //[TestFixture(AlgorithmType.Backtracking)]
     public class CharEscapeMatcherTests : AlgorithmTests
     {
         public CharEscapeMatcherTests(AlgorithmType algorithmType)

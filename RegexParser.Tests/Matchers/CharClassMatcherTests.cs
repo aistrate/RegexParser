@@ -8,8 +8,8 @@ using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ExplicitDFA)]
-    [TestFixture(AlgorithmType.Backtracking)]
+    [TestFixture(AlgorithmType.ExplicitDFA)]
+    //[TestFixture(AlgorithmType.Backtracking)]
     public class CharClassMatcherTests : AlgorithmTests
     {
         public CharClassMatcherTests(AlgorithmType algorithmType)
