@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegexParser.Matchers;
 using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    [TestFixture(AlgorithmType.ExplicitDFA)]
-    //[TestFixture(AlgorithmType.Backtracking)]
+    //[TestFixture(AlgorithmType.ExplicitDFA)]
+    [TestFixture(AlgorithmType.Backtracking)]
     public class AlternationMatcherTests : AlgorithmTests
     {
         public AlternationMatcherTests(AlgorithmType algorithmType)
@@ -19,10 +15,22 @@ namespace RegexParser.Tests.Matchers
         public void Simple()
         {
             RegexAssert.AreMatchesSameAsMsoft("abbbc", @"(a|ab)bbbc", AlgorithmType);
-            //RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(a|ab)bbbc", AlgorithmType);
-
-            //RegexAssert.AreMatchesSameAsMsoft("abbbc", @"(ab|a)bbbc", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(ab|a)bbbc", AlgorithmType);
+        }
+
+        [Test]
+        public void MustBacktrack()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(a|ab)bbbc", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abbbc", @"(ab|a)bbbc", AlgorithmType);
+        }
+
+        [Test]
+        public void FirstDoesNotMatch()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(c|ba|ab)bbbc", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(aa|ab)bbbc", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(ba|aa|ab|a)bbbc", AlgorithmType);
         }
     }
 }

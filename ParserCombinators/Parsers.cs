@@ -154,6 +154,7 @@ namespace ParserCombinators
                 return from first in parser
                        from rest in
                            Count(minItemCount - 1,
+                                 null,
                                  from s in sep
                                  from v in parser
                                  select v)

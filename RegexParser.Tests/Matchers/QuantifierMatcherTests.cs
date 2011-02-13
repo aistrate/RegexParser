@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegexParser.Matchers;
 using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    [TestFixture(AlgorithmType.ExplicitDFA)]
-    //[TestFixture(AlgorithmType.Backtracking)]
+    //[TestFixture(AlgorithmType.ExplicitDFA)]
+    [TestFixture(AlgorithmType.Backtracking)]
     public class QuantifierMatcherTests : AlgorithmTests
     {
         public QuantifierMatcherTests(AlgorithmType algorithmType)
@@ -143,6 +139,14 @@ namespace RegexParser.Tests.Matchers
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void MustBacktrack()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("aaax", @"\S*\wx", AlgorithmType);
         }
     }
 }

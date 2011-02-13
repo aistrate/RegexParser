@@ -4,6 +4,7 @@ using ParserCombinators;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 using RegexParser.Patterns;
+using RegexParser.Transforms;
 
 namespace RegexParser.Matchers
 {
@@ -13,6 +14,11 @@ namespace RegexParser.Matchers
             : base(patternText)
         {
             Parser = createParser(Pattern);
+        }
+
+        protected override BasePattern TransformAST(BasePattern pattern)
+        {
+            return new StringASTTransform().Transform(pattern);
         }
 
         protected Parser<char, string> Parser { get; private set; }

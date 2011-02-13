@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegexParser.Matchers;
 using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    [TestFixture(AlgorithmType.ExplicitDFA)]
-    //[TestFixture(AlgorithmType.Backtracking)]
+    //[TestFixture(AlgorithmType.ExplicitDFA)]
+    [TestFixture(AlgorithmType.Backtracking)]
     public class GroupMatcherTests : AlgorithmTests
     {
         public GroupMatcherTests(AlgorithmType algorithmType)

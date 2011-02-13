@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NUnit.Framework;
+using RegexParser.Matchers;
 using RegexParser.Tests.Helpers;
 using RegexParser.Util;
-using RegexParser.Matchers;
 
 namespace RegexParser.Tests.Matchers
 {
-    [TestFixture(AlgorithmType.ExplicitDFA)]
-    //[TestFixture(AlgorithmType.Backtracking)]
+    //[TestFixture(AlgorithmType.ExplicitDFA)]
+    [TestFixture(AlgorithmType.Backtracking)]
     public class CharEscapeMatcherTests : AlgorithmTests
     {
         public CharEscapeMatcherTests(AlgorithmType algorithmType)

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserCombinators.ConsLists
 {
-    public static class ConsList
+    /// <summary>
+    /// Extension methods for ConsLists.
+    /// </summary>
+    public static class ConsLists
     {
         public static IEnumerable<T> AsEnumerable<T>(this IConsList<T> source)
         {
@@ -24,6 +24,11 @@ namespace ParserCombinators.ConsLists
                 result = result.Tail;
 
             return result;
+        }
+
+        public static SimpleConsList<T> Cons<T>(this T value, SimpleConsList<T> list)
+        {
+            return new SimpleConsList<T>(value, list);
         }
     }
 }

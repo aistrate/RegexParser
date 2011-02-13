@@ -13,6 +13,18 @@ namespace RegexParser.Patterns
             if (childPattern == null)
                 throw new ArgumentNullException("childPattern.", "Child pattern is null in quantifier pattern.");
 
+            minOccurrences = Math.Max(0, minOccurrences);
+
+            if (maxOccurrences != null)
+            {
+                maxOccurrences = Math.Max(0, (int)maxOccurrences);
+
+                if (minOccurrences > maxOccurrences)
+                    throw new ArgumentException(
+                        "Quantifier pattern: the maximum number of occurrences must be greater than or equal to the minimum number.",
+                        "maxOccurrences.");
+            }
+
             ChildPattern = childPattern;
             MinOccurrences = minOccurrences;
             MaxOccurrences = maxOccurrences;

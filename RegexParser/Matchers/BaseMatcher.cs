@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ParserCombinators;
 using ParserCombinators.ConsLists;
 using RegexParser.Patterns;
-using RegexParser.Transforms;
 
 namespace RegexParser.Matchers
 {
@@ -18,7 +17,8 @@ namespace RegexParser.Matchers
     {
         protected BaseMatcher(string patternText)
         {
-            Pattern = TransformPattern(BasePattern.CreatePattern(patternText));
+            Pattern = BasePattern.CreatePattern(patternText);
+            Pattern = TransformAST(Pattern);
         }
 
         public BasePattern Pattern { get; private set; }
@@ -41,9 +41,9 @@ namespace RegexParser.Matchers
             }
         }
 
-        protected virtual BasePattern TransformPattern(BasePattern pattern)
+        protected virtual BasePattern TransformAST(BasePattern pattern)
         {
-            return new StringASTTransform().Transform(pattern);
+            return pattern;
         }
 
         protected abstract Result<char, string> Parse(IConsList<char> consList);

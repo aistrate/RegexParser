@@ -6,7 +6,6 @@ using RegexParser.Tests.Helpers;
 namespace RegexParser.Tests.Transforms
 {
     [TestFixture(AlgorithmType.ExplicitDFA)]
-    //[TestFixture(AlgorithmType.Backtracking)]
     public class StringASTTransformTests : AlgorithmTests
     {
         public StringASTTransformTests(AlgorithmType algorithmType)

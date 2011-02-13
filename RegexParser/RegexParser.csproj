@@ -51,7 +51,6 @@
     <Compile Include="Matchers\BaseMatcher.cs" />
     <Compile Include="Matchers\ExplicitDFAMatcher.cs" />
     <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
-    <Compile Include="Matchers\MatchParsers.cs" />
     <Compile Include="Patterns\AlternationPattern.cs" />
     <Compile Include="Patterns\CharClassPattern.cs" />
     <Compile Include="Patterns\CharGroupPattern.cs" />
@@ -69,6 +68,7 @@
     <Compile Include="Transforms\BaseASTTransform.cs" />
     <Compile Include="Transforms\StringASTTransform.cs" />
     <Compile Include="Util\CachedList.cs" />
+    <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\Factory.cs" />
     <Compile Include="Util\HashCodeCombiner.cs" />
   </ItemGroup>
