@@ -1,0 +1,34 @@
+RegexParser - priority list:
+
+- backtracking matcher:
+    * quantifiers
+    - separation of tests (ExplicitDFA / Backtracking); turn on/off ALL tests at once, for a particular algorithm
+    - lazy quantifiers
+
+[-explicit DFA matcher:
+    - build NFA state machine (from pattern AST)
+    - transform state machine from NFA to DFA
+    - quantifiers
+    - alternations
+   [- lazy quantifiers]]
+
+[-implicit DFA matcher]
+
+- anchors: ^, $, \b, \B
+- Regex options: IgnoreCase, IgnorePatternWhitespace, Multiline, Singleline
+- miscellaneous constructs: (?#comment), (?i)
+
+- error handling when parsing the pattern
+
+- captures and capturing groups
+- named groups
+- backreferences
+
+- look-ahead and look-behind (positive and negative)
+
+- Replace()
+- substitution patterns (starting with '$')
+
+- Unicode:
+    - Unicode categories and named blocks (char classes)
+	- RegexOption: canonical (Unicode) or ECMAScript/JavaScript (ASCII) behavior
