@@ -36,6 +36,44 @@ namespace RegexParser.Matchers
                     else if (currentPattern is QuantifierPattern)
                     {
                         QuantifierPattern quant = (QuantifierPattern)currentPattern;
+
+                        if (quant.MinOccurrences > 0)
+                        {
+                            var optionalQuants =
+                                quant.MaxOccurrences == null || quant.MaxOccurrences > quant.MinOccurrences ?
+                                    Enumerable.Repeat<BasePattern>(
+                                            new QuantifierPattern(quant.ChildPattern,
+                                                                  0,
+                                                                  quant.MaxOccurrences != null ?
+                                                                        quant.MaxOccurrences - quant.MinOccurrences :
+                                                                        null,
+                                                                  quant.IsGreedy),
+                                            1) :
+                                    Enumerable.Empty<BasePattern>();
+
+                            callStack = new StackFrame(callStack,
+                                                       Enumerable.Repeat(quant.ChildPattern, quant.MinOccurrences)
+                                                                 .Concat(optionalQuants)
+                                                                 .ToArray());
+                        }
+                        else if (quant.MaxOccurrences == null || quant.MaxOccurrences > 0)
+                        {
+                            BasePattern newPattern =
+                                quant.MaxOccurrences == null ? new GroupPattern(quant.ChildPattern, quant) :
+                                quant.MaxOccurrences >= 2 ?    new GroupPattern(quant.ChildPattern,
+                                                                                new QuantifierPattern(quant.ChildPattern,
+                                                                                                      0,
+                                                                                                      quant.MaxOccurrences - 1,
+                                                                                                      quant.IsGreedy)) :
+                                quant.MaxOccurrences == 1 ?    quant.ChildPattern :
+                                                               null;
+
+                            AlternationPattern quantAlternation =
+                                quant.IsGreedy ? new AlternationPattern(newPattern, GroupPattern.Empty) :
+                                                 new AlternationPattern(GroupPattern.Empty, newPattern);
+
+                            callStack = new StackFrame(callStack, quantAlternation);
+                        }
                     }
 
                     else if (currentPattern is AlternationPattern)

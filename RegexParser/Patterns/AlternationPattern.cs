@@ -14,6 +14,11 @@ namespace RegexParser.Patterns
             Alternatives = alternatives;
         }
 
+        public AlternationPattern(params BasePattern[] alternatives)
+        {
+            Alternatives = alternatives;
+        }
+
         public IEnumerable<BasePattern> Alternatives { get; private set; }
 
         public override string ToString()

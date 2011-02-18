@@ -20,6 +20,8 @@ namespace RegexParser.Patterns
             Patterns = patterns;
         }
 
+        public static GroupPattern Empty = new GroupPattern();
+
         public BasePattern[] Patterns { get; private set; }
 
         public int Length { get { return Patterns.Length; } }
