@@ -37,42 +37,48 @@ namespace RegexParser.Matchers
                     {
                         QuantifierPattern quant = (QuantifierPattern)currentPattern;
 
-                        if (quant.MinOccurrences > 0)
+                        if (quant.MaxOccurrences == null || quant.MaxOccurrences > 0)
                         {
-                            var optionalQuants =
-                                quant.MaxOccurrences == null || quant.MaxOccurrences > quant.MinOccurrences ?
-                                    Enumerable.Repeat<BasePattern>(
-                                            new QuantifierPattern(quant.ChildPattern,
-                                                                  0,
-                                                                  quant.MaxOccurrences != null ?
-                                                                        quant.MaxOccurrences - quant.MinOccurrences :
-                                                                        null,
-                                                                  quant.IsGreedy),
-                                            1) :
-                                    Enumerable.Empty<BasePattern>();
+                            if (quant.MinOccurrences > 0)
+                            {
+                                if (quant.MaxOccurrences == null || quant.MinOccurrences < quant.MaxOccurrences)
+                                    callStack = new StackFrame(callStack,
+                                                               new QuantifierPattern(quant.ChildPattern,
+                                                                                     quant.MinOccurrences,
+                                                                                     quant.MinOccurrences,
+                                                                                     quant.IsGreedy),
+                                                               new QuantifierPattern(quant.ChildPattern,
+                                                                                     0,
+                                                                                     quant.MaxOccurrences != null ?
+                                                                                                quant.MaxOccurrences - quant.MinOccurrences :
+                                                                                                null,
+                                                                                     quant.IsGreedy));
+                                else
+                                    callStack = new StackFrame(callStack,
+                                                               Enumerable.Repeat(quant.ChildPattern, quant.MinOccurrences)
+                                                                         .ToArray());
+                            }
+                            else
+                            {
+                                BasePattern newPattern =
+                                    quant.MaxOccurrences == null ?
+                                            new GroupPattern(quant.ChildPattern, quant) :
+                                    quant.MaxOccurrences >= 2 ?
+                                            new GroupPattern(quant.ChildPattern,
+                                                             new QuantifierPattern(quant.ChildPattern,
+                                                                                   0,
+                                                                                   quant.MaxOccurrences - 1,
+                                                                                   quant.IsGreedy)) :
+                                    quant.MaxOccurrences == 1 ?
+                                            quant.ChildPattern :
+                                            null;
 
-                            callStack = new StackFrame(callStack,
-                                                       Enumerable.Repeat(quant.ChildPattern, quant.MinOccurrences)
-                                                                 .Concat(optionalQuants)
-                                                                 .ToArray());
-                        }
-                        else if (quant.MaxOccurrences == null || quant.MaxOccurrences > 0)
-                        {
-                            BasePattern newPattern =
-                                quant.MaxOccurrences == null ? new GroupPattern(quant.ChildPattern, quant) :
-                                quant.MaxOccurrences >= 2 ?    new GroupPattern(quant.ChildPattern,
-                                                                                new QuantifierPattern(quant.ChildPattern,
-                                                                                                      0,
-                                                                                                      quant.MaxOccurrences - 1,
-                                                                                                      quant.IsGreedy)) :
-                                quant.MaxOccurrences == 1 ?    quant.ChildPattern :
-                                                               null;
+                                AlternationPattern quantAlternation =
+                                    quant.IsGreedy ? new AlternationPattern(newPattern, GroupPattern.Empty) :
+                                                     new AlternationPattern(GroupPattern.Empty, newPattern);
 
-                            AlternationPattern quantAlternation =
-                                quant.IsGreedy ? new AlternationPattern(newPattern, GroupPattern.Empty) :
-                                                 new AlternationPattern(GroupPattern.Empty, newPattern);
-
-                            callStack = new StackFrame(callStack, quantAlternation);
+                                callStack = new StackFrame(callStack, quantAlternation);
+                            }
                         }
                     }
 
