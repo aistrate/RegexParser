@@ -4,6 +4,7 @@ using ParserCombinators;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 using RegexParser.Patterns;
+using System.Collections.Generic;
 
 namespace RegexParser.Matchers
 {
@@ -90,6 +91,7 @@ namespace RegexParser.Matchers
                                           quantifier.MinOccurrences,
                                           quantifier.MinOccurrences,
                                           quantifier.IsGreedy),
+
                     new QuantifierPattern(quantifier.ChildPattern,
                                           0,
                                           quantifier.MaxOccurrences != null ?
@@ -100,24 +102,25 @@ namespace RegexParser.Matchers
 
             else
             {
-                BasePattern nonEmptyAlternative =
-                        quantifier.MaxOccurrences == null ?
-                                new GroupPattern(quantifier.ChildPattern, quantifier) :
-                        quantifier.MaxOccurrences >= 2 ?
-                                new GroupPattern(quantifier.ChildPattern,
-                                                 new QuantifierPattern(quantifier.ChildPattern,
-                                                                       0,
-                                                                       quantifier.MaxOccurrences - 1,
-                                                                       quantifier.IsGreedy)) :
-                        quantifier.MaxOccurrences == 1 ?
-                                quantifier.ChildPattern :
-                                null;
+                var groupPatterns = new List<BasePattern>();
 
-                AlternationPattern quantAlternation =
-                    quantifier.IsGreedy ? new AlternationPattern(nonEmptyAlternative, GroupPattern.Empty) :
-                                          new AlternationPattern(GroupPattern.Empty, nonEmptyAlternative);
+                groupPatterns.Add(quantifier.ChildPattern);
 
-                transformed = new BasePattern[] { quantAlternation };
+                if (quantifier.MaxOccurrences == null)
+                    groupPatterns.Add(quantifier);
+                else if (quantifier.MaxOccurrences >= 2)
+                    groupPatterns.Add(new QuantifierPattern(quantifier.ChildPattern,
+                                                            0,
+                                                            quantifier.MaxOccurrences - 1,
+                                                            quantifier.IsGreedy));
+
+                GroupPattern group = new GroupPattern(groupPatterns);
+
+                AlternationPattern alternation =
+                    quantifier.IsGreedy ? new AlternationPattern(group, GroupPattern.Empty) :
+                                          new AlternationPattern(GroupPattern.Empty, group);
+
+                transformed = new BasePattern[] { alternation };
             }
 
             return new ArrayConsList<BasePattern>(transformed);
