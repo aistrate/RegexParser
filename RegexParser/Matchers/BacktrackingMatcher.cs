@@ -35,51 +35,10 @@ namespace RegexParser.Matchers
 
                     else if (currentPattern is QuantifierPattern)
                     {
-                        QuantifierPattern quant = (QuantifierPattern)currentPattern;
+                        BasePattern[] transformed = transformQuantifier((QuantifierPattern)currentPattern);
 
-                        if (quant.MaxOccurrences == null || quant.MaxOccurrences > 0)
-                        {
-                            if (quant.MinOccurrences > 0)
-                            {
-                                if (quant.MaxOccurrences == null || quant.MinOccurrences < quant.MaxOccurrences)
-                                    callStack = new StackFrame(callStack,
-                                                               new QuantifierPattern(quant.ChildPattern,
-                                                                                     quant.MinOccurrences,
-                                                                                     quant.MinOccurrences,
-                                                                                     quant.IsGreedy),
-                                                               new QuantifierPattern(quant.ChildPattern,
-                                                                                     0,
-                                                                                     quant.MaxOccurrences != null ?
-                                                                                                quant.MaxOccurrences - quant.MinOccurrences :
-                                                                                                null,
-                                                                                     quant.IsGreedy));
-                                else
-                                    callStack = new StackFrame(callStack,
-                                                               Enumerable.Repeat(quant.ChildPattern, quant.MinOccurrences)
-                                                                         .ToArray());
-                            }
-                            else
-                            {
-                                BasePattern newPattern =
-                                    quant.MaxOccurrences == null ?
-                                            new GroupPattern(quant.ChildPattern, quant) :
-                                    quant.MaxOccurrences >= 2 ?
-                                            new GroupPattern(quant.ChildPattern,
-                                                             new QuantifierPattern(quant.ChildPattern,
-                                                                                   0,
-                                                                                   quant.MaxOccurrences - 1,
-                                                                                   quant.IsGreedy)) :
-                                    quant.MaxOccurrences == 1 ?
-                                            quant.ChildPattern :
-                                            null;
-
-                                AlternationPattern quantAlternation =
-                                    quant.IsGreedy ? new AlternationPattern(newPattern, GroupPattern.Empty) :
-                                                     new AlternationPattern(GroupPattern.Empty, newPattern);
-
-                                callStack = new StackFrame(callStack, quantAlternation);
-                            }
-                        }
+                        if (transformed.Length > 0)
+                            callStack = new StackFrame(callStack, transformed);
                     }
 
                     else if (currentPattern is AlternationPattern)
@@ -120,6 +79,54 @@ namespace RegexParser.Matchers
 
             return new Result<char, string>(partialResult.Value.AsEnumerable().Reverse().AsString(),
                                             partialResult.Rest);
+        }
+
+        private BasePattern[] transformQuantifier(QuantifierPattern quantifier)
+        {
+            if (quantifier.MaxOccurrences == 0)
+                return new BasePattern[] { };
+
+            if (quantifier.MinOccurrences > 0)
+            {
+                if (quantifier.MaxOccurrences == null || quantifier.MinOccurrences < quantifier.MaxOccurrences)
+                    return new BasePattern[]
+                           {
+                               new QuantifierPattern(quantifier.ChildPattern,
+                                                     quantifier.MinOccurrences,
+                                                     quantifier.MinOccurrences,
+                                                     quantifier.IsGreedy),
+                               new QuantifierPattern(quantifier.ChildPattern,
+                                                     0,
+                                                     quantifier.MaxOccurrences != null ?
+                                                                    quantifier.MaxOccurrences - quantifier.MinOccurrences :
+                                                                    null,
+                                                     quantifier.IsGreedy),
+                           };
+                else
+                    return Enumerable.Repeat(quantifier.ChildPattern, quantifier.MinOccurrences)
+                                     .ToArray();
+            }
+            else
+            {
+                BasePattern newPattern =
+                    quantifier.MaxOccurrences == null ?
+                            new GroupPattern(quantifier.ChildPattern, quantifier) :
+                    quantifier.MaxOccurrences >= 2 ?
+                            new GroupPattern(quantifier.ChildPattern,
+                                             new QuantifierPattern(quantifier.ChildPattern,
+                                                                   0,
+                                                                   quantifier.MaxOccurrences - 1,
+                                                                   quantifier.IsGreedy)) :
+                    quantifier.MaxOccurrences == 1 ?
+                            quantifier.ChildPattern :
+                            null;
+
+                AlternationPattern quantAlternation =
+                    quantifier.IsGreedy ? new AlternationPattern(newPattern, GroupPattern.Empty) :
+                                          new AlternationPattern(GroupPattern.Empty, newPattern);
+
+                return new BasePattern[] { quantAlternation };
+            }
         }
 
         private Result<char, SimpleConsList<char>> parseChar(Result<char, SimpleConsList<char>> partialResult, Func<char, bool> isMatch)
