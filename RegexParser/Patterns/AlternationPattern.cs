@@ -11,7 +11,7 @@ namespace RegexParser.Patterns
     {
         public AlternationPattern(IEnumerable<BasePattern> alternatives)
         {
-            Alternatives = alternatives;
+            Alternatives = alternatives.ToArray();
         }
 
         public AlternationPattern(params BasePattern[] alternatives)
@@ -19,7 +19,7 @@ namespace RegexParser.Patterns
             Alternatives = alternatives;
         }
 
-        public IEnumerable<BasePattern> Alternatives { get; private set; }
+        public BasePattern[] Alternatives { get; private set; }
 
         public override string ToString()
         {
