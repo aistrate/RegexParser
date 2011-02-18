@@ -80,7 +80,7 @@ namespace RegexParser.Matchers
         private IConsList<BasePattern> transformQuantifier(QuantifierPattern quantifier)
         {
             if (quantifier.MinOccurrences == quantifier.MaxOccurrences)
-                return new ArrayConsList<BasePattern>(Enumerable.Repeat(quantifier.ChildPattern, quantifier.MinOccurrences));
+                return new RepeaterConsList<BasePattern>(quantifier.ChildPattern, quantifier.MinOccurrences);
 
             BasePattern[] transformed;
 

@@ -50,6 +50,7 @@
     <Compile Include="ConsLists\ConsLists.cs" />
     <Compile Include="ConsLists\IConsList.cs" />
     <Compile Include="ConsLists\LinkedConsList.cs" />
+    <Compile Include="ConsLists\RepeaterConsList.cs" />
     <Compile Include="ConsLists\SimpleConsList.cs" />
     <Compile Include="ConsLists\StringConsList.cs" />
     <Compile Include="Parser.cs" />
