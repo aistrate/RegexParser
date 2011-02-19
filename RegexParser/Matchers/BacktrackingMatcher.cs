@@ -5,6 +5,7 @@ using ParserCombinators;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 using RegexParser.Patterns;
+using RegexParser.Transforms;
 
 namespace RegexParser.Matchers
 {
@@ -13,6 +14,11 @@ namespace RegexParser.Matchers
         public BacktrackingMatcher(string patternText)
             : base(patternText)
         {
+        }
+
+        protected override BasePattern TransformAST(BasePattern pattern)
+        {
+            return new QuantifierASTTransform().Transform(pattern);
         }
 
         protected override Result<char, string> Parse(IConsList<char> consList)
@@ -85,23 +91,7 @@ namespace RegexParser.Matchers
             if (quantifier.MinOccurrences == quantifier.MaxOccurrences)
                 return new RepeaterConsList<BasePattern>(quantifier.ChildPattern, quantifier.MinOccurrences);
 
-            if (quantifier.MinOccurrences > 0)
-                return new ArrayConsList<BasePattern>(new BasePattern[]
-                {
-                    new QuantifierPattern(quantifier.ChildPattern,
-                                          quantifier.MinOccurrences,
-                                          quantifier.MinOccurrences,
-                                          quantifier.IsGreedy),
-
-                    new QuantifierPattern(quantifier.ChildPattern,
-                                          0,
-                                          quantifier.MaxOccurrences != null ?
-                                                        quantifier.MaxOccurrences - quantifier.MinOccurrences :
-                                                        null,
-                                          quantifier.IsGreedy),
-                });
-
-            else
+            else if (quantifier.MinOccurrences == 0)
             {
                 var groupPatterns = new List<BasePattern>();
 
@@ -123,6 +113,11 @@ namespace RegexParser.Matchers
 
                 return new SimpleConsList<BasePattern>(alternation, SimpleConsList<BasePattern>.Empty);
             }
+
+            else
+                throw new ApplicationException(string.Format("Quantifier pattern with bad parameters: {{{0},{1}}}.",
+                                                             quantifier.MinOccurrences,
+                                                             quantifier.MaxOccurrences));
         }
 
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)
