@@ -16,8 +16,8 @@ using RegexParser.Tests.Helpers;
 using RegexParser.Tests.Matchers;
 using RegexParser.Tests.Patterns;
 using RegexParser.Tests.Performance;
-using Msoft = System.Text.RegularExpressions;
 using RegexParser.Util;
+using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.ConsoleTests
 {
@@ -27,11 +27,11 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //MatcherPerformanceTests.VeryLongMatches();
+                MatcherPerformanceTests.VeryLongMatches();
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
 
-                RegexAssert.DisplayASTTransform(@"(a|ab)bbbc", AlgorithmType.ExplicitDFA);
+                //RegexAssert.DisplayASTTransform(@"(a|ab)bbbc", AlgorithmType.ExplicitDFA);
 
                 //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);

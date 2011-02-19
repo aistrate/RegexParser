@@ -1,0 +1,49 @@
+ExplicitDFA (Chars):
+
+Pattern: @""
+Matches: 1,000,001
+Time:    2.003 sec.
+
+Pattern: @"k"
+Matches: 38,462
+Time:    3.040 sec.
+
+Pattern: @"\w"
+Matches: 1,000,000
+Time:    8.030 sec.
+
+Pattern: @"\w{1000}"
+Matches: 1,000
+Time:    0.635 sec.
+
+Pattern: @"(\w{1000})+"
+Matches: 1
+Time:    0.848 sec.
+
+Pattern: @"(\w{10000})+"
+Matches: 1
+Time:    0.942 sec.
+
+Pattern: @"(\w{20000})+"
+Matches: 1
+Time:    1.173 sec.
+
+Pattern: @"(\w{100000})+"
+Matches: 1
+Time:    1.300 sec.
+
+Pattern: @"(\w{10001})+"
+Matches: 1
+Time:    12.069 sec.
+
+Pattern: @"abcdefghijklmnopqrstuvwxyz"
+Matches: 38,461
+Time:    2.926 sec.
+
+Pattern: @"abcdefghijklm"
+Matches: 38,462
+Time:    2.938 sec.
+
+Pattern: @"(abcdefghijklmnopqrstuvwxyz)+"
+Matches: 1
+Time:    3.101 sec.

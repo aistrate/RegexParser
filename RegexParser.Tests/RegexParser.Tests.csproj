@@ -89,6 +89,13 @@
       <Name>RegexParser</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Performance\Output\MatcherPT_Backtracking_Int.txt" />
+    <Content Include="Performance\Output\MatcherPT_Backtracking_Int_StringASTTransform.txt" />
+    <Content Include="Performance\Output\MatcherPT_Backtracking_SimpleConsList.txt" />
+    <Content Include="Performance\Output\MatcherPT_ExplicitDFA_Chars.txt" />
+    <Content Include="Performance\Output\MatcherPT_ExplicitDFA_StringASTTransform.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

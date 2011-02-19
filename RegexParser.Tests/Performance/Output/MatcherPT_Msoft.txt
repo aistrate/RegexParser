@@ -1,0 +1,68 @@
+Msoft:
+
+Pattern: @""
+Matches: 1,000,001
+Time:    2.247 sec.
+
+Pattern: @"k"
+Matches: 38,462
+Time:    0.037 sec.
+
+Pattern: @"\w"
+Matches: 1,000,000
+Time:    2.361 sec.
+
+Pattern: @"\w{1000}"
+Matches: 1,000
+Time:    0.113 sec.
+
+Pattern: @"(\w{1000})+"
+Matches: 1
+Time:    0.094 sec.
+
+Pattern: @"(\w{10000})+"
+Matches: 1
+Time:    0.093 sec.
+
+Pattern: @"(\w{20000})+"
+Matches: 1
+Time:    0.091 sec.
+
+Pattern: @"(\w{100000})+"
+Matches: 1
+Time:    0.092 sec.
+
+Pattern: @"(\w{10001})+"
+Matches: 1
+Time:    0.098 sec.
+
+Pattern: @"abcdefghijklmnopqrstuvwxyz"
+Matches: 38,461
+Time:    0.103 sec.
+
+Pattern: @"abcdefghijklm"
+Matches: 38,462
+Time:    0.059 sec.
+
+Pattern: @"(abcdefghijklmnopqrstuvwxyz)+"
+Matches: 1
+Time:    0.024 sec.
+
+Pattern: @"\w{1000000}"
+Matches: 1
+Time:    0.098 sec.
+
+Pattern: @"\w+"
+Matches: 1
+Time:    0.090 sec.
+
+Pattern: @"\w+n"
+Matches: 1
+Time:    0.091 sec.
+
+Pattern: @"\w+e"
+Matches: 1
+Time:    0.092 sec.
+
+Pattern: @"\w+5"
+[too long, more than 2 minutes]

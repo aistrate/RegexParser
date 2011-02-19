@@ -1,0 +1,65 @@
+Backtracking (int):
+
+Pattern: @""
+Matches: 1,000,001
+Time:    2.065 sec.
+
+Pattern: @"k"
+Matches: 38,462
+Time:    0.586 sec.
+
+Pattern: @"\w"
+Matches: 1,000,000
+Time:    2.878 sec.
+
+Pattern: @"\w{1000}"
+Matches: 1,000
+Time:    0.451 sec.
+
+Pattern: @"(\w{1000})+"
+Matches: 1
+Time:    0.468 sec.
+
+Pattern: @"(\w{10000})+"
+Matches: 1
+Time:    0.457 sec.
+
+Pattern: @"(\w{20000})+"
+Matches: 1
+Time:    0.399 sec.
+
+Pattern: @"(\w{100000})+"
+Matches: 1
+Time:    0.392 sec.
+
+Pattern: @"(\w{10001})+"
+Matches: 1
+Time:    13.399 sec.
+
+Pattern: @"abcdefghijklmnopqrstuvwxyz"
+Matches: 38,461
+Time:    0.450 sec.
+
+Pattern: @"abcdefghijklm"
+Matches: 38,462
+Time:    0.529 sec.
+
+Pattern: @"(abcdefghijklmnopqrstuvwxyz)+"
+Matches: 1
+Time:    1.519 sec.
+
+Pattern: @"\w{1000000}"
+Matches: 1
+Time:    0.394 sec.
+
+Pattern: @"\w+"
+Matches: 1
+Time:    30.640 sec.
+
+Pattern: @"\w+n"
+Matches: 1
+Time:    30.135 sec.
+
+Pattern: @"\w+e"
+Matches: 1
+Time:    30.010 sec.

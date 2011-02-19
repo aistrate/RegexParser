@@ -29,6 +29,7 @@ namespace RegexParser.Tests.Matchers
         [Test]
         public void Nested()
         {
+            // TODO: create similar tests that need backtracking
             RegexAssert.AreMatchesSameAsMsoft("abab", @"(aba?)+", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbab", @"(aba?)+", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbab", @"(abb?)+", AlgorithmType);

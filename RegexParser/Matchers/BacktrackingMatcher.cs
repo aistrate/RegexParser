@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ParserCombinators;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 using RegexParser.Patterns;
-using System.Collections.Generic;
 
 namespace RegexParser.Matchers
 {
@@ -20,7 +20,7 @@ namespace RegexParser.Matchers
             BacktrackPoint lastBacktrackPoint = null;
 
             var callStack = new StackFrame(null, Pattern);
-            var partialResult = new Result<char, SimpleConsList<char>>(SimpleConsList<char>.Empty, consList);
+            var partialResult = new Result<char, int>(0, consList);
 
             while (callStack != null)
             {
@@ -30,6 +30,9 @@ namespace RegexParser.Matchers
                 {
                     BasePattern currentPattern = callStack.RemainingChildren.Head;
                     callStack = new StackFrame(callStack.Parent, callStack.RemainingChildren.Tail);
+
+                    while (callStack.Parent != null && callStack.RemainingChildren.IsEmpty)
+                        callStack = callStack.Parent;
 
                     if (currentPattern is GroupPattern)
                         callStack = new StackFrame(callStack, ((GroupPattern)currentPattern).Patterns);
@@ -73,7 +76,7 @@ namespace RegexParser.Matchers
                 }
             }
 
-            return new Result<char, string>(partialResult.Value.AsEnumerable().Reverse().AsString(),
+            return new Result<char, string>(consList.AsEnumerable().Take(partialResult.Value).AsString(),
                                             partialResult.Rest);
         }
 
@@ -82,10 +85,8 @@ namespace RegexParser.Matchers
             if (quantifier.MinOccurrences == quantifier.MaxOccurrences)
                 return new RepeaterConsList<BasePattern>(quantifier.ChildPattern, quantifier.MinOccurrences);
 
-            BasePattern[] transformed;
-
             if (quantifier.MinOccurrences > 0)
-                transformed = new BasePattern[]
+                return new ArrayConsList<BasePattern>(new BasePattern[]
                 {
                     new QuantifierPattern(quantifier.ChildPattern,
                                           quantifier.MinOccurrences,
@@ -98,7 +99,7 @@ namespace RegexParser.Matchers
                                                         quantifier.MaxOccurrences - quantifier.MinOccurrences :
                                                         null,
                                           quantifier.IsGreedy),
-                };
+                });
 
             else
             {
@@ -117,20 +118,18 @@ namespace RegexParser.Matchers
                 GroupPattern group = new GroupPattern(groupPatterns);
 
                 AlternationPattern alternation =
-                    quantifier.IsGreedy ? new AlternationPattern(group, GroupPattern.Empty) :
-                                          new AlternationPattern(GroupPattern.Empty, group);
+                    quantifier.IsGreedy ? new AlternationPattern(group, null) :
+                                          new AlternationPattern(null, group);
 
-                transformed = new BasePattern[] { alternation };
+                return new SimpleConsList<BasePattern>(alternation, SimpleConsList<BasePattern>.Empty);
             }
-
-            return new ArrayConsList<BasePattern>(transformed);
         }
 
-        private Result<char, SimpleConsList<char>> parseChar(Result<char, SimpleConsList<char>> partialResult, Func<char, bool> isMatch)
+        private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)
         {
             if (!partialResult.Rest.IsEmpty && isMatch(partialResult.Rest.Head))
-                return new Result<char, SimpleConsList<char>>(partialResult.Value.Prepend(partialResult.Rest.Head),
-                                                              partialResult.Rest.Tail);
+                return new Result<char, int>(partialResult.Value + 1,
+                                             partialResult.Rest.Tail);
             else
                 return null;
         }
@@ -164,7 +163,7 @@ namespace RegexParser.Matchers
     {
         public BacktrackPoint(BacktrackPoint previous,
                               StackFrame callStack,
-                              Result<char, SimpleConsList<char>> partialResult,
+                              Result<char, int> partialResult,
                               BasePattern condition)
         {
             Previous = previous;
@@ -176,7 +175,7 @@ namespace RegexParser.Matchers
         public BacktrackPoint Previous { get; private set; }
 
         public StackFrame CallStack { get; private set; }
-        public Result<char, SimpleConsList<char>> PartialResult { get; private set; }
+        public Result<char, int> PartialResult { get; private set; }
 
         public BasePattern Condition { get; private set; }
     }

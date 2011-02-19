@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Timers;
 using ParserCombinators.Tests.Performance;
 using ParserCombinators.Util;
 using RegexParser.Matchers;
 using RegexParser.Tests.Helpers;
+using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.Tests.Performance
 {
@@ -17,7 +15,8 @@ namespace RegexParser.Tests.Performance
         {
             const int times = 1, inputLength = 1000000;
 
-            string lowercaseChars = EnumerablePerformanceTests.RepeatChars("abcdefghijklmnopqrstuvwxyz", inputLength)
+            string alphabet = "abcdefghijklmnopqrstuvwxyz";
+            string lowercaseChars = EnumerablePerformanceTests.RepeatChars(alphabet, inputLength)
                                                               .AsString();
 
             //Console.WriteLine("(Short input)");
@@ -62,38 +61,67 @@ namespace RegexParser.Tests.Performance
             testRegexMatches(lowercaseChars, @"(\w{10001})+", times);
             // 12.556 sec. (inputLength =  1,000,000)   (!?)
             // 18.828 sec. (inputLength = 10,000,000)
+
+
+            testRegexMatches(lowercaseChars, alphabet, times);
+
+            testRegexMatches(lowercaseChars, alphabet.Substring(0, alphabet.Length / 2), times);
+
+            testRegexMatches(lowercaseChars, string.Format("({0})+", alphabet), times);
+
+
+            testRegexMatches(lowercaseChars, @"\w{1000000}", times);
+
+            testRegexMatches(lowercaseChars, @"\w+", times);
+
+            testRegexMatches(lowercaseChars, @"\w+n", times);
+
+            testRegexMatches(lowercaseChars, @"\w+e", times);
+
+            //testRegexMatches(lowercaseChars, @"\w+5", times);
         }
 
-        private static MatchCollection2 testRegexMatches(string input, string pattern, int times)
+        private const bool useMemoryProfiler = false;
+
+        private static void testRegexMatches(string input, string pattern, int times)
         {
             Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
 
-            MemoryProfiler memoryProfiler = MemoryProfiler.StartNew();
+            MemoryProfiler memoryProfiler;
+
+            if (useMemoryProfiler)
+                memoryProfiler = MemoryProfiler.StartNew();
+
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             MatchCollection2 matches = null;
-            
+            //Msoft.MatchCollection matches = null;
+
             for (int i = 0; i < times; i++)
                 matches = new Regex2(pattern, AlgorithmType.Backtracking).Matches(input);
+                //matches = new Msoft.Regex(pattern).Matches(input);
 
-            memoryProfiler.Reset();
+            if (useMemoryProfiler)
+                memoryProfiler.Reset();
 
             Console.WriteLine("Matches: {0:#,##0}", matches.Count);
 
             decimal elapsed = ((decimal)stopwatch.ElapsedMilliseconds) / 1000;
 
-            long deltaBefore = memoryProfiler.DeltaValue;
-            memoryProfiler.CollectGC();
-            long deltaAfter = memoryProfiler.DeltaValue;
+            if (useMemoryProfiler)
+            {
+                long deltaBefore = memoryProfiler.DeltaValue;
+                memoryProfiler.CollectGC();
+                long deltaAfter = memoryProfiler.DeltaValue;
 
-            if (matches.Count > 0)
-                Console.WriteLine("Last:    {0:#,##0} chars", matches.Last().Value.Length);
+                if (matches.Count > 0)
+                    Console.WriteLine("Last:    {0:#,##0} chars", matches[matches.Count - 1].Value.Length);
 
-            Console.WriteLine("Memory:  {0,10:#,##0} bytes", deltaBefore);
-            Console.WriteLine("AfterGC: {0,10:#,##0} bytes", deltaAfter);
-            Console.WriteLine("Time:    {0:#0.000} sec.\n\n", elapsed);
+                Console.WriteLine("Memory:  {0,10:#,##0} bytes", deltaBefore);
+                Console.WriteLine("AfterGC: {0,10:#,##0} bytes", deltaAfter);
+            }
 
-            return matches;
+            Console.WriteLine("Time:    {0:#0.000} sec.\n", elapsed);
         }
     }
 }
