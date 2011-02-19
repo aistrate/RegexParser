@@ -3,3 +3,5 @@ RegexParser TODO:
 - RegexParsers: "unify" all group patterns that are part of various patterns (alternation, quantifier, etc.) (groups are similar, except for each excluding their own parent pattern)
 
 - replace the use of 'string' in Result<char, string> with an immutable class which stores all 'Value' chars in a tree structure (with cheap 'append', and branch re-use); maybe revive the idea of a non-deterministic parser (as in the 'experimental' Git branch) (Value is not a single string/char tree, but a list of them, possibly empty); replace the current implementation of backtracking
+
+- in BacktrackingMatcher.Parse, "traverse" the input IConsList<char> with a char counter (build the output string by counting matching chars, then at the end take that many from the input), instead of building a new Result<char, SimpleConsList<char>> at every step

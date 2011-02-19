@@ -59,6 +59,7 @@ namespace RegexParser.Matchers
                        select new string(c, 1);
 
             else
+                // TODO: throw exception if pattern not parsable by DFA matcher
                 return null;
         }
     }
