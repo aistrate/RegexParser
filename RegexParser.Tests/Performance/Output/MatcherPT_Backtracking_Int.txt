@@ -46,7 +46,7 @@ Time:    0.529 sec.
 
 Pattern: @"(abcdefghijklmnopqrstuvwxyz)+"
 Matches: 1
-Time:    1.519 sec.
+Time:    0.433 sec.
 
 Pattern: @"\w{1000000}"
 Matches: 1
@@ -54,12 +54,12 @@ Time:    0.394 sec.
 
 Pattern: @"\w+"
 Matches: 1
-Time:    30.640 sec.
+Time:    2.589 sec.
 
 Pattern: @"\w+n"
 Matches: 1
-Time:    30.135 sec.
+Time:    2.652 sec.
 
 Pattern: @"\w+e"
 Matches: 1
-Time:    30.010 sec.
+Time:    2.733 sec.

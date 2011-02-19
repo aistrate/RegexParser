@@ -44,7 +44,30 @@ namespace RegexParser.Matchers
                         callStack = new StackFrame(callStack, ((GroupPattern)currentPattern).Patterns);
 
                     else if (currentPattern is QuantifierPattern)
-                        callStack = new StackFrame(callStack, transformQuantifier((QuantifierPattern)currentPattern));
+                    {
+                        var quant = (QuantifierPattern)currentPattern;
+
+                        if (quant.MinOccurrences == quant.MaxOccurrences)
+                            callStack = new StackFrame(callStack,
+                                                       new RepeaterConsList<BasePattern>(quant.ChildPattern, quant.MinOccurrences));
+
+                        else if (quant.MinOccurrences == 0)
+                        {
+                            BasePattern split = splitQuantifier(quant);
+
+                            BasePattern firstAlt = quant.IsGreedy ? split : null,
+                                        secondAlt = quant.IsGreedy ? null : split;
+
+                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint, callStack, partialResult, secondAlt);
+
+                            callStack = new StackFrame(callStack, firstAlt);
+                        }
+
+                        else
+                            throw new ApplicationException(string.Format("Quantifier pattern with bad parameters: {{{0},{1}}}.",
+                                                                         quant.MinOccurrences,
+                                                                         quant.MaxOccurrences));
+                    }
 
                     else if (currentPattern is AlternationPattern)
                     {
@@ -86,38 +109,22 @@ namespace RegexParser.Matchers
                                             partialResult.Rest);
         }
 
-        private IConsList<BasePattern> transformQuantifier(QuantifierPattern quantifier)
+        private BasePattern splitQuantifier(QuantifierPattern quant)
         {
-            if (quantifier.MinOccurrences == quantifier.MaxOccurrences)
-                return new RepeaterConsList<BasePattern>(quantifier.ChildPattern, quantifier.MinOccurrences);
-
-            else if (quantifier.MinOccurrences == 0)
-            {
-                var groupPatterns = new List<BasePattern>();
-
-                groupPatterns.Add(quantifier.ChildPattern);
-
-                if (quantifier.MaxOccurrences == null)
-                    groupPatterns.Add(quantifier);
-                else if (quantifier.MaxOccurrences >= 2)
-                    groupPatterns.Add(new QuantifierPattern(quantifier.ChildPattern,
-                                                            0,
-                                                            quantifier.MaxOccurrences - 1,
-                                                            quantifier.IsGreedy));
-
-                GroupPattern group = new GroupPattern(groupPatterns);
-
-                AlternationPattern alternation =
-                    quantifier.IsGreedy ? new AlternationPattern(group, null) :
-                                          new AlternationPattern(null, group);
-
-                return new SimpleConsList<BasePattern>(alternation, SimpleConsList<BasePattern>.Empty);
-            }
-
+            if (quant.MaxOccurrences == 1)
+                return quant.ChildPattern;
             else
-                throw new ApplicationException(string.Format("Quantifier pattern with bad parameters: {{{0},{1}}}.",
-                                                             quantifier.MinOccurrences,
-                                                             quantifier.MaxOccurrences));
+            {
+                QuantifierPattern rest =
+                    quant.MaxOccurrences == null ?
+                        quant :
+                        new QuantifierPattern(quant.ChildPattern,
+                                              0,
+                                              quant.MaxOccurrences - 1,
+                                              quant.IsGreedy);
+
+                return new GroupPattern(quant.ChildPattern, rest);
+            }
         }
 
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)
