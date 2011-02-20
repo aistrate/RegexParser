@@ -64,5 +64,10 @@ Pattern: @"\w+e"
 Matches: 1
 Time:    0.092 sec.
 
-Pattern: @"\w+5"
-[too long, more than 2 minutes]
+Pattern: @"\w+7"
+Matches: 1
+Time:    0.094 sec.
+
+Pattern: @"\w+?7"
+Matches: 1
+Time:    0.161 sec.

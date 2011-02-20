@@ -63,3 +63,11 @@ Time:    2.078 sec.
 Pattern: @"\w+e"
 Matches: 1
 Time:    1.902 sec.
+
+Pattern: @"\w+7"
+Matches: 1
+Time:    2.083 sec.
+
+Pattern: @"\w+?7"
+Matches: 1
+Time:    0.922 sec.

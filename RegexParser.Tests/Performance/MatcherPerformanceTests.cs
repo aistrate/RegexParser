@@ -69,7 +69,6 @@ namespace RegexParser.Tests.Performance
 
             testRegexMatches(lowercaseChars, string.Format("({0})+", alphabet), times);
 
-
             testRegexMatches(lowercaseChars, @"\w{1000000}", times);
 
             testRegexMatches(lowercaseChars, @"\w+", times);
@@ -78,7 +77,9 @@ namespace RegexParser.Tests.Performance
 
             testRegexMatches(lowercaseChars, @"\w+e", times);
 
-            //testRegexMatches(lowercaseChars, @"\w+5", times);
+            testRegexMatches(lowercaseChars + "7", @"\w+7", times);
+
+            testRegexMatches(lowercaseChars + "7", @"\w+?7", times);
         }
 
         private const bool useMemoryProfiler = false;
