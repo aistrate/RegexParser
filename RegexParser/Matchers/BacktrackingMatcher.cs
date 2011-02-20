@@ -45,7 +45,8 @@ namespace RegexParser.Matchers
 
                     if (quant.MinOccurrences == quant.MaxOccurrences)
                         callStack = new StackFrame(callStack,
-                                                   new RepeaterConsList<BasePattern>(quant.ChildPattern, quant.MinOccurrences));
+                                                   new RepeaterConsList<BasePattern>(quant.ChildPattern,
+                                                                                     quant.MinOccurrences));
 
                     else
                     {
@@ -90,7 +91,9 @@ namespace RegexParser.Matchers
                 }
 
                 else
-                    throw new ApplicationException(string.Format("Unknown pattern type ({0}).", currentPattern.GetType().Name));
+                    throw new ApplicationException(
+                        string.Format("BacktrackingMatcher: unknown pattern type ({0}).",
+                                      currentPattern.GetType().Name));
 
                 callStack = unwindEmptyFrames(callStack);
             }
