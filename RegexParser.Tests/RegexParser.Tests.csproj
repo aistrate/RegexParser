@@ -63,6 +63,7 @@
     <Compile Include="Performance\GeneralPerformanceTests.cs" />
     <Compile Include="Performance\MatcherPerformanceTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
+    <Compile Include="Performance\TransformPerformanceTests.cs" />
     <Compile Include="Transforms\StringASTTransformTests.cs" />
     <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />

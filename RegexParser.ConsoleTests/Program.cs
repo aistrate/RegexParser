@@ -27,8 +27,8 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //MatcherPerformanceTests.VeryLongMatches();
-                RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
+                TransformPerformanceTests.TransformTests();
+                //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
 
