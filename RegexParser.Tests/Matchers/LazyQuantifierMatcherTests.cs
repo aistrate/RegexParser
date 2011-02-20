@@ -4,7 +4,12 @@ using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
+#if TEST_BACKTRACKING
     [TestFixture(AlgorithmType.Backtracking)]
+#endif
+
+#if TEST_BACKTRACKING
+
     public class LazyQuantifierMatcherTests : AlgorithmTests
     {
         public LazyQuantifierMatcherTests(AlgorithmType algorithmType)
@@ -141,4 +146,6 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft("aaax", @"\S*?\wx", AlgorithmType);
         }
     }
+
+#endif
 }

@@ -4,8 +4,15 @@ using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ExplicitDFA)]
+#if TEST_EXPLICITDFA
+    [TestFixture(AlgorithmType.ExplicitDFA)]
+#endif
+#if TEST_BACKTRACKING
     [TestFixture(AlgorithmType.Backtracking)]
+#endif
+
+#if TEST_EXPLICITDFA || TEST_BACKTRACKING
+
     public class QuantifierMatcherTests : AlgorithmTests
     {
         public QuantifierMatcherTests(AlgorithmType algorithmType)
@@ -142,4 +149,6 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
     }
+
+#endif
 }

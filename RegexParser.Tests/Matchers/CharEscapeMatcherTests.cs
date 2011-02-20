@@ -6,8 +6,15 @@ using RegexParser.Util;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ExplicitDFA)]
+#if TEST_EXPLICITDFA
+    [TestFixture(AlgorithmType.ExplicitDFA)]
+#endif
+#if TEST_BACKTRACKING
     [TestFixture(AlgorithmType.Backtracking)]
+#endif
+
+#if TEST_EXPLICITDFA || TEST_BACKTRACKING
+
     public class CharEscapeMatcherTests : AlgorithmTests
     {
         public CharEscapeMatcherTests(AlgorithmType algorithmType)
@@ -261,4 +268,6 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
     }
+
+#endif
 }

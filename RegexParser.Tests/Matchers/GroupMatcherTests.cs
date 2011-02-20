@@ -4,8 +4,15 @@ using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ExplicitDFA)]
+#if TEST_EXPLICITDFA
+    [TestFixture(AlgorithmType.ExplicitDFA)]
+#endif
+#if TEST_BACKTRACKING
     [TestFixture(AlgorithmType.Backtracking)]
+#endif
+
+#if TEST_EXPLICITDFA || TEST_BACKTRACKING
+
     public class GroupMatcherTests : AlgorithmTests
     {
         public GroupMatcherTests(AlgorithmType algorithmType)
@@ -65,4 +72,6 @@ namespace RegexParser.Tests.Matchers
         //    Assert.Catch<ArgumentException>(() => { new Regex2("thi)ng", AlgorithmType).Match(input); });
         //}
     }
+
+#endif
 }

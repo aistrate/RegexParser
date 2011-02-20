@@ -3,7 +3,7 @@ RegexParser - priority list:
 - backtracking matcher:
     * quantifiers
     * lazy quantifiers
-    - separation of tests (ExplicitDFA / Backtracking); turn on/off ALL tests at once, for a particular algorithm
+    * separation of tests (ExplicitDFA / Backtracking); turn on/off ALL tests at once, for a particular algorithm
 
 [-explicit DFA matcher:
     - build NFA state machine (from pattern AST)

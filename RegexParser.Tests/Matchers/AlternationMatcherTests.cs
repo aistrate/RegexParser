@@ -4,8 +4,15 @@ using RegexParser.Tests.Helpers;
 
 namespace RegexParser.Tests.Matchers
 {
-    //[TestFixture(AlgorithmType.ExplicitDFA)]
+#if TEST_EXPLICITDFA
+    [TestFixture(AlgorithmType.ExplicitDFA)]
+#endif
+#if TEST_BACKTRACKING
     [TestFixture(AlgorithmType.Backtracking)]
+#endif
+
+#if TEST_EXPLICITDFA || TEST_BACKTRACKING
+
     public class AlternationMatcherTests : AlgorithmTests
     {
         public AlternationMatcherTests(AlgorithmType algorithmType)
@@ -36,4 +43,6 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft("abcadef", @"abc|def", AlgorithmType);
         }
     }
+
+#endif
 }
