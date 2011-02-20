@@ -12,6 +12,8 @@ namespace RegexParser.Transforms
         {
             // The identity transform
 
+            // TODO: don't make copy if children are reference-equal with their own transform
+
             if (pattern is GroupPattern)
                 return new GroupPattern(((GroupPattern)pattern).Patterns
                                                                .Select(a => Transform(a)));

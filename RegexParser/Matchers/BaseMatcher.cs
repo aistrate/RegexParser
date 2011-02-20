@@ -69,7 +69,9 @@ namespace RegexParser.Matchers
                     }
                 }
 
-                consList = consList.Tail;
+                if (!consList.IsEmpty)
+                    consList = consList.Tail;
+
                 index++;
             }
         }

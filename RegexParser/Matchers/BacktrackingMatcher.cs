@@ -37,7 +37,7 @@ namespace RegexParser.Matchers
                     BasePattern currentPattern = callStack.RemainingChildren.Head;
                     callStack = new StackFrame(callStack.Parent, callStack.RemainingChildren.Tail);
 
-                    while (callStack.Parent != null && callStack.RemainingChildren.IsEmpty)
+                    while (callStack != null && callStack.RemainingChildren.IsEmpty)
                         callStack = callStack.Parent;
 
                     if (currentPattern is GroupPattern)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ParserCombinators.ConsLists
+﻿namespace ParserCombinators.ConsLists
 {
     public class RepeaterConsList<T> : IConsList<T>
     {
@@ -23,13 +18,13 @@ namespace ParserCombinators.ConsLists
         private int? count;
 
 
-        public T Head { get { assertNotEmpty("Head"); return value; } }
+        public T Head { get { this.AssertNotEmpty(ConsOp.Head); return value; } }
 
         public IConsList<T> Tail
         {
             get
             {
-                assertNotEmpty("Tail");
+                this.AssertNotEmpty(ConsOp.Tail);
                 return IsInfinite ? this : new RepeaterConsList<T>(value, (int)count - 1);
             }
         }
@@ -38,12 +33,5 @@ namespace ParserCombinators.ConsLists
 
 
         public bool IsInfinite { get { return count == null; } }
-
-        private void assertNotEmpty(string operation)
-        {
-            if (IsEmpty)
-                throw new ApplicationException(
-                    string.Format("{0}: could not perform operation because cons list is empty.", operation));
-        }
     }
 }

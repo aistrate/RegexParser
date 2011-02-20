@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ParserCombinators.ConsLists
 {
@@ -32,9 +31,9 @@ namespace ParserCombinators.ConsLists
         private SimpleConsList<T> next;
 
 
-        public T Head { get { assertNotEmpty("Head"); return value; } }
+        public T Head { get { this.AssertNotEmpty(ConsOp.Head); return value; } }
 
-        public IConsList<T> Tail { get { assertNotEmpty("Tail"); return next; } }
+        public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return next; } }
 
         public bool IsEmpty { get { return next == null; } }
 
@@ -57,14 +56,6 @@ namespace ParserCombinators.ConsLists
         public SimpleConsList<T> Prepend(T val)
         {
             return new SimpleConsList<T>(val, this);
-        }
-
-
-        private void assertNotEmpty(string operation)
-        {
-            if (IsEmpty)
-                throw new ApplicationException(
-                    string.Format("{0}: could not perform operation because cons list is empty.", operation));
         }
     }
 }

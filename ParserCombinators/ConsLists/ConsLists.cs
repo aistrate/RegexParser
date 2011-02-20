@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ParserCombinators.Util;
 
 namespace ParserCombinators.ConsLists
 {
@@ -30,5 +33,34 @@ namespace ParserCombinators.ConsLists
         {
             return new SimpleConsList<T>(value, list);
         }
+
+        internal static void AssertNotEmpty<T>(this IConsList<T> consList, ConsOp consOp)
+        {
+            if (consList.IsEmpty)
+                throw new ApplicationException(
+                    string.Format("{0}: could not perform {1} operation because Cons List is empty.",
+                                  getGenericTypeName(consList.GetType()),
+                                  consOp));
+        }
+
+        private static string getGenericTypeName(Type type)
+        {
+            string name = type.Name;
+
+            if (name.IndexOf('`') >= 0)
+                name = string.Format("{0}<{1}>",
+                                     name.Split('`')[0],
+                                     type.GetGenericArguments()
+                                         .Select(t => getGenericTypeName(t))
+                                         .JoinStrings(", "));
+
+            return name;
+        }
+    }
+
+    internal enum ConsOp
+    {
+        Head,
+        Tail,
     }
 }

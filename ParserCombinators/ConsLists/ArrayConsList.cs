@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ParserCombinators.ConsLists
 {
@@ -30,9 +28,10 @@ namespace ParserCombinators.ConsLists
         private T[] array;
         private int index;
 
-        public T Head { get { return array[index]; } }
 
-        public IConsList<T> Tail { get { return new ArrayConsList<T>(array, index + 1); } }
+        public T Head { get { this.AssertNotEmpty(ConsOp.Head); return array[index]; } }
+
+        public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new ArrayConsList<T>(array, index + 1); } }
 
         public bool IsEmpty { get { return index >= array.Length; } }
     }

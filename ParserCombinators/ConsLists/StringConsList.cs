@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ParserCombinators.ConsLists
 {
@@ -27,9 +25,10 @@ namespace ParserCombinators.ConsLists
 
         public string Value { get; private set; }
 
-        public char Head { get { return Value[0]; } }
 
-        public IConsList<char> Tail { get { return new StringConsList(Value.Substring(1)); } }
+        public char Head { get { this.AssertNotEmpty(ConsOp.Head); return Value[0]; } }
+
+        public IConsList<char> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new StringConsList(Value.Substring(1)); } }
 
         public bool IsEmpty { get { return Value.Length == 0; } }
     }

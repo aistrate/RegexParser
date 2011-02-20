@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ParserCombinators.ConsLists
 {
@@ -22,9 +19,10 @@ namespace ParserCombinators.ConsLists
 
         private LinkedListNode<T> firstNode;
 
-        public T Head { get { return firstNode.Value; } }
 
-        public IConsList<T> Tail { get { return new LinkedConsList<T>(firstNode.Next); } }
+        public T Head { get { this.AssertNotEmpty(ConsOp.Head); return firstNode.Value; } }
+
+        public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new LinkedConsList<T>(firstNode.Next); } }
 
         public bool IsEmpty { get { return firstNode == null; } }
     }
