@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ParserCombinators;
 using ParserCombinators.ConsLists;
@@ -128,46 +127,5 @@ namespace RegexParser.Matchers
             else
                 return null;
         }
-    }
-
-    /// <summary>
-    /// Immutable class.
-    /// </summary>
-    public class StackFrame
-    {
-
-        public StackFrame(StackFrame parent, params BasePattern[] remainingChildren)
-            : this(parent, new ArrayConsList<BasePattern>(remainingChildren))
-        {
-        }
-
-        public StackFrame(StackFrame parent, IConsList<BasePattern> remainingChildren)
-        {
-            Parent = parent;
-            RemainingChildren = remainingChildren;
-        }
-
-        public StackFrame Parent { get; private set; }
-        public IConsList<BasePattern> RemainingChildren { get; private set; }
-    }
-
-    /// <summary>
-    /// Immutable class.
-    /// </summary>
-    public class BacktrackPoint
-    {
-        public BacktrackPoint(BacktrackPoint previous,
-                              StackFrame callStack,
-                              Result<char, int> partialResult)
-        {
-            Previous = previous;
-            CallStack = callStack;
-            PartialResult = partialResult;
-        }
-
-        public BacktrackPoint Previous { get; private set; }
-
-        public StackFrame CallStack { get; private set; }
-        public Result<char, int> PartialResult { get; private set; }
     }
 }
