@@ -34,9 +34,11 @@ namespace ParserCombinators.ConsLists
             return new SimpleConsList<T>(value, list);
         }
 
+        private const bool isAssertEnabled = true;
+
         internal static void AssertNotEmpty<T>(this IConsList<T> consList, ConsOp consOp)
         {
-            if (consList.IsEmpty)
+            if (isAssertEnabled && consList.IsEmpty)
                 throw new ApplicationException(
                     string.Format("{0}: could not perform {1} operation because Cons List is empty.",
                                   getGenericTypeName(consList.GetType()),

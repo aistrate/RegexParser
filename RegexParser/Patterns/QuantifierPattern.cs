@@ -38,6 +38,18 @@ namespace RegexParser.Patterns
 
         public bool IsGreedy { get; private set; }
 
+        /// <summary>
+        /// Asserts quantifier is in one of the forms: {n,n}, {0,m}, or {0,} (where n > 0, m > 0)
+        /// </summary>
+        public void AssertCanonicalForm()
+        {
+            if (! ((MinOccurrences == 0 && MaxOccurrences != 0) ||
+                   (MinOccurrences  > 0 && MinOccurrences == MaxOccurrences)) )
+                throw new ApplicationException(string.Format("Quantifier pattern NOT in canonical form: {{{0},{1}}}.",
+                                                             MinOccurrences,
+                                                             MaxOccurrences != null ? MaxOccurrences.ToString() : ""));
+        }
+
         public override string ToString()
         {
             return string.Format("Quant {{{0}, Min={1}{2}{3}}}",

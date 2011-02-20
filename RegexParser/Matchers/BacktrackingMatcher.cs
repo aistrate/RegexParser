@@ -47,34 +47,32 @@ namespace RegexParser.Matchers
                     {
                         var quant = (QuantifierPattern)currentPattern;
 
+                        quant.AssertCanonicalForm();
+
                         if (quant.MinOccurrences == quant.MaxOccurrences)
                             callStack = new StackFrame(callStack,
                                                        new RepeaterConsList<BasePattern>(quant.ChildPattern, quant.MinOccurrences));
 
-                        else if (quant.MinOccurrences == 0)
-                        {
-                            BasePattern split = splitQuantifier(quant);
-
-                            BasePattern firstAlt = quant.IsGreedy ? split : null,
-                                        secondAlt = quant.IsGreedy ? null : split;
-
-                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint, callStack, partialResult, secondAlt);
-
-                            callStack = new StackFrame(callStack, firstAlt);
-                        }
-
                         else
-                            throw new ApplicationException(string.Format("Quantifier pattern with bad parameters: {{{0},{1}}}.",
-                                                                         quant.MinOccurrences,
-                                                                         quant.MaxOccurrences));
+                        {
+                            IConsList<BasePattern> split = splitQuantifier(quant);
+
+                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
+                                                                    quant.IsGreedy ? callStack : new StackFrame(callStack, split),
+                                                                    partialResult);
+
+                            callStack = quant.IsGreedy ? new StackFrame(callStack, split) : callStack;
+                        }
                     }
 
                     else if (currentPattern is AlternationPattern)
                     {
                         var alternatives = ((AlternationPattern)currentPattern).Alternatives;
 
-                        foreach (var alternative in alternatives.Skip(1).Reverse())
-                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint, callStack, partialResult, alternative);
+                        foreach (var alt in alternatives.Skip(1).Reverse())
+                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
+                                                                    new StackFrame(callStack, alt),
+                                                                    partialResult);
 
                         callStack = new StackFrame(callStack, alternatives.First());
                     }
@@ -89,9 +87,6 @@ namespace RegexParser.Matchers
                             {
                                 callStack = lastBacktrackPoint.CallStack;
                                 partialResult = lastBacktrackPoint.PartialResult;
-
-                                if (lastBacktrackPoint.Condition != null)
-                                    callStack = new StackFrame(callStack, lastBacktrackPoint.Condition);
 
                                 lastBacktrackPoint = lastBacktrackPoint.Previous;
                             }
@@ -109,22 +104,20 @@ namespace RegexParser.Matchers
                                             partialResult.Rest);
         }
 
-        private BasePattern splitQuantifier(QuantifierPattern quant)
+        private IConsList<BasePattern> splitQuantifier(QuantifierPattern quant)
         {
-            if (quant.MaxOccurrences == 1)
-                return quant.ChildPattern;
-            else
-            {
-                QuantifierPattern rest =
-                    quant.MaxOccurrences == null ?
-                        quant :
-                        new QuantifierPattern(quant.ChildPattern,
-                                              0,
-                                              quant.MaxOccurrences - 1,
-                                              quant.IsGreedy);
+            var rest = SimpleConsList<BasePattern>.Empty;
 
-                return new GroupPattern(quant.ChildPattern, rest);
-            }
+            if (quant.MaxOccurrences != 1)
+                rest = new SimpleConsList<BasePattern>(
+                                quant.MaxOccurrences == null ?
+                                    quant :
+                                    new QuantifierPattern(quant.ChildPattern,
+                                                          0,
+                                                          quant.MaxOccurrences - 1,
+                                                          quant.IsGreedy));
+
+            return new SimpleConsList<BasePattern>(quant.ChildPattern, rest);
         }
 
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)
@@ -165,20 +158,16 @@ namespace RegexParser.Matchers
     {
         public BacktrackPoint(BacktrackPoint previous,
                               StackFrame callStack,
-                              Result<char, int> partialResult,
-                              BasePattern condition)
+                              Result<char, int> partialResult)
         {
             Previous = previous;
             CallStack = callStack;
             PartialResult = partialResult;
-            Condition = condition;
         }
 
         public BacktrackPoint Previous { get; private set; }
 
         public StackFrame CallStack { get; private set; }
         public Result<char, int> PartialResult { get; private set; }
-
-        public BasePattern Condition { get; private set; }
     }
 }

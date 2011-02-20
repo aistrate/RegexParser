@@ -7,7 +7,7 @@ using RegexParser.Patterns;
 namespace RegexParser.Transforms
 {
     /// <summary>
-    /// An Abstract Syntax Tree (AST) transform in which:
+    /// An Abstract Syntax Tree (AST) transform that converts quantifiers into their canonic form:
     ///     - quantifier {n,m} becomes the pair {n,n}, {0,m-n}
     ///     - quantifier {n,}  becomes the pair {n,n}, {0,}
     ///     - quantifiers that are already in target form ({n,n}, {0,m}, or {0,}) remain unchanged

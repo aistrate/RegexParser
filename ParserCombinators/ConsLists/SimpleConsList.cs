@@ -18,6 +18,11 @@ namespace ParserCombinators.ConsLists
             this.next = null;
         }
 
+        public SimpleConsList(T value)
+            : this(value, Empty)
+        {
+        }
+
         public SimpleConsList(T value, SimpleConsList<T> next)
         {
             if (next == null)

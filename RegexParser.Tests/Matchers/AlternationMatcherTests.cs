@@ -32,5 +32,15 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(aa|ab)bbbc", AlgorithmType);
             RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(ba|aa|ab|a)bbbc", AlgorithmType);
         }
+
+        [Test]
+        public void NoParens()
+        {
+            RegexAssert.AreMatchesSameAsMsoft("abc", @"abc|def", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("def", @"abc|def", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abcdef", @"abc|def", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abc def", @"abc|def", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("abcadef", @"abc|def", AlgorithmType);
+        }
     }
 }
