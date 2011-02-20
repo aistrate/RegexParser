@@ -53,7 +53,9 @@
   <ItemGroup>
     <Compile Include="Helpers\ExceptionWrapper.cs" />
     <Compile Include="Helpers\MemoryProfiler.cs" />
+    <Compile Include="Matchers\QuantifierMatcherTests_Backtr.cs" />
     <Compile Include="Matchers\AlternationMatcherTests.cs" />
+    <Compile Include="Matchers\AlternationMatcherTests_Backtr.cs" />
     <Compile Include="Matchers\CharClassMatcherTests.cs" />
     <Compile Include="Matchers\GroupMatcherTests.cs" />
     <Compile Include="AlgorithmTests.cs" />

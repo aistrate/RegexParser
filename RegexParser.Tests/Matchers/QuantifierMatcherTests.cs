@@ -141,13 +141,5 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
-
-        [Test]
-        public void MustBacktrack()
-        {
-            RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("aaax", @"\S*\wx", AlgorithmType);
-        }
     }
 }

@@ -19,13 +19,6 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
-        public void MustBacktrack()
-        {
-            RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(a|ab)bbbc", AlgorithmType);
-            RegexAssert.AreMatchesSameAsMsoft("abbbc", @"(ab|a)bbbc", AlgorithmType);
-        }
-
-        [Test]
         public void FirstDoesNotMatch()
         {
             RegexAssert.AreMatchesSameAsMsoft("abbbbc", @"(c|ba|ab)bbbc", AlgorithmType);
