@@ -57,6 +57,7 @@
     <Compile Include="Matchers\CharClassMatcherTests.cs" />
     <Compile Include="Matchers\GroupMatcherTests.cs" />
     <Compile Include="AlgorithmTests.cs" />
+    <Compile Include="Matchers\LazyQuantifierMatcherTests.cs" />
     <Compile Include="Matchers\QuantifierMatcherTests.cs" />
     <Compile Include="Patterns\CharGroupPatternTests.cs" />
     <Compile Include="Patterns\QuantifierPatternTests.cs" />
