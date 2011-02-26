@@ -34,7 +34,11 @@ namespace ParserCombinators.ConsLists
             return new SimpleConsList<T>(value, list);
         }
 
+#if ENABLE_ASSERT
         private const bool isAssertEnabled = true;
+#else
+        private const bool isAssertEnabled = false;
+#endif
 
         internal static void AssertNotEmpty<T>(this IConsList<T> consList, ConsOp consOp)
         {

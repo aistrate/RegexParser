@@ -43,7 +43,8 @@ namespace RegexParser.Patterns
         /// </summary>
         public void AssertCanonicalForm()
         {
-            if (! ((MinOccurrences == 0 && MaxOccurrences != 0) ||
+            if (isAssertEnabled &&
+                ! ((MinOccurrences == 0 && MaxOccurrences != 0) ||
                    (MinOccurrences  > 0 && MinOccurrences == MaxOccurrences)) )
                 throw new ApplicationException(string.Format("Quantifier pattern NOT in canonical form: {{{0},{1}}}.",
                                                              MinOccurrences,

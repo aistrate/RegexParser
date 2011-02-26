@@ -31,6 +31,12 @@ namespace RegexParser.Patterns
                                 "patternText.");
         }
 
+#if ENABLE_ASSERT
+        protected const bool isAssertEnabled = true;
+#else
+        protected const bool isAssertEnabled = false;
+#endif
+
         public abstract PatternType Type { get; }
     }
 }
