@@ -88,7 +88,7 @@ namespace RegexParser.Matchers
 
                         default:
                             throw new ApplicationException(
-                                string.Format("BacktrackingMatcher: unknown pattern type ({0}).",
+                                string.Format("BacktrackingMatcher: unrecognized pattern type ({0}).",
                                               currentPattern.GetType().Name));
                     }
                 }

@@ -63,8 +63,9 @@ namespace RegexParser.Matchers
 
 
                 default:
-                    // TODO: throw exception if pattern not parsable by DFA matcher
-                    return null;
+                    throw new ApplicationException(
+                        string.Format("ExplicitDFAMatcher: unrecognized pattern type ({0}).",
+                                      pattern.GetType().Name));
             }
         }
     }

@@ -17,7 +17,7 @@ RegexParser - priority list:
 [-possessive quantifiers: ?+, *+, ++, {m,n}+ ]
 
 = anchors: ^, $, \b, \B
-- Regex options: IgnoreCase, IgnorePatternWhitespace, Multiline, Singleline
+= Regex options: IgnoreCase, IgnorePatternWhitespace, Multiline, Singleline
 - miscellaneous constructs: (?#comment), (?i)
 
 - error handling while parsing the pattern
