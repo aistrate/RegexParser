@@ -26,6 +26,8 @@ namespace RegexParser.Patterns
 
         public int Length { get { return Patterns.Length; } }
 
+        public override PatternType Type { get { return PatternType.Group; } }
+
         public override string ToString()
         {
             return string.Format("<{0}>", Patterns.Select(p => p.ToString())

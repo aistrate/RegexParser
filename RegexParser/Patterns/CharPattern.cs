@@ -8,5 +8,7 @@ namespace RegexParser.Patterns
     public abstract class CharPattern : BasePattern
     {
         public abstract bool IsMatch(char c);
+
+        public override PatternType Type { get { return PatternType.Char; } }
     }
 }

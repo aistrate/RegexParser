@@ -11,7 +11,7 @@ namespace RegexParser.Transforms
     {
         public override BasePattern Transform(BasePattern pattern)
         {
-            if (pattern is GroupPattern)
+            if (pattern.Type == PatternType.Group)
             {
                 // TODO: use groupBy (Haskell-style)
                 // TODO: if GroupPattern contains one single StringPattern, replace the former with the latter

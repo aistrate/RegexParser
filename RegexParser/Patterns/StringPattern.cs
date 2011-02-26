@@ -15,6 +15,8 @@ namespace RegexParser.Patterns
 
         public string Value { get; private set; }
 
+        public override PatternType Type { get { return PatternType.String; } }
+
         public override string ToString()
         {
             return Value.Show();

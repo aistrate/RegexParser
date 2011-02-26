@@ -33,34 +33,39 @@ namespace RegexParser.Matchers
             if (pattern == null)
                 throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
 
-            if (pattern is GroupPattern)
-                return from vs in CharParsers.Sequence(((GroupPattern)pattern).Patterns
-                                                                              .Select(p => createParser(p)))
-                       select vs.JoinStrings();
-
-            else if (pattern is QuantifierPattern)
+            switch (pattern.Type)
             {
-                QuantifierPattern quant = (QuantifierPattern)pattern;
+                case PatternType.Group:
+                    return from vs in CharParsers.Sequence(((GroupPattern)pattern).Patterns
+                                                                                  .Select(p => createParser(p)))
+                           select vs.JoinStrings();
 
-                return from vs in CharParsers.Count(quant.MinOccurrences, quant.MaxOccurrences, createParser(quant.ChildPattern))
-                       select vs.JoinStrings();
+
+                case PatternType.Quantifier:
+                    QuantifierPattern quant = (QuantifierPattern)pattern;
+                    return from vs in CharParsers.Count(quant.MinOccurrences, quant.MaxOccurrences, createParser(quant.ChildPattern))
+                           select vs.JoinStrings();
+
+
+                case PatternType.Alternation:
+                    return CharParsers.Choice(((AlternationPattern)pattern).Alternatives
+                                                                           .Select(p => createParser(p))
+                                                                           .ToArray());
+
+
+                case PatternType.String:
+                    return CharParsers.String(((StringPattern)pattern).Value);
+
+
+                case PatternType.Char:
+                    return from c in CharParsers.Satisfy(((CharPattern)pattern).IsMatch)
+                           select new string(c, 1);
+
+
+                default:
+                    // TODO: throw exception if pattern not parsable by DFA matcher
+                    return null;
             }
-
-            else if (pattern is AlternationPattern)
-                return CharParsers.Choice(((AlternationPattern)pattern).Alternatives
-                                                                       .Select(p => createParser(p))
-                                                                       .ToArray());
-
-            else if (pattern is StringPattern)
-                return CharParsers.String(((StringPattern)pattern).Value);
-
-            else if (pattern is CharPattern)
-                return from c in CharParsers.Satisfy(((CharPattern)pattern).IsMatch)
-                       select new string(c, 1);
-
-            else
-                // TODO: throw exception if pattern not parsable by DFA matcher
-                return null;
         }
     }
 }

@@ -15,24 +15,27 @@ namespace RegexParser.Transforms
         {
             // The Identity transform
 
-            if (pattern is GroupPattern)
-                return new GroupPattern(((GroupPattern)pattern).Patterns
-                                                               .Select(a => Transform(a)));
-
-            else if (pattern is QuantifierPattern)
+            switch (pattern.Type)
             {
-                QuantifierPattern quant = (QuantifierPattern)pattern;
+                case PatternType.Group:
+                    return new GroupPattern(((GroupPattern)pattern).Patterns
+                                                                   .Select(a => Transform(a)));
 
-                return new QuantifierPattern(Transform(quant.ChildPattern),
-                                             quant.MinOccurrences, quant.MaxOccurrences, quant.IsGreedy);
+
+                case PatternType.Quantifier:
+                    QuantifierPattern quant = (QuantifierPattern)pattern;
+                    return new QuantifierPattern(Transform(quant.ChildPattern),
+                                                 quant.MinOccurrences, quant.MaxOccurrences, quant.IsGreedy);
+
+
+                case PatternType.Alternation:
+                    return new AlternationPattern(((AlternationPattern)pattern).Alternatives
+                                                                               .Select(a => Transform(a)));
+
+
+                default:
+                    return pattern;
             }
-
-            else if (pattern is AlternationPattern)
-                return new AlternationPattern(((AlternationPattern)pattern).Alternatives
-                                                                           .Select(a => Transform(a)));
-
-            else
-                return pattern;
         }
     }
 }

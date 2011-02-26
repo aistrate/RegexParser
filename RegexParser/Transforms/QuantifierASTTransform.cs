@@ -16,7 +16,7 @@ namespace RegexParser.Transforms
     {
         public override BasePattern Transform(BasePattern pattern)
         {
-            if (pattern is QuantifierPattern)
+            if (pattern.Type == PatternType.Quantifier)
             {
                 QuantifierPattern quant = (QuantifierPattern)pattern;
 

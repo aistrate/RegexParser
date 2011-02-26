@@ -50,6 +50,8 @@ namespace RegexParser.Patterns
                                                              MaxOccurrences != null ? MaxOccurrences.ToString() : ""));
         }
 
+        public override PatternType Type { get { return PatternType.Quantifier; } }
+
         public override string ToString()
         {
             return string.Format("Quant {{{0}, Min={1}{2}{3}}}",

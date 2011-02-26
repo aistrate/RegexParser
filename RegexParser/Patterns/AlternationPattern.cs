@@ -21,6 +21,8 @@ namespace RegexParser.Patterns
 
         public BasePattern[] Alternatives { get; private set; }
 
+        public override PatternType Type { get { return PatternType.Alternation; } }
+
         public override string ToString()
         {
             return string.Format("Altern {{{0}}}", Alternatives.Select(p => p.ToString())
