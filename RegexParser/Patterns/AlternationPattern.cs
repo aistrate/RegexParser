@@ -10,18 +10,18 @@ namespace RegexParser.Patterns
     public class AlternationPattern : BasePattern, IEquatable<AlternationPattern>
     {
         public AlternationPattern(IEnumerable<BasePattern> alternatives)
+            : base(PatternType.Alternation)
         {
             Alternatives = alternatives.ToArray();
         }
 
         public AlternationPattern(params BasePattern[] alternatives)
+            : base(PatternType.Alternation)
         {
             Alternatives = alternatives;
         }
 
         public BasePattern[] Alternatives { get; private set; }
-
-        public override PatternType Type { get { return PatternType.Alternation; } }
 
         public override string ToString()
         {

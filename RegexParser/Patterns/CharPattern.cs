@@ -7,8 +7,11 @@ namespace RegexParser.Patterns
 {
     public abstract class CharPattern : BasePattern
     {
-        public abstract bool IsMatch(char c);
+        public CharPattern()
+            : base(PatternType.Char)
+        {
+        }
 
-        public override PatternType Type { get { return PatternType.Char; } }
+        public abstract bool IsMatch(char c);
     }
 }

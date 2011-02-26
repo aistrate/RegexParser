@@ -18,6 +18,13 @@ namespace RegexParser.Patterns
 
     public abstract class BasePattern
     {
+        protected BasePattern(PatternType type)
+        {
+            Type = type;
+        }
+
+        public PatternType Type { get; private set; }
+
         public static BasePattern CreatePattern(string patternText)
         {
             var result = PatternParsers.Regex(new ArrayConsList<char>(patternText));
@@ -36,7 +43,5 @@ namespace RegexParser.Patterns
 #else
         protected const bool isAssertEnabled = false;
 #endif
-
-        public abstract PatternType Type { get; }
     }
 }

@@ -9,6 +9,7 @@ namespace RegexParser.Patterns
     public class QuantifierPattern : BasePattern, IEquatable<QuantifierPattern>
     {
         public QuantifierPattern(BasePattern childPattern, int minOccurrences, int? maxOccurrences, bool isGreedy)
+            : base(PatternType.Quantifier)
         {
             if (childPattern == null)
                 throw new ArgumentNullException("childPattern.", "Child pattern is null in quantifier pattern.");
@@ -50,8 +51,6 @@ namespace RegexParser.Patterns
                                                              MinOccurrences,
                                                              MaxOccurrences != null ? MaxOccurrences.ToString() : ""));
         }
-
-        public override PatternType Type { get { return PatternType.Quantifier; } }
 
         public override string ToString()
         {

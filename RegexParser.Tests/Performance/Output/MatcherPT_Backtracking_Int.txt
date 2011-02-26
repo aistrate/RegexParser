@@ -2,72 +2,72 @@ Backtracking (int):
 
 Pattern: @""
 Matches: 1,000,001
-Time:    2.013 sec.
+Time:    1.989 sec.
 
 Pattern: @"k"
 Matches: 38,462
-Time:    0.692 sec.
+Time:    0.637 sec.
 
 Pattern: @"\w"
 Matches: 1,000,000
-Time:    2.872 sec.
+Time:    2.835 sec.
 
 Pattern: @"\w{1000}"
 Matches: 1,000
-Time:    0.441 sec.
+Time:    0.415 sec.
 
 Pattern: @"(\w{1000})+"
 Matches: 1
-Time:    0.422 sec.
+Time:    0.378 sec.
 
 Pattern: @"(\w{10000})+"
 Matches: 1
-Time:    0.427 sec.
+Time:    0.389 sec.
 
 Pattern: @"(\w{20000})+"
 Matches: 1
-Time:    0.393 sec.
+Time:    0.351 sec.
 
 Pattern: @"(\w{100000})+"
 Matches: 1
-Time:    0.377 sec.
+Time:    0.352 sec.
 
 Pattern: @"(\w{10001})+"
 Matches: 1
-Time:    13.623 sec.
+Time:    11.724 sec.
 
 Pattern: @"abcdefghijklmnopqrstuvwxyz"
 Matches: 38,461
-Time:    0.485 sec.
+Time:    0.449 sec.
 
 Pattern: @"abcdefghijklm"
 Matches: 38,462
-Time:    0.579 sec.
+Time:    0.575 sec.
 
 Pattern: @"(abcdefghijklmnopqrstuvwxyz)+"
 Matches: 1
-Time:    0.427 sec.
+Time:    0.384 sec.
 
 Pattern: @"\w{1000000}"
 Matches: 1
-Time:    0.357 sec.
+Time:    0.354 sec.
 
 Pattern: @"\w+"
 Matches: 1
-Time:    1.897 sec.
+Time:    1.810 sec.
 
 Pattern: @"\w+n"
 Matches: 1
-Time:    2.130 sec.
+Time:    2.047 sec.
 
 Pattern: @"\w+e"
 Matches: 1
-Time:    2.029 sec.
+Time:    1.939 sec.
 
 Pattern: @"\w+7"
 Matches: 1
-Time:    2.046 sec.
+Time:    1.949 sec.
 
 Pattern: @"\w+?7"
 Matches: 1
-Time:    0.845 sec.
+Time:    0.702 sec.

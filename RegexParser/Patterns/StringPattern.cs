@@ -9,13 +9,12 @@ namespace RegexParser.Patterns
     public class StringPattern : BasePattern, IEquatable<StringPattern>
     {
         public StringPattern(string s)
+            : base(PatternType.String)
         {
             Value = s;
         }
 
         public string Value { get; private set; }
-
-        public override PatternType Type { get { return PatternType.String; } }
 
         public override string ToString()
         {
