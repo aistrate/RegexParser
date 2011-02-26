@@ -1,6 +1,6 @@
 RegexParser - priority list:
 
-- backtracking matcher:
+* backtracking matcher:
     * quantifiers
     * lazy quantifiers
     * separation of tests (ExplicitDFA / Backtracking); turn on/off ALL tests at once, for a particular algorithm
@@ -14,19 +14,22 @@ RegexParser - priority list:
 
 [-implicit DFA matcher]
 
-- anchors: ^, $, \b, \B
+[-possessive quantifiers: ?+, *+, ++, {m,n}+ ]
+
+= anchors: ^, $, \b, \B
 - Regex options: IgnoreCase, IgnorePatternWhitespace, Multiline, Singleline
 - miscellaneous constructs: (?#comment), (?i)
 
 - error handling while parsing the pattern
 
-- captures and capturing groups
+= captures and capturing groups
+- nonbacktracking subexpressions (atomic grouping): (?> ...)
 - named groups
 - backreferences
 
 - look-ahead and look-behind (positive and negative)
 
-- Replace()
+= Replace()
 - substitution patterns (starting with '$')
 
 - Unicode:
