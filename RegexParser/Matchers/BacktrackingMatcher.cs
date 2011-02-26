@@ -20,7 +20,7 @@ namespace RegexParser.Matchers
             return new QuantifierASTTransform().Transform(pattern);
         }
 
-        protected override Result<char, string> Parse(IConsList<char> consList)
+        protected override Result<char, string> Parse(IConsList<char> consList, int length)
         {
             BacktrackPoint lastBacktrackPoint = null;
 
@@ -30,77 +30,83 @@ namespace RegexParser.Matchers
             while (callStack != null)
             {
                 BasePattern currentPattern = callStack.RemainingChildren.Head;
-                callStack = new StackFrame(callStack.Parent, callStack.RemainingChildren.Tail);
 
-                callStack = unwindEmptyFrames(callStack);
-
-                switch (currentPattern.Type)
+                if (partialResult.Value + currentPattern.MinCharLength > length)
+                    partialResult = null;
+                else
                 {
-                    case PatternType.Group:
-                        callStack = new StackFrame(callStack, ((GroupPattern)currentPattern).Patterns);
-                        break;
+                    callStack = new StackFrame(callStack.Parent, callStack.RemainingChildren.Tail);
+
+                    callStack = unwindEmptyFrames(callStack);
+
+                    switch (currentPattern.Type)
+                    {
+                        case PatternType.Group:
+                            callStack = new StackFrame(callStack, ((GroupPattern)currentPattern).Patterns);
+                            break;
 
 
-                    case PatternType.Quantifier:
-                        var quant = (QuantifierPattern)currentPattern;
+                        case PatternType.Quantifier:
+                            var quant = (QuantifierPattern)currentPattern;
 
-                        quant.AssertCanonicalForm();
+                            quant.AssertCanonicalForm();
 
-                        if (quant.MinOccurrences == quant.MaxOccurrences)
-                            callStack = new StackFrame(callStack,
-                                                       new RepeaterConsList<BasePattern>(quant.ChildPattern,
-                                                                                         quant.MinOccurrences));
+                            if (quant.MinOccurrences == quant.MaxOccurrences)
+                                callStack = new StackFrame(callStack,
+                                                           new RepeaterConsList<BasePattern>(quant.ChildPattern,
+                                                                                             quant.MinOccurrences));
 
-                        else
-                        {
-                            IConsList<BasePattern> split = splitQuantifier(quant);
-
-                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
-                                                                    quant.IsGreedy ? callStack : new StackFrame(callStack, split),
-                                                                    partialResult);
-
-                            callStack = quant.IsGreedy ? new StackFrame(callStack, split) : callStack;
-                        }
-                        break;
-
-
-                    case PatternType.Alternation:
-                        var alternatives = ((AlternationPattern)currentPattern).Alternatives;
-
-                        foreach (var alt in alternatives.Skip(1).Reverse())
-                            lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
-                                                                    new StackFrame(callStack, alt),
-                                                                    partialResult);
-
-                        callStack = new StackFrame(callStack, alternatives.First());
-                        break;
-
-
-                    case PatternType.Char:
-                        partialResult = parseChar(partialResult, ((CharPattern)currentPattern).IsMatch);
-
-                        if (partialResult == null)
-                        {
-                            if (lastBacktrackPoint != null)
-                            {
-                                callStack = lastBacktrackPoint.CallStack;
-                                partialResult = lastBacktrackPoint.PartialResult;
-
-                                lastBacktrackPoint = lastBacktrackPoint.Previous;
-                            }
                             else
-                                return null;
-                        }
-                        break;
+                            {
+                                IConsList<BasePattern> split = splitQuantifier(quant);
+
+                                lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
+                                                                        quant.IsGreedy ? callStack : new StackFrame(callStack, split),
+                                                                        partialResult);
+
+                                callStack = quant.IsGreedy ? new StackFrame(callStack, split) : callStack;
+                            }
+                            break;
 
 
-                    default:
-                        throw new ApplicationException(
-                            string.Format("BacktrackingMatcher: unknown pattern type ({0}).",
-                                          currentPattern.GetType().Name));
+                        case PatternType.Alternation:
+                            var alternatives = ((AlternationPattern)currentPattern).Alternatives;
+
+                            foreach (var alt in alternatives.Skip(1).Reverse())
+                                lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
+                                                                        new StackFrame(callStack, alt),
+                                                                        partialResult);
+
+                            callStack = new StackFrame(callStack, alternatives.First());
+                            break;
+
+
+                        case PatternType.Char:
+                            partialResult = parseChar(partialResult, ((CharPattern)currentPattern).IsMatch);
+                            break;
+
+
+                        default:
+                            throw new ApplicationException(
+                                string.Format("BacktrackingMatcher: unknown pattern type ({0}).",
+                                              currentPattern.GetType().Name));
+                    }
                 }
 
-                callStack = unwindEmptyFrames(callStack);
+                if (partialResult != null)
+                    callStack = unwindEmptyFrames(callStack);
+                else
+                {
+                    if (lastBacktrackPoint != null)
+                    {
+                        callStack = lastBacktrackPoint.CallStack;
+                        partialResult = lastBacktrackPoint.PartialResult;
+
+                        lastBacktrackPoint = lastBacktrackPoint.Previous;
+                    }
+                    else
+                        return null;
+                }
             }
 
             return new Result<char, string>(consList.AsEnumerable().Take(partialResult.Value).AsString(),

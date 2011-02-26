@@ -11,13 +11,12 @@ namespace RegexParser.Patterns
     public class GroupPattern : BasePattern, IEquatable<GroupPattern>
     {
         public GroupPattern(IEnumerable<BasePattern> patterns)
-            : base(PatternType.Group)
+            : this(patterns.ToArray())
         {
-            Patterns = patterns.ToArray();
         }
 
         public GroupPattern(params BasePattern[] patterns)
-            : base(PatternType.Group)
+            : base(PatternType.Group, patterns.Sum(p => p.MinCharLength))
         {
             Patterns = patterns;
         }

@@ -10,13 +10,12 @@ namespace RegexParser.Patterns
     public class AlternationPattern : BasePattern, IEquatable<AlternationPattern>
     {
         public AlternationPattern(IEnumerable<BasePattern> alternatives)
-            : base(PatternType.Alternation)
+            : this(alternatives.ToArray())
         {
-            Alternatives = alternatives.ToArray();
         }
 
         public AlternationPattern(params BasePattern[] alternatives)
-            : base(PatternType.Alternation)
+            : base(PatternType.Alternation, alternatives.Min(a => a.MinCharLength))
         {
             Alternatives = alternatives;
         }

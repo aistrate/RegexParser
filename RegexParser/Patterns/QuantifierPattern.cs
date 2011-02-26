@@ -9,7 +9,7 @@ namespace RegexParser.Patterns
     public class QuantifierPattern : BasePattern, IEquatable<QuantifierPattern>
     {
         public QuantifierPattern(BasePattern childPattern, int minOccurrences, int? maxOccurrences, bool isGreedy)
-            : base(PatternType.Quantifier)
+            : base(PatternType.Quantifier, minOccurrences * childPattern.MinCharLength)
         {
             if (childPattern == null)
                 throw new ArgumentNullException("childPattern.", "Child pattern is null in quantifier pattern.");

@@ -8,7 +8,7 @@ namespace RegexParser.Patterns
     public abstract class CharPattern : BasePattern
     {
         public CharPattern()
-            : base(PatternType.Char)
+            : base(PatternType.Char, 1)
         {
         }
 

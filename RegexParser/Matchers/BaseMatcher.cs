@@ -46,7 +46,7 @@ namespace RegexParser.Matchers
             return pattern;
         }
 
-        protected abstract Result<char, string> Parse(IConsList<char> consList);
+        protected abstract Result<char, string> Parse(IConsList<char> consList, int length);
 
         public IEnumerable<Match2> GetMatches(string inputText)
         {
@@ -55,7 +55,7 @@ namespace RegexParser.Matchers
 
             while (index <= inputText.Length)
             {
-                Result<char, string> result = Parse(consList);
+                Result<char, string> result = Parse(consList, inputText.Length - index);
 
                 if (result != null)
                 {

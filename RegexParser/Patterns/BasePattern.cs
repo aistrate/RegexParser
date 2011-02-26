@@ -18,12 +18,20 @@ namespace RegexParser.Patterns
 
     public abstract class BasePattern
     {
-        protected BasePattern(PatternType type)
+        protected BasePattern(PatternType type, int minCharLength)
         {
             Type = type;
+            MinCharLength = minCharLength;
         }
 
         public PatternType Type { get; private set; }
+
+        /// <summary>
+        /// Minimum number of characters the pattern will need in the input string, in order to match.
+        /// Calculated (recursively) based on children's value of the same property,
+        /// ultimately on CharPattern's value of 1.
+        /// </summary>
+        public int MinCharLength { get; private set; }
 
         public static BasePattern CreatePattern(string patternText)
         {

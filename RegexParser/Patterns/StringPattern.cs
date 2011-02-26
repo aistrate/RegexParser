@@ -9,7 +9,7 @@ namespace RegexParser.Patterns
     public class StringPattern : BasePattern, IEquatable<StringPattern>
     {
         public StringPattern(string s)
-            : base(PatternType.String)
+            : base(PatternType.String, s.Length)
         {
             Value = s;
         }
