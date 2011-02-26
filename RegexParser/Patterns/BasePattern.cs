@@ -29,7 +29,7 @@ namespace RegexParser.Patterns
         /// <summary>
         /// Minimum number of characters the pattern will need in the input string, in order to match.
         /// Calculated (recursively) based on children's value of the same property,
-        /// ultimately on CharPattern's value of 1.
+        /// ultimately based on CharPattern's value of 1.
         /// </summary>
         public int MinCharLength { get; private set; }
 
