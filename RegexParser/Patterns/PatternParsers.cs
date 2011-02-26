@@ -112,7 +112,7 @@ namespace RegexParser.Patterns
 
             Quantifier = from child in
                              Choice(
-                                 from p in Lazy(() => Group) select (BasePattern)p,
+                                 from p in Lazy(() => ParenGroup) select (BasePattern)p,
                                  from p in CharEscapeOutsideClass select (BasePattern)p,
                                  from p in CharClass select (BasePattern)p)
                          from suffix in QuantifierSuffix
@@ -123,7 +123,7 @@ namespace RegexParser.Patterns
             AlternationGroup = from ps in
                                    Many(Choice(
                                             from p in Quantifier select (BasePattern)p,
-                                            from p in Lazy(() => Group) select (BasePattern)p,
+                                            from p in Lazy(() => ParenGroup) select (BasePattern)p,
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
                                select ps.Count() == 1 ? ps.First() :
@@ -137,14 +137,14 @@ namespace RegexParser.Patterns
             BareGroup = from ps in Many(Choice(
                                             from p in Alternation select (BasePattern)p,
                                             from p in Quantifier select (BasePattern)p,
-                                            from p in Lazy(() => Group) select (BasePattern)p,
+                                            from p in Lazy(() => ParenGroup) select (BasePattern)p,
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
                         select new GroupPattern(ps);
 
-            Group = Between(Char('('),
-                            Char(')'),
-                            BareGroup);
+            ParenGroup = Between(Char('('),
+                                 Char(')'),
+                                 BareGroup);
 
             Regex = BareGroup;
         }
@@ -169,7 +169,7 @@ namespace RegexParser.Patterns
         public static Parser<char, AlternationPattern> Alternation;
 
         public static Parser<char, GroupPattern> BareGroup;
-        public static Parser<char, GroupPattern> Group;
+        public static Parser<char, GroupPattern> ParenGroup;
         public static Parser<char, GroupPattern> Regex;
 
 
