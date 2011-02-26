@@ -1,14 +1,14 @@
 RegexParser TODO:
 
-- Match2 should be initialized with Index and Length; Value should be computed only upon request (DON'T calculate the result string at the end of BacktrackingMatcher.Parse())
-
-- change classes StackFrame and BacktrackPoint into structs
-
 - RegexParsers: "unify" all group patterns that are part of various patterns (alternation, quantifier, etc.) (groups are similar, except for each excluding their own parent pattern)
+
+[- create subtype of StackFrame (QuantifierStackFrame) that deals with QuantifierPatterns (methods: Next, BacktrackNext)]
 
 - implement composability of ASTTransforms (both parallel and serial); define *fluent* interface (mini-DSL) for composability
 
 - is there a way to run an *action* for every match? (like Replace(), but running the action instead of the substitution pattern)
+
+- Match2 should be initialized with Index and Length; Value should be computed only upon request (DON'T calculate the result string at the end of BacktrackingMatcher.Parse())
 
 - replace the use of 'string' in Result<char, string> with an immutable class which stores all 'Value' chars in a tree structure (with cheap 'append', and branch re-use); maybe revive the idea of a non-deterministic parser (as in the 'experimental' Git branch) (Value is not a single string/char tree, but a list of them, possibly empty); replace the current implementation of backtracking
 
@@ -16,3 +16,5 @@ RegexParser TODO:
 * turn all asserts on/off through a preprocessor symbol (ENABLE_ASSERT)
 * create enum 'PatternType' (Group, Quantifier, Alternation, String, Char); use this instead of testing the pattern type with the 'is' keyword; this *may* improve performance; it can also be used in ASTTransforms
 * in BacktrackingMatcher.Parse, "traverse" the input IConsList<char> with a char counter (build the output string by counting matching chars, then at the end take that many from the input), instead of building a new Result<char, SimpleConsList<char>> at every step
+
+*(o) change classes StackFrame and BacktrackPoint into structs
