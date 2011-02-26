@@ -34,7 +34,7 @@ Time:    0.352 sec.
 
 Pattern: @"(\w{10001})+"
 Matches: 1
-Time:    11.724 sec.
+Time:    11.522 sec.
 
 Pattern: @"abcdefghijklmnopqrstuvwxyz"
 Matches: 38,461

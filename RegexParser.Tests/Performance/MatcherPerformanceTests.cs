@@ -107,6 +107,11 @@ namespace RegexParser.Tests.Performance
 
             Console.WriteLine("Matches: {0:#,##0}", matches.Count);
 
+            //string v;
+            //foreach (var m in matches.Cast<Match2>())
+            ////foreach (var m in matches.Cast<Msoft.Match>())
+            //    v = m.Value;
+
             decimal elapsed = ((decimal)stopwatch.ElapsedMilliseconds) / 1000;
 
             if (useMemoryProfiler)
