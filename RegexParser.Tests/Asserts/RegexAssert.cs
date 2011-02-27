@@ -16,18 +16,18 @@ namespace RegexParser.Tests.Asserts
     {
         public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType)
         {
-            AreMatchesSameAsMsoft(input, pattern, algorithmType, null);
+            AreMatchesSameAsMsoft(input, pattern, algorithmType, RegexOptions.None);
         }
 
-        public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
+        public static void AreMatchesSameAsMsoft(string input, string pattern, AlgorithmType algorithmType, RegexOptions options)
         {
             //DisplayPattern(pattern);
 
-            Match2[] actual = new Regex2(pattern, algorithmType).Matches(input).ToArray();
+            Match2[] actual = new Regex2(pattern, algorithmType, options).Matches(input).ToArray();
 
-            DisplayMatches(input, pattern, algorithmType, actual);
+            DisplayMatches(input, pattern, algorithmType, options, actual);
 
-            Match2[] expected = Msoft.Regex.Matches(input, pattern)
+            Match2[] expected = Msoft.Regex.Matches(input, pattern, toMsoftRegexOptions(options))
                                            .Cast<Msoft.Match>()
                                            .Select(m => createMatch(m))
                                            .ToArray();
@@ -38,29 +38,34 @@ namespace RegexParser.Tests.Asserts
             }
             catch (Exception ex)
             {
-                throw new AssertionException(formatException(message, input, pattern, ex));
+                throw new AssertionException(formatException(input, pattern, options, ex));
             }
         }
 
         public static void AreMatchesSameAsMsoft(string input, string[] patterns, AlgorithmType algorithmType)
         {
+            AreMatchesSameAsMsoft(input, patterns, algorithmType, RegexOptions.None);
+        }
+
+        public static void AreMatchesSameAsMsoft(string input, string[] patterns, AlgorithmType algorithmType, RegexOptions options)
+        {
             foreach (string pattern in patterns)
-                AreMatchesSameAsMsoft(input, pattern, algorithmType);
+                AreMatchesSameAsMsoft(input, pattern, algorithmType, options);
         }
 
         public static void ThrowsSameExceptionAsMsoft(string input, string pattern, AlgorithmType algorithmType)
         {
-            ThrowsSameExceptionAsMsoft(input, pattern, algorithmType, null);
+            ThrowsSameExceptionAsMsoft(input, pattern, algorithmType, RegexOptions.None);
         }
 
-        public static void ThrowsSameExceptionAsMsoft(string input, string pattern, AlgorithmType algorithmType, string message)
+        public static void ThrowsSameExceptionAsMsoft(string input, string pattern, AlgorithmType algorithmType, RegexOptions options)
         {
-            Exception expected = catchException(() => { Msoft.Regex.Matches(input, pattern); },
-                                                ".NET Regex", input, pattern, message),
-                      actual = catchException(() => { new Regex2(pattern, algorithmType).Matches(input); },
-                                              "Regex2", input, pattern, message);
+            Exception expected = catchException(() => { Msoft.Regex.Matches(input, pattern, toMsoftRegexOptions(options)); },
+                                                ".NET Regex", input, pattern, options),
+                      actual = catchException(() => { new Regex2(pattern, algorithmType, options).Matches(input); },
+                                              "Regex2", input, pattern, options);
 
-            DisplayExpectedException(input, pattern, algorithmType, actual);
+            DisplayExpectedException(input, pattern, algorithmType, options, actual);
 
             try
             {
@@ -70,14 +75,24 @@ namespace RegexParser.Tests.Asserts
             }
             catch (Exception ex)
             {
-                throw new AssertionException(formatException(message, input, pattern, ex));
+                throw new AssertionException(formatException(input, pattern, options, ex));
             }
         }
 
         public static void ThrowSameExceptionsAsMsoft(string input, string[] patterns, AlgorithmType algorithmType)
         {
+            ThrowSameExceptionsAsMsoft(input, patterns, algorithmType, RegexOptions.None);
+        }
+
+        public static void ThrowSameExceptionsAsMsoft(string input, string[] patterns, AlgorithmType algorithmType, RegexOptions options)
+        {
             foreach (string pattern in patterns)
-                ThrowsSameExceptionAsMsoft(input, pattern, algorithmType);
+                ThrowsSameExceptionAsMsoft(input, pattern, algorithmType, options);
+        }
+
+        private static Msoft.RegexOptions toMsoftRegexOptions(RegexOptions options)
+        {
+            return (Msoft.RegexOptions)(int)options;
         }
 
         public static void DisplayPattern(string pattern)
@@ -95,8 +110,13 @@ namespace RegexParser.Tests.Asserts
 
         public static void DisplayASTTransform(string pattern, AlgorithmType algorithmType)
         {
+            DisplayASTTransform(pattern, algorithmType, RegexOptions.None);
+        }
+
+        public static void DisplayASTTransform(string pattern, AlgorithmType algorithmType, RegexOptions options)
+        {
             BasePattern beforePattern = BasePattern.CreatePattern(pattern);
-            BasePattern afterPattern = BaseMatcher.CreateMatcher(algorithmType, pattern).Pattern;
+            BasePattern afterPattern = BaseMatcher.CreateMatcher(algorithmType, pattern, options).Pattern;
 
             Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
             Console.WriteLine("Before Transform: {0}", beforePattern);
@@ -105,10 +125,10 @@ namespace RegexParser.Tests.Asserts
             Console.Write("\n");
         }
 
-        public static void DisplayMatches(string input, string pattern, AlgorithmType algorithmType, IEnumerable<Match2> matches)
+        public static void DisplayMatches(string input, string pattern, AlgorithmType algorithmType, RegexOptions options,
+                                          IEnumerable<Match2> matches)
         {
-            Console.WriteLine("Input:    {0}", input.Show());
-            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+            displayHeader(input, pattern, options);
 
             int count = matches.Count();
             Console.WriteLine("{0} match{1} ({2}){3}",
@@ -125,14 +145,14 @@ namespace RegexParser.Tests.Asserts
             Console.Write("\n");
         }
 
-        public static void DisplayExpectedException(string input, string pattern, AlgorithmType algorithmType, Exception ex)
+        public static void DisplayExpectedException(string input, string pattern, AlgorithmType algorithmType, RegexOptions options,
+                                                    Exception ex)
         {
-            const string indent = "   ";
-
-            Console.WriteLine("Input: {0}", input.Show());
-            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+            displayHeader(input, pattern, options);
 
             Console.WriteLine("Exception was expected, this was thrown ({0}):", algorithmType.ToString());
+
+            const string indent = "   ";
 
             for (Exception e = ex; e != null; e = e.InnerException)
             {
@@ -143,6 +163,15 @@ namespace RegexParser.Tests.Asserts
             Console.Write("\n");
         }
 
+        private static void displayHeader(string input, string pattern, RegexOptions options)
+        {
+            Console.WriteLine("Input:    {0}", input.Show());
+            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+
+            if (options != RegexOptions.None)
+                Console.WriteLine("Options: [{0}]", options.ToString());
+        }
+
         private static Match2 createMatch(Msoft.Match msoftMatch)
         {
             if (msoftMatch.Success)
@@ -151,23 +180,23 @@ namespace RegexParser.Tests.Asserts
                 return Match2.Empty;
         }
 
-        private static string formatException(string message, string input, string pattern, Exception ex)
+        private static string formatException(string input, string pattern, RegexOptions options, Exception ex)
         {
             const string indent = "  ";
 
-            if (string.IsNullOrEmpty(message))
-                message = "";
-            else
-                message += "\n";
-
-            message += string.Format("Comparing with .NET Regex: Input={0}, Pattern={1}\n", input.Show(), pattern.ShowVerbatim()) +
-                       ex.Message;
+            string message = string.Format("Comparing with .NET Regex: Input={0}, Pattern={1}{2}\n",
+                                           input.Show(),
+                                           pattern.ShowVerbatim(),
+                                           options != RegexOptions.None ?
+                                                string.Format(", Options=[{0}]", options.ToString()) :
+                                                "") +
+                             ex.Message;
             message = indent + message.Replace("\n", "\n" + indent);
 
             return message;
         }
 
-        private static Exception catchException(Action runRegex, string regexName, string input, string pattern, string message)
+        private static Exception catchException(Action runRegex, string regexName, string input, string pattern, RegexOptions options)
         {
             Exception caughtException = null;
 
@@ -183,7 +212,7 @@ namespace RegexParser.Tests.Asserts
             if (caughtException != null)
                 return caughtException;
             else
-                throw new AssertionException(formatException(message, input, pattern,
+                throw new AssertionException(formatException(input, pattern, options,
                       new AssertionException(regexName + " did not throw an exception, though was supposed to.")));
         }
 

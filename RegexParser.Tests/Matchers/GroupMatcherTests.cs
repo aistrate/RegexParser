@@ -52,10 +52,10 @@ namespace RegexParser.Tests.Matchers
         [Test]
         public void EmptyPattern()
         {
-            RegexAssert.AreMatchesSameAsMsoft("", "", AlgorithmType, "Empty");
-            RegexAssert.AreMatchesSameAsMsoft("x", "", AlgorithmType, "x");
-            RegexAssert.AreMatchesSameAsMsoft("xx", "", AlgorithmType, "xx");
-            RegexAssert.AreMatchesSameAsMsoft("xyz", "", AlgorithmType, "xyz");
+            RegexAssert.AreMatchesSameAsMsoft("", "", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("x", "", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("xx", "", AlgorithmType);
+            RegexAssert.AreMatchesSameAsMsoft("xyz", "", AlgorithmType);
         }
 
         //[Test]

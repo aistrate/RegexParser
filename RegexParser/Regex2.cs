@@ -6,20 +6,32 @@ namespace RegexParser
     public class Regex2
     {
         public Regex2(string patternText)
-            : this(patternText, AlgorithmType.Backtracking)
+            : this(patternText, AlgorithmType.Backtracking, RegexOptions.None)
         {
         }
 
         public Regex2(string patternText, AlgorithmType algorithmType)
+            : this(patternText, algorithmType, RegexOptions.None)
+        {
+        }
+
+        public Regex2(string patternText, RegexOptions options)
+            : this(patternText, AlgorithmType.Backtracking, options)
+        {
+        }
+
+        public Regex2(string patternText, AlgorithmType algorithmType, RegexOptions options)
         {
             PatternText = patternText;
             AlgorithmType = algorithmType;
+            Options = options;
 
-            Matcher = BaseMatcher.CreateMatcher(AlgorithmType, PatternText);
+            Matcher = BaseMatcher.CreateMatcher(AlgorithmType, PatternText, options);
         }
 
         public string PatternText { get; private set; }
         public AlgorithmType AlgorithmType { get; private set; }
+        public RegexOptions Options { get; private set; }
 
         public BaseMatcher Matcher { get; private set; }
 

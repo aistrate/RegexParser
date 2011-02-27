@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ParserCombinators;
 using RegexParser.Patterns;
+using RegexParser.Transforms;
 using Utility.ConsLists;
 
 namespace RegexParser.Matchers
@@ -15,26 +16,34 @@ namespace RegexParser.Matchers
 
     public abstract class BaseMatcher
     {
-        protected BaseMatcher(string patternText)
+        protected BaseMatcher(string patternText, RegexOptionsEx options)
         {
+            Options = options;
+
             Pattern = BasePattern.CreatePattern(patternText);
             Pattern = TransformAST(Pattern);
         }
 
         public BasePattern Pattern { get; private set; }
+        public RegexOptionsEx Options { get; private set; }
 
-        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, string patternText)
+        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, string patternText, RegexOptions options)
+        {
+            return CreateMatcher(algorithmType, patternText, new RegexOptionsEx(options));
+        }
+
+        public static BaseMatcher CreateMatcher(AlgorithmType algorithmType, string patternText, RegexOptionsEx options)
         {
             switch (algorithmType)
             {
                 case AlgorithmType.ExplicitDFA:
-                    return new ExplicitDFAMatcher(patternText);
+                    return new ExplicitDFAMatcher(patternText, options);
 
                 case AlgorithmType.ImplicitDFA:
-                    return new ImplicitDFAMatcher(patternText);
+                    return new ImplicitDFAMatcher(patternText, options);
 
                 case AlgorithmType.Backtracking:
-                    return new BacktrackingMatcher(patternText);
+                    return new BacktrackingMatcher(patternText, options);
 
                 default:
                     throw new NotImplementedException("Algorithm not yet implemented.");
@@ -43,7 +52,7 @@ namespace RegexParser.Matchers
 
         protected virtual BasePattern TransformAST(BasePattern pattern)
         {
-            return pattern;
+            return new RegexOptionsASTTransform(Options).Transform(pattern);
         }
 
         protected abstract Result<char, string> Parse(IConsList<char> consList, int length);

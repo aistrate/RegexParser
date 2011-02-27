@@ -10,13 +10,15 @@ namespace RegexParser.Matchers
 {
     public class BacktrackingMatcher : BaseMatcher
     {
-        public BacktrackingMatcher(string patternText)
-            : base(patternText)
+        public BacktrackingMatcher(string patternText, RegexOptionsEx options)
+            : base(patternText, options)
         {
         }
 
         protected override BasePattern TransformAST(BasePattern pattern)
         {
+            pattern = base.TransformAST(pattern);
+
             return new QuantifierASTTransform().Transform(pattern);
         }
 

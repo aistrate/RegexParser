@@ -196,7 +196,7 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
-        public void NewLines()
+        public void Newlines()
         {
             string input = "AB\nCD\r\nEF\n\rGH\rIJ\n\nKL\r\rMN\n\r\nOP\r\n\rQR\n";
 

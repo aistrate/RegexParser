@@ -62,9 +62,9 @@ namespace RegexParser.Tests.Transforms
 
         private BasePattern getTransformedPattern(string patternText)
         {
-            RegexAssert.DisplayASTTransform(patternText, AlgorithmType);
+            RegexAssert.DisplayASTTransform(patternText, AlgorithmType, RegexOptions.None);
 
-            return BaseMatcher.CreateMatcher(AlgorithmType, patternText).Pattern;
+            return BaseMatcher.CreateMatcher(AlgorithmType, patternText, RegexOptions.None).Pattern;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace RegexParser.Patterns
                                 Choice(CharClassSubtract,
                                        BareCharGroup(false)));
 
-            CharClass = Choice(from c in Char('.') select (CharClassPattern)CharGroupPattern.AnyChar,
+            CharClass = Choice(from c in Char('.') select (CharClassPattern)new AnyCharPattern(false),
                                NamedCharClass,
                                CharGroup);
 

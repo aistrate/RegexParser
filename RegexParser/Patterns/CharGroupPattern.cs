@@ -68,7 +68,7 @@ namespace RegexParser.Patterns
         {
             return string.Format("CharClass {{{0}{1}}}",
                                  IsPositive ? "" : "^Neg: ",
-                                 Enumerable.Repeat(CharSet.Show(), CharSet != "" ? 1 : 0)
+                                 Enumerable.Repeat(CharSet.Show(), (CharSet != "" || ChildPatterns.Length == 0) ? 1 : 0)
                                            .Concat(ChildPatterns.Select(p => p.ToString()))
                                            .JoinStrings(", "));
         }
@@ -95,7 +95,9 @@ namespace RegexParser.Patterns
 
         public CharGroupPattern Negated { get { return new CharGroupPattern(!IsPositive, this); } }
 
-        public static readonly CharGroupPattern AnyChar = new CharGroupPattern(false, "\n");
+        public static readonly CharGroupPattern AnyChar = new CharGroupPattern(false, "");
+
+        public static readonly CharGroupPattern AnyCharExceptNewline = new CharGroupPattern(false, "\n");
 
         public static readonly CharGroupPattern WhitespaceChar = new CharGroupPattern(true, " \n\r\t\f\v");
 

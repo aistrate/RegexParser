@@ -27,7 +27,7 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                MatcherPerformanceTests.VeryLongMatches();
+                //MatcherPerformanceTests.VeryLongMatches();
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
@@ -47,7 +47,9 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"(a|b)x|c");
                 //RegexAssert.DisplayPattern(@"abcd|defgh|012");
 
-                //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking);
+                displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking, RegexOptions.Singleline | RegexOptions.Multiline);
+                //RegexAssert.ThrowsSameExceptionAsMsoft("abab", @"(ab)++", AlgorithmType.Backtracking,
+                //                                       RegexOptions.Singleline | RegexOptions.Multiline);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abbbc", @"(abb?b?b?c)|(bc)")));
 
@@ -154,10 +156,15 @@ namespace RegexParser.ConsoleTests
 
         private static void displayMatches(string input, string pattern, AlgorithmType algorithmType)
         {
+            displayMatches(input, pattern, algorithmType, RegexOptions.None);
+        }
+
+        private static void displayMatches(string input, string pattern, AlgorithmType algorithmType, RegexOptions options)
+        {
             //RegexAssert.DisplayPattern(pattern);
 
-            var matches = new Regex2(pattern, algorithmType).Matches(input);
-            RegexAssert.DisplayMatches(input, pattern, algorithmType, matches);
+            var matches = new Regex2(pattern, algorithmType, options).Matches(input);
+            RegexAssert.DisplayMatches(input, pattern, algorithmType, options, matches);
         }
 
         private static string formatMsoftMatches(Msoft.MatchCollection matches)

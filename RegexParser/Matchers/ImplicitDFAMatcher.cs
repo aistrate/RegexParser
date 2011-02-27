@@ -5,8 +5,8 @@ namespace RegexParser.Matchers
 {
     public class ImplicitDFAMatcher : BaseMatcher
     {
-        public ImplicitDFAMatcher(string patternText)
-            : base(patternText)
+        public ImplicitDFAMatcher(string patternText, RegexOptionsEx options)
+            : base(patternText, options)
         {
         }
 

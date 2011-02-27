@@ -10,14 +10,16 @@ namespace RegexParser.Matchers
 {
     public class ExplicitDFAMatcher : BaseMatcher
     {
-        public ExplicitDFAMatcher(string patternText)
-            : base(patternText)
+        public ExplicitDFAMatcher(string patternText, RegexOptionsEx options)
+            : base(patternText, options)
         {
             Parser = createParser(Pattern);
         }
 
         protected override BasePattern TransformAST(BasePattern pattern)
         {
+            pattern = base.TransformAST(pattern);
+
             return new StringASTTransform().Transform(pattern);
         }
 
