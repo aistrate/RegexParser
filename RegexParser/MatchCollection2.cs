@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ParserCombinators.Util;
-using RegexParser.Util;
+using Utility.BaseTypes;
+using Utility.Collections;
 
 namespace RegexParser
 {

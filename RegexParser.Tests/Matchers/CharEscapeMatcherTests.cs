@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using RegexParser.Matchers;
-using RegexParser.Tests.Helpers;
+using RegexParser.Tests.Asserts;
 using RegexParser.Util;
 
 namespace RegexParser.Tests.Matchers

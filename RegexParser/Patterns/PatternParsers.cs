@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ParserCombinators;
-using ParserCombinators.Util;
+using Utility.BaseTypes;
 
 namespace RegexParser.Patterns
 {

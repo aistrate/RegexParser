@@ -51,8 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ExceptionWrapper.cs" />
-    <Compile Include="Helpers\MemoryProfiler.cs" />
     <Compile Include="Matchers\AnchorMatcherTests.cs" />
     <Compile Include="Matchers\QuantifierMatcherTests_Backtr.cs" />
     <Compile Include="Matchers\AlternationMatcherTests.cs" />
@@ -69,16 +67,11 @@
     <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Performance\TransformPerformanceTests.cs" />
     <Compile Include="Transforms\StringASTTransformTests.cs" />
-    <Compile Include="Util\CachedListTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
     <Compile Include="Patterns\PatternTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Matchers\CharEscapeMatcherTests.cs" />
-    <Compile Include="Helpers\ClassExtensions.cs" />
-    <Compile Include="Helpers\CollAssert.cs" />
-    <Compile Include="Helpers\Counter.cs" />
-    <Compile Include="Helpers\RegexAssert.cs" />
-    <Compile Include="Helpers\SeqAssert.cs" />
+    <Compile Include="Asserts\RegexAssert.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParserCombinators.Tests\ParserCombinators.Tests.csproj">
@@ -92,6 +85,18 @@
     <ProjectReference Include="..\RegexParser\RegexParser.csproj">
       <Project>{F870A64D-2B11-4804-BD5E-36D9B0984CB8}</Project>
       <Name>RegexParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnitTesting\UnitTesting.csproj">
+      <Project>{D060A316-849A-4367-A4D7-1C07B4BE24E8}</Project>
+      <Name>UnitTesting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Tests\Utility.Tests.csproj">
+      <Project>{17EFE02B-3387-4972-9448-DAB3AC5370FD}</Project>
+      <Name>Utility.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{B1D63E0B-9AE8-4101-8C23-AD9C44B48AFF}</Project>
+      <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

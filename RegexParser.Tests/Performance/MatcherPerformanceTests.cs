@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using ParserCombinators.Tests.Performance;
-using ParserCombinators.Util;
 using RegexParser.Matchers;
-using RegexParser.Tests.Helpers;
-using Msoft = System.Text.RegularExpressions;
+using UnitTesting;
+using Utility.BaseTypes;
+using Utility.Tests.Performance;
 
 namespace RegexParser.Tests.Performance
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using ParserCombinators.Util;
+using Utility.BaseTypes;
 
 namespace RegexParser.Patterns
 {

@@ -71,6 +71,18 @@
       <Project>{F870A64D-2B11-4804-BD5E-36D9B0984CB8}</Project>
       <Name>RegexParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UnitTesting\UnitTesting.csproj">
+      <Project>{D060A316-849A-4367-A4D7-1C07B4BE24E8}</Project>
+      <Name>UnitTesting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Tests\Utility.Tests.csproj">
+      <Project>{17EFE02B-3387-4972-9448-DAB3AC5370FD}</Project>
+      <Name>Utility.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{B1D63E0B-9AE8-4101-8C23-AD9C44B48AFF}</Project>
+      <Name>Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

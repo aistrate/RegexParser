@@ -1,6 +1,6 @@
 ﻿using System;
-using ParserCombinators.Util;
-using RegexParser.Util;
+using Utility.BaseTypes;
+using Utility.General;
 
 namespace RegexParser.Patterns
 {

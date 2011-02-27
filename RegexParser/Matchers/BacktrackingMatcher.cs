@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using ParserCombinators;
-using ParserCombinators.ConsLists;
-using ParserCombinators.Util;
 using RegexParser.Patterns;
 using RegexParser.Transforms;
+using Utility.BaseTypes;
+using Utility.ConsLists;
 
 namespace RegexParser.Matchers
 {

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ParserCombinators.ConsLists;
-using ParserCombinators.Util;
+using Utility.BaseTypes;
+using Utility.ConsLists;
+using Utility.Tests.Performance;
 
 namespace ParserCombinators.Tests.Performance
 {

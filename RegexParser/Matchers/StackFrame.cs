@@ -1,5 +1,5 @@
-﻿using ParserCombinators.ConsLists;
-using RegexParser.Patterns;
+﻿using RegexParser.Patterns;
+using Utility.ConsLists;
 
 namespace RegexParser.Matchers
 {

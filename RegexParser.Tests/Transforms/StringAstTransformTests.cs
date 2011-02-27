@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RegexParser.Matchers;
 using RegexParser.Patterns;
-using RegexParser.Tests.Helpers;
+using RegexParser.Tests.Asserts;
 
 namespace RegexParser.Tests.Transforms
 {

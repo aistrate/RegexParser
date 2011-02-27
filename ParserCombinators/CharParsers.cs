@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using ParserCombinators.Util;
+using Utility.BaseTypes;
 
 namespace ParserCombinators
 {

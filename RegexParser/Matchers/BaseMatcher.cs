@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ParserCombinators;
-using ParserCombinators.ConsLists;
 using RegexParser.Patterns;
+using Utility.ConsLists;
 
 namespace RegexParser.Matchers
 {

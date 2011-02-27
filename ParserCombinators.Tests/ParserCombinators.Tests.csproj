@@ -49,20 +49,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Performance\CharBuffer.cs" />
     <Compile Include="Performance\CharParsersPerformanceTests.cs" />
-    <Compile Include="Performance\ConsListPerformanceTests.cs" />
-    <Compile Include="Performance\EnumerablePerformanceTests.cs" />
     <Compile Include="MiniML\MiniMLParsers.cs" />
     <Compile Include="MiniML\Terms.cs" />
     <Compile Include="ParserCombinatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\CharacterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParserCombinators\ParserCombinators.csproj">
       <Project>{E02FEF77-7F73-47EA-A775-4FFAAD77147B}</Project>
       <Name>ParserCombinators</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility.Tests\Utility.Tests.csproj">
+      <Project>{17EFE02B-3387-4972-9448-DAB3AC5370FD}</Project>
+      <Name>Utility.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{B1D63E0B-9AE8-4101-8C23-AD9C44B48AFF}</Project>
+      <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

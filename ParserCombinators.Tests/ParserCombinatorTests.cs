@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using ParserCombinators;
-using ParserCombinators.ConsLists;
 using ParserCombinators.Tests.MiniML;
+using Utility.ConsLists;
 
 namespace ParserCombinators.Tests
 {

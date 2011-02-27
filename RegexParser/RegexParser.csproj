@@ -71,15 +71,16 @@
     <Compile Include="Transforms\BaseASTTransform.cs" />
     <Compile Include="Transforms\QuantifierASTTransform.cs" />
     <Compile Include="Transforms\StringASTTransform.cs" />
-    <Compile Include="Util\CachedList.cs" />
-    <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\Factory.cs" />
-    <Compile Include="Util\HashCodeCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParserCombinators\ParserCombinators.csproj">
       <Project>{E02FEF77-7F73-47EA-A775-4FFAAD77147B}</Project>
       <Name>ParserCombinators</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{B1D63E0B-9AE8-4101-8C23-AD9C44B48AFF}</Project>
+      <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

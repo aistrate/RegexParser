@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ParserCombinators.Util;
+﻿using System.Linq;
+using Utility.BaseTypes;
 
 namespace ParserCombinators.Tests.MiniML
 {

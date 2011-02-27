@@ -4,19 +4,19 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using ParserCombinators;
-using ParserCombinators.ConsLists;
 using ParserCombinators.Tests;
 using ParserCombinators.Tests.Performance;
-using ParserCombinators.Tests.Util;
-using ParserCombinators.Util;
 using RegexParser.Matchers;
 using RegexParser.Patterns;
 using RegexParser.Tests;
-using RegexParser.Tests.Helpers;
+using RegexParser.Tests.Asserts;
 using RegexParser.Tests.Matchers;
 using RegexParser.Tests.Patterns;
 using RegexParser.Tests.Performance;
 using RegexParser.Util;
+using Utility.BaseTypes;
+using Utility.ConsLists;
+using Utility.Tests.BaseTypes;
 using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.ConsoleTests

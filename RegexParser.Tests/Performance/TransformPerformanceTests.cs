@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using ParserCombinators.Util;
 using RegexParser.Matchers;
+using Utility.BaseTypes;
 
 namespace RegexParser.Tests.Performance
 {
