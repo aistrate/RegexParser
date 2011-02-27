@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections;
-using RegexParser.Util;
 using ParserCombinators.Util;
+using RegexParser.Util;
 
 namespace RegexParser.Patterns
 {

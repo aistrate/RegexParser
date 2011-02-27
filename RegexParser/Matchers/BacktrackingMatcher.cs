@@ -81,6 +81,10 @@ namespace RegexParser.Matchers
                             break;
 
 
+                        case PatternType.Anchor:
+                            break;
+
+
                         case PatternType.Char:
                             partialResult = parseChar(partialResult, ((CharPattern)currentPattern).IsMatch);
                             break;

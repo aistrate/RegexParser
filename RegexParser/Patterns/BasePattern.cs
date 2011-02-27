@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ParserCombinators.ConsLists;
 using ParserCombinators.Util;
 
@@ -12,6 +9,7 @@ namespace RegexParser.Patterns
         Group,
         Quantifier,
         Alternation,
+        Anchor,
         String,
         Char,
     }

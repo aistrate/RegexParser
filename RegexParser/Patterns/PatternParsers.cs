@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using ParserCombinators;
 using ParserCombinators.Util;
 
@@ -85,17 +83,26 @@ namespace RegexParser.Patterns
                                CharGroup);
 
 
+            // Anchors
+            Anchor = Choice(from c in Char('^') select new AnchorPattern(AnchorType.StartOfStringOrLine),
+                            from c in Char('$') select new AnchorPattern(AnchorType.EndOfStringOrLine),
+
+                            from b in Char('\\')
+                            from anc in OneOf(anchorTypeKeys)
+                            select new AnchorPattern(anchorTypes[anc]));
+
+
             // Quantifiers
-            Natural = from ds in Many1(Digit)
-                      select Numeric.ReadDec(ds);
+            NaturalNum = from ds in Many1(Digit)
+                         select Numeric.ReadDec(ds);
 
             var RangeQuantifierSuffix = Between(Char('{'),
                                                 Char('}'),
 
-                                                from min in Natural
+                                                from min in NaturalNum
                                                 from max in
                                                     Option((int?)min, from comma in Char(',')
-                                                                      from m in OptionNullable(Natural)
+                                                                      from m in OptionNullable(NaturalNum)
                                                                       select m)
                                                 select new { Min = min, Max = max });
 
@@ -113,6 +120,7 @@ namespace RegexParser.Patterns
             Quantifier = from child in
                              Choice(
                                  from p in Lazy(() => ParenGroup) select (BasePattern)p,
+                                 from p in Anchor select (BasePattern)p,
                                  from p in CharEscapeOutsideClass select (BasePattern)p,
                                  from p in CharClass select (BasePattern)p)
                          from suffix in QuantifierSuffix
@@ -124,6 +132,7 @@ namespace RegexParser.Patterns
                                    Many(Choice(
                                             from p in Quantifier select (BasePattern)p,
                                             from p in Lazy(() => ParenGroup) select (BasePattern)p,
+                                            from p in Anchor select (BasePattern)p,
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
                                select ps.Count() == 1 ? ps.First() :
@@ -138,6 +147,7 @@ namespace RegexParser.Patterns
                                             from p in Alternation select (BasePattern)p,
                                             from p in Quantifier select (BasePattern)p,
                                             from p in Lazy(() => ParenGroup) select (BasePattern)p,
+                                            from p in Anchor select (BasePattern)p,
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
                         select new GroupPattern(ps);
@@ -162,7 +172,9 @@ namespace RegexParser.Patterns
         public static Parser<char, CharClassPattern> CharGroup;
         public static Parser<char, CharClassPattern> CharClass;
 
-        public static Parser<char, int> Natural;
+        public static Parser<char, AnchorPattern> Anchor;
+
+        public static Parser<char, int> NaturalNum;
         public static Parser<char, QuantifierPattern> Quantifier;
 
         public static Parser<char, BasePattern> AlternationGroup;
@@ -200,7 +212,6 @@ namespace RegexParser.Patterns
                 { 't', '\t' },
                 { 'v', '\v' },
             };
-
         private static string charEscapeKeysOutsideClass = charEscapes.Keys.Except("b").AsString();
         private static string charEscapeKeysInsideClass = charEscapes.Keys.AsString();
 
@@ -215,7 +226,19 @@ namespace RegexParser.Patterns
                 { 'd', CharGroupPattern.DigitChar },
                 { 'D', CharGroupPattern.DigitChar.Negated },
             };
-
         private static string namedCharClassKeys = namedCharClasses.Keys.AsString();
+
+
+        private static Dictionary<char, AnchorType> anchorTypes =
+            new Dictionary<char, AnchorType>()
+            {
+                { 'A', AnchorType.StartOfStringOnly },
+                { 'Z', AnchorType.EndOfStringOrBeforeEndingNewline },
+                { 'z', AnchorType.EndOfStringOnly },
+                { 'G', AnchorType.ContiguousMatch },
+                { 'b', AnchorType.WordBoundary },
+                { 'B', AnchorType.NonWordBoundary },
+            };
+        private static string anchorTypeKeys = anchorTypes.Keys.AsString();
     }
 }

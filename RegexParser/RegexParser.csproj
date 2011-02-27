@@ -54,6 +54,7 @@
     <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
     <Compile Include="Matchers\StackFrame.cs" />
     <Compile Include="Patterns\AlternationPattern.cs" />
+    <Compile Include="Patterns\AnchorPattern.cs" />
     <Compile Include="Patterns\CharClassPattern.cs" />
     <Compile Include="Patterns\CharGroupPattern.cs" />
     <Compile Include="Patterns\CharClassSubtractPattern.cs" />
