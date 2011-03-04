@@ -17,7 +17,13 @@ RegexParser - priority list:
 [-possessive quantifiers: ?+, *+, ++, {m,n}+ ]
 
 = anchors: ^, $, \b, \B
-= Regex options: IgnoreCase, IgnorePatternWhitespace, Multiline, Singleline
+= Regex options:
+    * Singleline
+    - Multiline
+    - IgnoreCase
+    - IgnorePatternWhitespace
+    - ExplicitCapture
+   [- RightToLeft]
 - miscellaneous constructs: (?#comment), (?i)
 
 - error handling while parsing the pattern
@@ -32,6 +38,20 @@ RegexParser - priority list:
 = Replace()
 - substitution patterns (starting with '$')
 
+- Replace(String, MatchEvaluator), where MatchEvaluator is a delegate
+- Split()
+
 - Unicode:
     - Unicode categories and named blocks (char classes)
 	- RegexOption: canonical (Unicode) or ECMAScript/JavaScript (ASCII) behavior
+
+
+
+Short version:
+
+- options (global & inline)
+- anchors
+- captures
+- Replace()
+- group-related (named groups, atomic groups, backreferences)
+- look-ahead and look-behind
