@@ -59,6 +59,11 @@
     <Compile Include="Collections\CachedList.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="General\HashCodeCombiner.cs" />
+    <Compile Include="Tuple\Tuple.cs" />
+    <Compile Include="Tuple\Tuple1.cs" />
+    <Compile Include="Tuple\Tuple2.cs" />
+    <Compile Include="Tuple\Tuple3.cs" />
+    <Compile Include="Tuple\Tuple4.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
