@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using RegexParser.Matchers;
 using RegexParser.Patterns;
+using RegexParser.Transforms;
 using RegexParser.Util;
 using UnitTesting;
 using Utility.BaseTypes;
@@ -108,21 +109,59 @@ namespace RegexParser.Tests.Asserts
             Console.Write("\n");
         }
 
-        public static void DisplayASTTransform(string pattern, AlgorithmType algorithmType)
+        public static void IsASTTransformCorrect(BasePattern expected, string patternText, BaseASTTransform transform)
         {
-            DisplayASTTransform(pattern, algorithmType, RegexOptions.None);
+            BasePattern beforePattern = BasePattern.CreatePattern(patternText);
+            BasePattern afterPattern = doTransform(beforePattern, transform);
+
+            displayASTTransform(patternText, beforePattern, afterPattern);
+
+            Assert.AreEqual(expected, afterPattern);
         }
 
-        public static void DisplayASTTransform(string pattern, AlgorithmType algorithmType, RegexOptions options)
+        public static void IsASTTransformCorrect(BasePattern expected, string patternText, AlgorithmType algorithmType, RegexOptions options)
         {
-            BasePattern beforePattern = BasePattern.CreatePattern(pattern);
-            BasePattern afterPattern = BaseMatcher.CreateMatcher(algorithmType, pattern, options).Pattern;
+            BasePattern beforePattern = BasePattern.CreatePattern(patternText);
+            BasePattern afterPattern = doTransform(patternText, algorithmType, options);
 
-            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+            displayASTTransform(patternText, beforePattern, afterPattern);
+
+            Assert.AreEqual(expected, afterPattern);
+        }
+
+        public static void DisplayASTTransform(string patternText, BaseASTTransform transform)
+        {
+            BasePattern beforePattern = BasePattern.CreatePattern(patternText);
+            BasePattern afterPattern = doTransform(beforePattern, transform);
+
+            displayASTTransform(patternText, beforePattern, afterPattern);
+        }
+
+        public static void DisplayASTTransform(string patternText, AlgorithmType algorithmType, RegexOptions options)
+        {
+            BasePattern beforePattern = BasePattern.CreatePattern(patternText);
+            BasePattern afterPattern = doTransform(patternText, algorithmType, options);
+
+            displayASTTransform(patternText, beforePattern, afterPattern);
+        }
+
+        private static void displayASTTransform(string patternText, BasePattern beforePattern, BasePattern afterPattern)
+        {
+            Console.WriteLine("Pattern Text:     {0}", patternText.ShowVerbatim());
             Console.WriteLine("Before Transform: {0}", beforePattern);
             Console.WriteLine("After  Transform: {0}", afterPattern);
 
             Console.Write("\n");
+        }
+
+        private static BasePattern doTransform(BasePattern pattern, BaseASTTransform transform)
+        {
+            return transform.Transform(pattern);
+        }
+
+        private static BasePattern doTransform(string patternText, AlgorithmType algorithmType, RegexOptions options)
+        {
+            return BaseMatcher.CreateMatcher(algorithmType, patternText, options).Pattern;
         }
 
         public static void DisplayMatches(string input, string pattern, AlgorithmType algorithmType, RegexOptions options,

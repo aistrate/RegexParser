@@ -2,52 +2,59 @@
 using RegexParser.Matchers;
 using RegexParser.Patterns;
 using RegexParser.Tests.Asserts;
+using RegexParser.Transforms;
 
 namespace RegexParser.Tests.Transforms
 {
-    [TestFixture(AlgorithmType.ExplicitDFA)]
-    public class StringASTTransformTests : AlgorithmTests
+    [TestFixture]
+    public class StringASTTransformTests
     {
-        public StringASTTransformTests(AlgorithmType algorithmType)
-            : base(algorithmType) { }
+        private BaseASTTransform transform = new StringASTTransform();
 
         [Test]
         public void OneChar()
         {
-            BasePattern actual = getTransformedPattern("x");
+            string patternText = "x";
+
             BasePattern expected = new GroupPattern(new BasePattern[]
                                    {
                                        new CharEscapePattern('x'),
                                    });
-            Assert.AreEqual(expected, actual);
+
+            RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
 
         [Test]
         public void TwoChars()
         {
-            BasePattern actual = getTransformedPattern("cd");
+            string patternText = "cd";
+
             BasePattern expected = new GroupPattern(new BasePattern[]
                                    {
                                        new StringPattern("cd"),
                                    });
-            Assert.AreEqual(expected, actual);
+
+            RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
 
         [Test]
         public void ManyChars()
         {
-            BasePattern actual = getTransformedPattern(@"A longer string\.");
+            string patternText = @"A longer string\.";
+
             BasePattern expected = new GroupPattern(new BasePattern[]
                                    {
                                        new StringPattern("A longer string."),
                                    });
-            Assert.AreEqual(expected, actual);
+
+            RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
 
         [Test]
         public void ManyCharsWithClasses()
         {
-            BasePattern actual = getTransformedPattern(@"ab[cd][efg]hijk\dm");
+            string patternText = @"ab[cd][efg]hijk\dm";
+
             BasePattern expected = new GroupPattern(new BasePattern[]
                                    {
                                        new StringPattern("ab"),
@@ -57,14 +64,8 @@ namespace RegexParser.Tests.Transforms
                                        CharGroupPattern.DigitChar,
                                        new CharEscapePattern('m'),
                                    });
-            Assert.AreEqual(expected, actual);
-        }
 
-        private BasePattern getTransformedPattern(string patternText)
-        {
-            RegexAssert.DisplayASTTransform(patternText, AlgorithmType, RegexOptions.None);
-
-            return BaseMatcher.CreateMatcher(AlgorithmType, patternText, RegexOptions.None).Pattern;
+            RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
     }
 }
