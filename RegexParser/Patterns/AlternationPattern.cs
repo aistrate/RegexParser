@@ -23,8 +23,8 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("Altern {{{0}}}", Alternatives.Select(p => p.ToString())
-                                                               .JoinStrings(" | "));
+            return string.Format("Altern {{ {0} }}", Alternatives.Select(p => p.ToString())
+                                                                 .JoinStrings(" | "));
         }
 
         bool IEquatable<AlternationPattern>.Equals(AlternationPattern other)

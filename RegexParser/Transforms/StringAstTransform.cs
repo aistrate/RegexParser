@@ -14,9 +14,6 @@ namespace RegexParser.Transforms
             if (pattern.Type == PatternType.Group)
             {
                 // TODO: use groupBy (Haskell-style)
-                // TODO: if GroupPattern contains one single StringPattern, replace the former with the latter
-                //       (distinguish between capturing and non-capturing groups)
-                // TODO: write tests for Transforms
 
                 BasePattern[] oldChildPatterns = ((GroupPattern)pattern).Patterns;
                 List<BasePattern> newChildPatterns = new List<BasePattern>();

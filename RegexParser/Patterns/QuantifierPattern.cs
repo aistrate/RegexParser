@@ -51,11 +51,11 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("Quant {{{0}, Min={1}{2}{3}}}",
-                                 ChildPattern.ToString(),
+            return string.Format("Quant(Min={0}{1}{2}) {{ {3} }}",
                                  MinOccurrences,
                                  MaxOccurrences != null ? string.Format(", Max={0}", MaxOccurrences) : "",
-                                 IsGreedy ? "" : string.Format(", IsGreedy={0}", IsGreedy));
+                                 IsGreedy ? "" : string.Format(", IsGreedy={0}", IsGreedy),
+                                 ChildPattern.ToString());
         }
 
         bool IEquatable<QuantifierPattern>.Equals(QuantifierPattern other)

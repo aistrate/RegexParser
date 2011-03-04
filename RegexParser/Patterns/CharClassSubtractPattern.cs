@@ -21,7 +21,7 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return string.Format("CharClassSubtr {{{0}, Excluded={1}}}", BaseClass.ToString(), ExcludedClass.ToString());
+            return string.Format("CharClassSubtr {{ {0}, Excluded={1} }}", BaseClass.ToString(), ExcludedClass.ToString());
         }
 
         bool IEquatable<CharClassSubtractPattern>.Equals(CharClassSubtractPattern other)
