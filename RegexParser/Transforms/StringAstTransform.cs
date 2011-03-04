@@ -39,7 +39,7 @@ namespace RegexParser.Transforms
                 if (currentString.Length > 0)
                     addStringPattern(newChildPatterns, currentString.ToString());
 
-                return new GroupPattern(newChildPatterns);
+                return CreateGroupOrSingleton(newChildPatterns.ToArray());
             }
             else
                 return base.Transform(pattern);
