@@ -4,8 +4,6 @@ RegexParser TODO:
 
 - RegexParsers: "unify" all group patterns that are part of various patterns (alternation, quantifier, etc.) (groups are similar, except for each excluding their own parent pattern); use Lazy() for all patterns in a group
 
-- (Base)ASTTransform: when calculating GroupPattern.Patterns, QuantifierPattern.ChildPattern, AlternationPattern.Alternation, filter out all children that are 'null', or empty GroupPatterns; if the pattern that should dissapear is a CharPattern, return 'null'; if a QuantifierPattern, return an empty GroupPattern
-
 - implement composability of ASTTransforms (both parallel and serial); define *fluent* interface (mini-DSL) for composability
 
 - display pattern in multi-line indented format (with level of indent depending on element depth within the tree)
@@ -19,6 +17,7 @@ RegexParser TODO:
 - replace the use of 'string' in Result<char, string> with an immutable class which stores all 'Value' chars in a tree structure (with cheap 'append', and branch re-use); maybe revive the idea of a non-deterministic parser (as in the 'experimental' Git branch) (Value is not a single string/char tree, but a list of them, possibly empty); replace the current implementation of backtracking
 
 
+* (Base)ASTTransform: when calculating GroupPattern.Patterns, QuantifierPattern.ChildPattern, AlternationPattern.Alternation, filter out all children that are 'null', or empty GroupPatterns; if the pattern that should dissapear is a CharPattern, return 'null'; if a QuantifierPattern, return an empty GroupPattern
 * add RegexOptions.RightToLeft
 * is there a way to run an *action* for every match? (like Replace(), but running the action instead of the substitution pattern)
 * turn all asserts on/off through a preprocessor symbol (ENABLE_ASSERT)

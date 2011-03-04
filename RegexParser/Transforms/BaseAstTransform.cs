@@ -16,13 +16,18 @@ namespace RegexParser.Transforms
             {
                 case PatternType.Group:
                     return new GroupPattern(((GroupPattern)pattern).Patterns
-                                                                   .Select(a => Transform(a)));
+                                                                   .Select(p => Transform(p))
+                                                                   .Where(IsNotEmpty));
 
 
                 case PatternType.Quantifier:
                     QuantifierPattern quant = (QuantifierPattern)pattern;
-                    return new QuantifierPattern(Transform(quant.ChildPattern),
-                                                 quant.MinOccurrences, quant.MaxOccurrences, quant.IsGreedy);
+                    BasePattern newChild = Transform(quant.ChildPattern);
+
+                    if (IsNotEmpty(newChild))
+                        return new QuantifierPattern(newChild, quant.MinOccurrences, quant.MaxOccurrences, quant.IsGreedy);
+                    else
+                        return GroupPattern.Empty;
 
 
                 case PatternType.Alternation:
@@ -33,6 +38,11 @@ namespace RegexParser.Transforms
                 default:
                     return pattern;
             }
+        }
+
+        protected bool IsNotEmpty(BasePattern pattern)
+        {
+            return !(pattern.Type == PatternType.Group && pattern.Equals(GroupPattern.Empty));
         }
     }
 }
