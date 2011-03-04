@@ -29,6 +29,7 @@ namespace RegexParser.ConsoleTests
             {
                 //MatcherPerformanceTests.VeryLongMatches();
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
+                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
 
@@ -47,7 +48,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"(a|b)x|c");
                 //RegexAssert.DisplayPattern(@"abcd|defgh|012");
 
-                displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking, RegexOptions.Singleline | RegexOptions.Multiline);
+                //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking, RegexOptions.Singleline | RegexOptions.Multiline);
                 //RegexAssert.ThrowsSameExceptionAsMsoft("abab", @"(ab)++", AlgorithmType.Backtracking,
                 //                                       RegexOptions.Singleline | RegexOptions.Multiline);
 

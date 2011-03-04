@@ -24,7 +24,7 @@ namespace RegexParser
 
         /// <summary>
         /// Specifies that the only valid captures are explicitly named or numbered groups
-        /// of the form (?<name>...). This allows unnamed parentheses to act as noncapturing
+        /// of the form (?&lt;name&gt;...). This allows unnamed parentheses to act as noncapturing
         /// groups without the syntactic clumsiness of the expression (?:...).
         /// </summary>
         ExplicitCapture = 4,
@@ -37,10 +37,16 @@ namespace RegexParser
 
         /// <summary>
         /// Eliminates unescaped white space from the pattern.
-        /// However, the System.Text.RegularExpressions.RegexOptions.IgnorePatternWhitespace
+        /// However, the IgnorePatternWhitespace
         /// value does not affect or eliminate white space in character classes.
         /// </summary>
         IgnorePatternWhitespace = 32,
+
+        /// <summary>
+        /// Specifies that the search will be from right to left instead of from left
+        /// to right.
+        /// </summary>
+        RightToLeft = 64,
     }
 
     public class RegexOptionsEx
@@ -50,7 +56,8 @@ namespace RegexParser
                    (options & RegexOptions.Multiline) == RegexOptions.Multiline,
                    (options & RegexOptions.ExplicitCapture) == RegexOptions.ExplicitCapture,
                    (options & RegexOptions.Singleline) == RegexOptions.Singleline,
-                   (options & RegexOptions.IgnorePatternWhitespace) == RegexOptions.IgnorePatternWhitespace)
+                   (options & RegexOptions.IgnorePatternWhitespace) == RegexOptions.IgnorePatternWhitespace,
+                   (options & RegexOptions.RightToLeft) == RegexOptions.RightToLeft)
         {
         }
 
@@ -58,13 +65,15 @@ namespace RegexParser
                               bool multiline,
                               bool explicitCapture,
                               bool singleline,
-                              bool ignorePatternWhitespace)
+                              bool ignorePatternWhitespace,
+                              bool rightToLeft)
         {
             IgnoreCase = ignoreCase;
             Multiline = multiline;
             ExplicitCapture = explicitCapture;
             Singleline = singleline;
             IgnorePatternWhitespace = ignorePatternWhitespace;
+            RightToLeft = rightToLeft;
         }
 
         public bool IgnoreCase { get; private set; }
@@ -72,5 +81,6 @@ namespace RegexParser
         public bool ExplicitCapture { get; private set; }
         public bool Singleline { get; private set; }
         public bool IgnorePatternWhitespace { get; private set; }
+        public bool RightToLeft { get; private set; }
     }
 }
