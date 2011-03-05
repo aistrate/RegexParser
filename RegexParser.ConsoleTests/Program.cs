@@ -29,11 +29,20 @@ namespace RegexParser.ConsoleTests
             {
                 //MatcherPerformanceTests.VeryLongMatches();
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
-                Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
+
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"(^\w)+")));
+                //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"(^)+")));
+                //RegexAssert.AreMatchesSameAsMsoft("abc", @"(^\w)+", AlgorithmType.Backtracking);
+                //RegexAssert.AreMatchesSameAsMsoft("abc", @"(^)+", AlgorithmType.Backtracking);
 
                 //new CharEscapeMatcherTests(AlgorithmType.Backtracking).TwoMatches();
 
-                //RegexAssert.DisplayASTTransform(@"(a|ab)bbbc", AlgorithmType.ExplicitDFA);
+                //RegexAssert.DisplayASTTransform(@"(a|ab)bbbc", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                //RegexAssert.DisplayASTTransform(@"(a|ab[a-mx-z])+bbc", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                //RegexAssert.DisplayASTTransform(@"(ab[a-mx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                //RegexAssert.DisplayASTTransform(@"(ab[a-z-[m-p]])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                RegexAssert.DisplayASTTransform(@"(ab[cdemx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
 
                 //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);
@@ -47,6 +56,11 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"a|x[abc0-9]|c*");
                 //RegexAssert.DisplayPattern(@"(a|b)x|c");
                 //RegexAssert.DisplayPattern(@"abcd|defgh|012");
+                //RegexAssert.DisplayPattern(@"a|x\w|c*");
+
+                //RegexAssert.DisplayPattern(@"(ab[a-z-[m-p]])*efg");
+                //RegexAssert.DisplayPattern(@".x[^abc0-9A-M]");
+                //RegexAssert.DisplayPattern(@"^.x[abc0-9A-M]");
 
                 //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking, RegexOptions.Singleline | RegexOptions.Multiline);
                 //RegexAssert.ThrowsSameExceptionAsMsoft("abab", @"(ab)++", AlgorithmType.Backtracking,

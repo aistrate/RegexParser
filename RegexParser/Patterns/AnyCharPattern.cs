@@ -1,4 +1,5 @@
 ﻿using System;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -16,9 +17,9 @@ namespace RegexParser.Patterns
             return AcceptNewline || c != '\n';
         }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("AnyChar{0}Newline", AcceptNewline ? "Incl" : "Excl");
+            return new PPText(string.Format("AnyChar (AcceptNL={0})", AcceptNewline));
         }
 
         bool IEquatable<AnyCharPattern>.Equals(AnyCharPattern other)

@@ -1,5 +1,6 @@
 ﻿using System;
 using Utility.General;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -19,9 +20,22 @@ namespace RegexParser.Patterns
             return BaseClass.IsMatch(c) && !ExcludedClass.IsMatch(c);
         }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("CharClassSubtr {{ {0}, Excluded={1} }}", BaseClass.ToString(), ExcludedClass.ToString());
+            return new PPGroup(
+                            new PPText("CharClassSubtr"),
+                            new PPNewline(),
+                            new PPText("{"),
+                            new PPIncIndent(
+                                new PPGroup(
+                                    new PPNewline(),
+                                    BaseClass.ToPrettyPrint(),
+                                    new PPNewline(),
+                                    new PPText("Excluded:"),
+                                    new PPNewline(),
+                                    ExcludedClass.ToPrettyPrint())),
+                            new PPNewline(),
+                            new PPText("}"));
         }
 
         bool IEquatable<CharClassSubtractPattern>.Equals(CharClassSubtractPattern other)

@@ -1,12 +1,12 @@
 RegexParser TODO:
 
-- PatternParsers: remove Anchor from Quantifier
+- display pattern in multi-line indented format (with level of indent depending on element depth within the tree)
+
+- solve case when Quantifier has Anchor as a child (e.g.: "^+"); for now, it enters an infinite loop
 
 - RegexParsers: "unify" all group patterns that are part of various patterns (alternation, quantifier, etc.) (groups are similar, except for each excluding their own parent pattern); use Lazy() for all patterns in a group
 
 - implement composability of ASTTransforms (both parallel and serial); define *fluent* interface (mini-DSL) for composability
-
-- display pattern in multi-line indented format (with level of indent depending on element depth within the tree)
 
 - implement lookbehind by using RegexOptions.RightToLeft and method Regex.Match(String, Int32) (with a '\G' anchor at the right)
 
@@ -24,5 +24,6 @@ RegexParser TODO:
 * create enum 'PatternType' (Group, Quantifier, Alternation, String, Char); use this instead of testing the pattern type with the 'is' keyword; this *may* improve performance; it can also be used in ASTTransforms
 * in BacktrackingMatcher.Parse, "traverse" the input IConsList<char> with a char counter (build the output string by counting matching chars, then at the end take that many from the input), instead of building a new Result<char, SimpleConsList<char>> at every step
 
+*(o) PatternParsers: remove Anchor from Quantifier
 *(o) Match2 should be initialized with Index and Length; Value should be computed only upon request (DON'T calculate the result string at the end of BacktrackingMatcher.Parse())
 *(o) change classes StackFrame and BacktrackPoint into structs

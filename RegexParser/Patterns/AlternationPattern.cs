@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Utility.BaseTypes;
 using Utility.General;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -21,10 +22,23 @@ namespace RegexParser.Patterns
 
         public BasePattern[] Alternatives { get; private set; }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("Altern {{ {0} }}", Alternatives.Select(p => p.ToString())
-                                                                 .JoinStrings(" | "));
+            return new PPGroup(
+                            new PPText("Altern"),
+                            new PPNewline(),
+                            new PPText("{"),
+                            new PPIncIndent(
+                                new PPGroup(
+                                    new PPGroup(
+                                        new PPNewline(),
+                                        new PPText("Or")),
+                                    Alternatives.Select<BasePattern, PPElement>(a =>
+                                        new PPGroup(
+                                            new PPNewline(),
+                                            a.ToPrettyPrint())))),
+                            new PPNewline(),
+                            new PPText("}"));
         }
 
         bool IEquatable<AlternationPattern>.Equals(AlternationPattern other)

@@ -1,6 +1,7 @@
 ﻿using System;
 using Utility.BaseTypes;
 using Utility.General;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -20,9 +21,9 @@ namespace RegexParser.Patterns
             return From <= c && c <= To;
         }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("{{{0}-{1}}}", From.Show(), To.Show());
+            return new PPText(string.Format("[{0}-{1}]", From.Show(), To.Show()));
         }
 
         bool IEquatable<CharRangePattern>.Equals(CharRangePattern other)

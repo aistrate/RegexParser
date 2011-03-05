@@ -1,4 +1,5 @@
 ﻿using System;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -24,9 +25,9 @@ namespace RegexParser.Patterns
 
         public AnchorType AnchorType { get; private set; }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("Anchor({0})", AnchorType.ToString());
+            return new PPText(string.Format("Anchor ({0})", AnchorType.ToString()));
         }
 
         bool IEquatable<AnchorPattern>.Equals(AnchorPattern other)

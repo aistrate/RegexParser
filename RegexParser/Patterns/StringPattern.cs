@@ -1,5 +1,6 @@
 ﻿using System;
 using Utility.BaseTypes;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -13,9 +14,9 @@ namespace RegexParser.Patterns
 
         public string Value { get; private set; }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return Value.Show();
+            return new PPText(Value.Show());
         }
 
         bool IEquatable<StringPattern>.Equals(StringPattern other)

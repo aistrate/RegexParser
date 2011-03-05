@@ -1,5 +1,6 @@
 ﻿using System;
 using Utility.General;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -49,13 +50,21 @@ namespace RegexParser.Patterns
                                                              MaxOccurrences != null ? MaxOccurrences.ToString() : ""));
         }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("Quant(Min={0}{1}{2}) {{ {3} }}",
-                                 MinOccurrences,
-                                 MaxOccurrences != null ? string.Format(", Max={0}", MaxOccurrences) : "",
-                                 IsGreedy ? "" : string.Format(", IsGreedy={0}", IsGreedy),
-                                 ChildPattern.ToString());
+            return new PPGroup(
+                            new PPText(string.Format("Quant (Min={0}{1}{2})",
+                                                     MinOccurrences,
+                                                     MaxOccurrences != null ? string.Format(", Max={0}", MaxOccurrences) : "",
+                                                     IsGreedy ? "" : string.Format(", IsGreedy={0}", IsGreedy))),
+                            new PPNewline(),
+                            new PPText("{"),
+                            new PPIncIndent(
+                                new PPGroup(
+                                    new PPNewline(),
+                                    ChildPattern.ToPrettyPrint())),
+                            new PPNewline(),
+                            new PPText("}"));
         }
 
         bool IEquatable<QuantifierPattern>.Equals(QuantifierPattern other)

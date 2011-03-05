@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Utility.BaseTypes;
 using Utility.General;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -64,13 +65,25 @@ namespace RegexParser.Patterns
             return CharSet.IndexOf(c) >= 0;
         }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return string.Format("CharClass {{{0}{1}}}",
-                                 IsPositive ? "" : "^Neg: ",
-                                 Enumerable.Repeat(CharSet.Show(), (CharSet != "" || ChildPatterns.Length == 0) ? 1 : 0)
-                                           .Concat(ChildPatterns.Select(p => p.ToString()))
-                                           .JoinStrings(", "));
+            var childPPElements = Enumerable.Repeat<PPElement>(new PPText(string.Format("[{0}]", CharSet.Show())),
+                                                               CharSet != "" || ChildPatterns.Length == 0 ? 1 : 0)
+                                            .Concat(ChildPatterns.Select(p => p.ToPrettyPrint()));
+
+            return new PPGroup(
+                            new PPText(string.Format("CharClass{0}", IsPositive ? "" : " (Neg)")),
+                            new PPNewline(),
+                            new PPText("{"),
+                            new PPIncIndent(
+                                new PPGroup(
+                                    new PPText(","),
+                                    childPPElements.Select<PPElement, PPElement>(elem =>
+                                        new PPGroup(
+                                            new PPNewline(),
+                                            elem)))),
+                            new PPNewline(),
+                            new PPText("}"));
         }
 
         bool IEquatable<CharGroupPattern>.Equals(CharGroupPattern other)

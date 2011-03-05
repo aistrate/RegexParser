@@ -147,9 +147,11 @@ namespace RegexParser.Tests.Asserts
 
         private static void displayASTTransform(string patternText, BasePattern beforePattern, BasePattern afterPattern)
         {
-            Console.WriteLine("Pattern Text:     {0}", patternText.ShowVerbatim());
-            Console.WriteLine("Before Transform: {0}", beforePattern);
-            Console.WriteLine("After  Transform: {0}", afterPattern);
+            Console.WriteLine("Pattern Text:\n    {0}", patternText.ShowVerbatim());
+            Console.WriteLine("Before Transform:");
+            Console.WriteLine(beforePattern.FormatAsTree(1));
+            Console.WriteLine("After Transform:");
+            Console.WriteLine(afterPattern.FormatAsTree(1));
 
             Console.Write("\n");
         }

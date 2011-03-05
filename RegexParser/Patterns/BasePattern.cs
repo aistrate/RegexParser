@@ -1,6 +1,7 @@
 ﻿using System;
 using Utility.BaseTypes;
 using Utility.ConsLists;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -23,6 +24,18 @@ namespace RegexParser.Patterns
         }
 
         public PatternType Type { get; private set; }
+
+        public abstract PPElement ToPrettyPrint();
+
+        public override string ToString()
+        {
+            return PPElement.FormatAsFlat(ToPrettyPrint());
+        }
+
+        public string FormatAsTree(int indentLevel)
+        {
+            return PPElement.FormatAsTree(ToPrettyPrint(), indentLevel);
+        }
 
         /// <summary>
         /// Minimum number of characters the pattern will need in the input string, in order to match.

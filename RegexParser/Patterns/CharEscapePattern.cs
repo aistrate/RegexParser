@@ -1,5 +1,6 @@
 ﻿using System;
 using Utility.BaseTypes;
+using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
@@ -17,9 +18,9 @@ namespace RegexParser.Patterns
             return c == Value;
         }
 
-        public override string ToString()
+        public override PPElement ToPrettyPrint()
         {
-            return Value.Show();
+            return new PPText(Value.Show());
         }
 
         bool IEquatable<CharEscapePattern>.Equals(CharEscapePattern other)
