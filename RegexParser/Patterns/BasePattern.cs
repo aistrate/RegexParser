@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Utility.BaseTypes;
 using Utility.ConsLists;
 using Utility.PrettyPrint;
@@ -35,6 +37,27 @@ namespace RegexParser.Patterns
         public string FormatAsTree(int indentLevel)
         {
             return PPElement.FormatAsTree(ToPrettyPrint(), indentLevel);
+        }
+
+        protected static PPElement PPGroupWithDelimiters(IEnumerable<PPElement> children)
+        {
+            return PPGroupWithDelimiters(new PPText(","), children);
+        }
+
+        protected static PPElement PPGroupWithDelimiters(PPElement separator, IEnumerable<PPElement> children)
+        {
+            return new PPGroup(
+                            new PPNewline(),
+                            new PPText("{"),
+                            new PPIncIndent(
+                                new PPGroup(
+                                    separator,
+                                    children.Select<PPElement, PPElement>(c =>
+                                        new PPGroup(
+                                            new PPNewline(),
+                                            c)))),
+                            new PPNewline(),
+                            new PPText("}"));
         }
 
         /// <summary>

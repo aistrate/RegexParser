@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Utility.BaseTypes;
 using Utility.General;
 using Utility.PrettyPrint;
 
@@ -26,19 +25,11 @@ namespace RegexParser.Patterns
         {
             return new PPGroup(
                             new PPText("Altern"),
-                            new PPNewline(),
-                            new PPText("{"),
-                            new PPIncIndent(
+                            PPGroupWithDelimiters(
                                 new PPGroup(
-                                    new PPGroup(
-                                        new PPNewline(),
-                                        new PPText("Or")),
-                                    Alternatives.Select<BasePattern, PPElement>(a =>
-                                        new PPGroup(
-                                            new PPNewline(),
-                                            a.ToPrettyPrint())))),
-                            new PPNewline(),
-                            new PPText("}"));
+                                    new PPNewline(),
+                                    new PPText("Or")),
+                                Alternatives.Select(a => a.ToPrettyPrint())));
         }
 
         bool IEquatable<AlternationPattern>.Equals(AlternationPattern other)

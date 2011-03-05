@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Utility.BaseTypes;
 using Utility.General;
 using Utility.PrettyPrint;
 
@@ -30,17 +29,7 @@ namespace RegexParser.Patterns
         {
             return new PPGroup(
                             new PPText("Group"),
-                            new PPNewline(),
-                            new PPText("{"),
-                            new PPIncIndent(
-                                new PPGroup(
-                                    new PPText(","),
-                                    Patterns.Select<BasePattern, PPElement>(p =>
-                                        new PPGroup(
-                                            new PPNewline(),
-                                            p.ToPrettyPrint())))),
-                            new PPNewline(),
-                            new PPText("}"));
+                            PPGroupWithDelimiters(Patterns.Select(p => p.ToPrettyPrint())));
         }
 
         bool IEquatable<GroupPattern>.Equals(GroupPattern other)

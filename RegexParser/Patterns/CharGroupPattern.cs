@@ -73,17 +73,8 @@ namespace RegexParser.Patterns
 
             return new PPGroup(
                             new PPText(string.Format("CharClass{0}", IsPositive ? "" : " (Neg)")),
-                            new PPNewline(),
-                            new PPText("{"),
-                            new PPIncIndent(
-                                new PPGroup(
-                                    new PPText(","),
-                                    childPPElements.Select<PPElement, PPElement>(elem =>
-                                        new PPGroup(
-                                            new PPNewline(),
-                                            elem)))),
-                            new PPNewline(),
-                            new PPText("}"));
+                            PPGroupWithDelimiters(childPPElements));
+
         }
 
         bool IEquatable<CharGroupPattern>.Equals(CharGroupPattern other)

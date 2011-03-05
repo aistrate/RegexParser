@@ -57,14 +57,7 @@ namespace RegexParser.Patterns
                                                      MinOccurrences,
                                                      MaxOccurrences != null ? string.Format(", Max={0}", MaxOccurrences) : "",
                                                      IsGreedy ? "" : string.Format(", IsGreedy={0}", IsGreedy))),
-                            new PPNewline(),
-                            new PPText("{"),
-                            new PPIncIndent(
-                                new PPGroup(
-                                    new PPNewline(),
-                                    ChildPattern.ToPrettyPrint())),
-                            new PPNewline(),
-                            new PPText("}"));
+                            PPGroupWithDelimiters(new PPElement[] { ChildPattern.ToPrettyPrint() }));
         }
 
         bool IEquatable<QuantifierPattern>.Equals(QuantifierPattern other)

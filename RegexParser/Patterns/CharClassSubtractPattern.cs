@@ -24,18 +24,15 @@ namespace RegexParser.Patterns
         {
             return new PPGroup(
                             new PPText("CharClassSubtr"),
-                            new PPNewline(),
-                            new PPText("{"),
-                            new PPIncIndent(
+                            PPGroupWithDelimiters(
                                 new PPGroup(
                                     new PPNewline(),
+                                    new PPText("Excluded:")),
+                                new PPElement[]
+                                {
                                     BaseClass.ToPrettyPrint(),
-                                    new PPNewline(),
-                                    new PPText("Excluded:"),
-                                    new PPNewline(),
-                                    ExcludedClass.ToPrettyPrint())),
-                            new PPNewline(),
-                            new PPText("}"));
+                                    ExcludedClass.ToPrettyPrint()
+                                }));
         }
 
         bool IEquatable<CharClassSubtractPattern>.Equals(CharClassSubtractPattern other)
