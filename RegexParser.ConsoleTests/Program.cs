@@ -42,7 +42,8 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayASTTransform(@"(a|ab[a-mx-z])+bbc", AlgorithmType.ExplicitDFA, RegexOptions.None);
                 //RegexAssert.DisplayASTTransform(@"(ab[a-mx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
                 //RegexAssert.DisplayASTTransform(@"(ab[a-z-[m-p]])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
-                RegexAssert.DisplayASTTransform(@"(ab[cdemx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                //RegexAssert.DisplayASTTransform(@"(ab[cdemx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                RegexAssert.DisplayASTTransform(@"(a|a[a-z])+\wb*c(ab|cd)", AlgorithmType.ExplicitDFA, RegexOptions.None);
 
                 //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);

@@ -37,7 +37,8 @@ namespace Utility.PrettyPrint
 
     public class VariableFormatSpecifier : FormatSpecifier
     {
-        public VariableFormatSpecifier(StaticFormatSpecifier defaultFormatSpecifier, Func<string, StaticFormatSpecifier> getFormatSpecifier)
+        public VariableFormatSpecifier(StaticFormatSpecifier defaultFormatSpecifier,
+                                       Func<string, StaticFormatSpecifier, StaticFormatSpecifier> getFormatSpecifier)
         {
             DefaultFormatSpecifier = defaultFormatSpecifier;
 
@@ -48,7 +49,7 @@ namespace Utility.PrettyPrint
         }
 
         public StaticFormatSpecifier DefaultFormatSpecifier { get; private set; }
-        public Func<string, StaticFormatSpecifier> GetFormatSpecifier { get; private set; }
+        public Func<string, StaticFormatSpecifier, StaticFormatSpecifier> GetFormatSpecifier { get; private set; }
 
         public override string NewlineString { get { return DefaultFormatSpecifier.NewlineString; } }
         public override string IndentString { get { return DefaultFormatSpecifier.IndentString; } }
@@ -57,22 +58,29 @@ namespace Utility.PrettyPrint
         {
             if (string.IsNullOrEmpty(tag))
                 return this;
-            
-            StaticFormatSpecifier newFormatSpecifier = GetFormatSpecifier(tag);
 
+            StaticFormatSpecifier newFormatSpecifier = GetFormatSpecifier(tag, DefaultFormatSpecifier);
             if (newFormatSpecifier == null)
                 return this;
-            else
-                return new VariableFormatSpecifier(newFormatSpecifier, GetFormatSpecifier);
+
+            return new VariableFormatSpecifier(newFormatSpecifier, GetFormatSpecifier);
         }
 
         public static VariableFormatSpecifier ExpandedExceptTags(params string[] collapsedTags)
         {
             return new VariableFormatSpecifier(
                             StaticFormatSpecifier.Expanded,
-                            tag => string.IsNullOrEmpty(tag) ? null :
-                                   Array.IndexOf(collapsedTags, tag) >= 0 ? StaticFormatSpecifier.Collapsed :
-                                                                            StaticFormatSpecifier.Expanded);
+
+                            (tag, parentFormatSpecifier) =>
+                            {
+                                if (string.IsNullOrEmpty(tag))
+                                    return null;
+                                else if (parentFormatSpecifier == StaticFormatSpecifier.Collapsed ||
+                                         Array.IndexOf(collapsedTags, tag) >= 0)
+                                    return StaticFormatSpecifier.Collapsed;
+                                else
+                                    return StaticFormatSpecifier.Expanded;
+                            });
         }
     }
 }
