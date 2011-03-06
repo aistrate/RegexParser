@@ -13,6 +13,7 @@ using RegexParser.Tests.Asserts;
 using RegexParser.Tests.Matchers;
 using RegexParser.Tests.Patterns;
 using RegexParser.Tests.Performance;
+using RegexParser.Tests.Transforms;
 using RegexParser.Util;
 using Utility.BaseTypes;
 using Utility.ConsLists;
@@ -27,7 +28,7 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //MatcherPerformanceTests.VeryLongMatches();
+                MatcherPerformanceTests.VeryLongMatches();
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
@@ -43,7 +44,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayASTTransform(@"(ab[a-mx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
                 //RegexAssert.DisplayASTTransform(@"(ab[a-z-[m-p]])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
                 //RegexAssert.DisplayASTTransform(@"(ab[cdemx-z])*efg", AlgorithmType.ExplicitDFA, RegexOptions.None);
-                RegexAssert.DisplayASTTransform(@"(a|a[a-z])+\wb*c(ab|cd)", AlgorithmType.ExplicitDFA, RegexOptions.None);
+                //RegexAssert.DisplayASTTransform(@"(a|a[a-z])+\wb*c(ab|cd)", AlgorithmType.ExplicitDFA, RegexOptions.None);
 
                 //RegexAssert.AreMatchesSameAsMsoft("aaac", @"a*ac", AlgorithmType.Backtracking);
                 //RegexAssert.AreMatchesSameAsMsoft("aaax", @"[ab]*\wx", AlgorithmType.Backtracking);

@@ -17,6 +17,8 @@ namespace RegexParser.Patterns
             return AcceptNewline || c != '\n';
         }
 
+        public override CharPattern CaseInsensitive { get { return this; } }
+
         public override PPElement ToPrettyPrint()
         {
             return new PPText(Type.ToString(), string.Format("AnyChar (AcceptNL={0})", AcceptNewline));

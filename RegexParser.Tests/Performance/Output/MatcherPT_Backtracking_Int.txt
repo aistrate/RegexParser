@@ -71,3 +71,26 @@ Time:    1.879 sec.
 Pattern: @"\w+?7"
 Matches: 1
 Time:    0.723 sec.
+
+Pattern: @"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+Matches: 0
+Time:    0.525 sec.
+
+Pattern: @"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+Options: [IgnoreCase]
+Matches: 38,461
+Time:    0.610 sec.
+
+Pattern: @"ABCDEFGHIJKLM"
+Options: [IgnoreCase]
+Matches: 38,462
+Time:    0.684 sec.
+
+Pattern: @"[a-m]+"
+Matches: 38,462
+Time:    0.883 sec.
+
+Pattern: @"[A-M]+"
+Options: [IgnoreCase]
+Matches: 38,462
+Time:    1.101 sec.

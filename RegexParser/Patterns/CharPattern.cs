@@ -8,5 +8,7 @@
         }
 
         public abstract bool IsMatch(char c);
+
+        public virtual CharPattern CaseInsensitive { get { return new CaseInsensitiveCharPattern(this); } }
     }
 }

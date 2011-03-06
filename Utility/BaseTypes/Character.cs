@@ -5,6 +5,11 @@ namespace Utility.BaseTypes
 {
     public static class Character
     {
+        public static bool IsLetter(this char c)
+        {
+            return char.IsLetter(c);
+        }
+
         public static bool IsDigit(this char c)
         {
             return char.IsDigit(c);

@@ -36,6 +36,28 @@ namespace RegexParser.Tests.Matchers
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType, RegexOptions.Singleline);
         }
+
+        [Test]
+        public void IgnoreCase()
+        {
+            string input = "First line\nSecond line.\nAnd a third\nThe last";
+
+            string[] patterns = new[] {
+                @"first",
+                @"SECOND",
+                @"[A-Z]+",
+                @"[a-z]+",
+                @"s",
+                @"s\w*",
+                @"S.",
+                @"E.",
+                @"D.",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType, RegexOptions.IgnoreCase);
+        }
     }
 
 #endif

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using RegexParser.Matchers;
+using RegexParser.Tests.Asserts;
 using UnitTesting;
 using Utility.BaseTypes;
 using Utility.Tests.Performance;
+using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.Tests.Performance
 {
@@ -78,13 +80,32 @@ namespace RegexParser.Tests.Performance
             testRegexMatches(lowercaseChars + "7", @"\w+7", times);
 
             testRegexMatches(lowercaseChars + "7", @"\w+?7", times);
+
+
+            testRegexMatches(lowercaseChars, alphabet.ToUpper(), times);
+
+            testRegexMatches(lowercaseChars, alphabet.ToUpper(), RegexOptions.IgnoreCase, times);
+
+            testRegexMatches(lowercaseChars, alphabet.Substring(0, alphabet.Length / 2).ToUpper(), RegexOptions.IgnoreCase, times);
+
+            testRegexMatches(lowercaseChars, @"[a-m]+", times);
+
+            testRegexMatches(lowercaseChars, @"[A-M]+", RegexOptions.IgnoreCase, times);
         }
 
         private const bool useMemoryProfiler = false;
 
         private static void testRegexMatches(string input, string pattern, int times)
         {
+            testRegexMatches(input, pattern, RegexOptions.None, times);
+        }
+
+        private static void testRegexMatches(string input, string pattern, RegexOptions options, int times)
+        {
             Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
+
+            if (options != RegexOptions.None)
+                Console.WriteLine("Options: [{0}]", options.ToString());
 
             MemoryProfiler memoryProfiler;
 
@@ -97,8 +118,8 @@ namespace RegexParser.Tests.Performance
             //Msoft.MatchCollection matches = null;
 
             for (int i = 0; i < times; i++)
-                matches = new Regex2(pattern, AlgorithmType.Backtracking).Matches(input);
-                //matches = new Msoft.Regex(pattern).Matches(input);
+                matches = new Regex2(pattern, AlgorithmType.Backtracking, options).Matches(input);
+                //matches = new Msoft.Regex(pattern, RegexAssert.ToMsoftRegexOptions(options)).Matches(input);
 
             if (useMemoryProfiler)
                 memoryProfiler.Reset();

@@ -65,6 +65,18 @@ namespace RegexParser.Patterns
             return CharSet.IndexOf(c) >= 0;
         }
 
+        public override CharPattern CaseInsensitive
+        {
+            get
+            {
+                if (predefined.Contains(this) ||
+                    predefined.Contains(this.Negated))
+                    return this;
+                else
+                    return base.CaseInsensitive;
+            }
+        }
+
         public override PPElement ToPrettyPrint()
         {
             var childPPElements = Enumerable.Repeat<PPElement>(new PPText(string.Format("[{0}]", CharSet.Show())),
@@ -100,10 +112,6 @@ namespace RegexParser.Patterns
 
         public CharGroupPattern Negated { get { return new CharGroupPattern(!IsPositive, this); } }
 
-        public static readonly CharGroupPattern AnyChar = new CharGroupPattern(false, "");
-
-        public static readonly CharGroupPattern AnyCharExceptNewline = new CharGroupPattern(false, "\n");
-
         public static readonly CharGroupPattern WhitespaceChar = new CharGroupPattern(true, " \n\r\t\f\v");
 
         public static readonly CharGroupPattern WordChar = new CharGroupPattern(true, "_", new[]
@@ -117,5 +125,12 @@ namespace RegexParser.Patterns
                                                                                  {
                                                                                      new CharRangePattern('0', '9')
                                                                                  });
+
+        private static readonly CharGroupPattern[] predefined = new []
+        {
+            WhitespaceChar,
+            WordChar,
+            DigitChar,
+        };
     }
 }

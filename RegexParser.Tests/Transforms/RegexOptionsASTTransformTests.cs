@@ -37,5 +37,31 @@ namespace RegexParser.Tests.Transforms
             RegexAssert.IsASTTransformCorrect(expected, patternText,
                                               new RegexOptionsASTTransform(RegexOptions.Singleline));
         }
+
+        [Test]
+        public void IgnoreCase()
+        {
+            string patternText = @"aA7 :.[a-m]\w\D\s.+";
+
+            BasePattern expected = new GroupPattern(
+                                        true,
+                                        new CaseInsensitiveCharPattern(new CharEscapePattern('a')),
+                                        new CaseInsensitiveCharPattern(new CharEscapePattern('A')),
+                                        new CharEscapePattern('7'),
+                                        new CharEscapePattern(' '),
+                                        new CharEscapePattern(':'),
+                                        new AnyCharPattern(false),
+                                        new CaseInsensitiveCharPattern(
+                                            new CharGroupPattern(true, new [] { new CharRangePattern('a', 'm') })),
+                                        CharGroupPattern.WordChar,
+                                        CharGroupPattern.DigitChar.Negated,
+                                        CharGroupPattern.WhitespaceChar,
+                                        new QuantifierPattern(
+                                            new AnyCharPattern(false),
+                                            1, null, true));
+
+            RegexAssert.IsASTTransformCorrect(expected, patternText,
+                                              new RegexOptionsASTTransform(RegexOptions.IgnoreCase));
+        }
     }
 }

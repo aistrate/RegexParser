@@ -28,7 +28,7 @@ namespace RegexParser.Tests.Asserts
 
             DisplayMatches(input, pattern, algorithmType, options, actual);
 
-            Match2[] expected = Msoft.Regex.Matches(input, pattern, toMsoftRegexOptions(options))
+            Match2[] expected = Msoft.Regex.Matches(input, pattern, ToMsoftRegexOptions(options))
                                            .Cast<Msoft.Match>()
                                            .Select(m => createMatch(m))
                                            .ToArray();
@@ -61,7 +61,7 @@ namespace RegexParser.Tests.Asserts
 
         public static void ThrowsSameExceptionAsMsoft(string input, string pattern, AlgorithmType algorithmType, RegexOptions options)
         {
-            Exception expected = catchException(() => { Msoft.Regex.Matches(input, pattern, toMsoftRegexOptions(options)); },
+            Exception expected = catchException(() => { Msoft.Regex.Matches(input, pattern, ToMsoftRegexOptions(options)); },
                                                 ".NET Regex", input, pattern, options),
                       actual = catchException(() => { new Regex2(pattern, algorithmType, options).Matches(input); },
                                               "Regex2", input, pattern, options);
@@ -91,7 +91,7 @@ namespace RegexParser.Tests.Asserts
                 ThrowsSameExceptionAsMsoft(input, pattern, algorithmType, options);
         }
 
-        private static Msoft.RegexOptions toMsoftRegexOptions(RegexOptions options)
+        public static Msoft.RegexOptions ToMsoftRegexOptions(RegexOptions options)
         {
             return (Msoft.RegexOptions)(int)options;
         }

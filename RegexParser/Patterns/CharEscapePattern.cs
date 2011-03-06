@@ -18,6 +18,17 @@ namespace RegexParser.Patterns
             return c == Value;
         }
 
+        public override CharPattern CaseInsensitive
+        {
+            get
+            {
+                if (!char.IsLetter(Value))
+                    return this;
+                else
+                    return base.CaseInsensitive;
+            }
+        }
+
         public override PPElement ToPrettyPrint()
         {
             return new PPText(Type.ToString(), Value.Show());
