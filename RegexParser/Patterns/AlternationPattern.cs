@@ -29,7 +29,7 @@ namespace RegexParser.Patterns
                             PPGroupWithDelimiters(
                                 new PPGroup(
                                     new PPNewline(),
-                                    new PPText("Or")),
+                                    new PPText("or")),
                                 Alternatives.Select(a => a.ToPrettyPrint())));
         }
 
