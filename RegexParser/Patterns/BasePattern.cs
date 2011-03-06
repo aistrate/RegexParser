@@ -31,12 +31,21 @@ namespace RegexParser.Patterns
 
         public override string ToString()
         {
-            return PPElement.FormatAsFlat(ToPrettyPrint());
+            return ToPrettyPrint().FormatAsFlat();
         }
 
         public string FormatAsTree(int indentLevel)
         {
-            return PPElement.FormatAsTree(ToPrettyPrint(), indentLevel);
+            return FormatAsTree(indentLevel, false);
+        }
+
+        public string FormatAsTree(int indentLevel, bool expandCharPatterns)
+        {
+            if (expandCharPatterns)
+                return ToPrettyPrint().FormatAsTree(indentLevel);
+            else
+                return ToPrettyPrint().FormatAsTree(indentLevel,
+                                                    VariableFormatSpecifier.ExpandedExceptTags(PatternType.Char.ToString()));
         }
 
         protected static PPElement PPGroupWithDelimiters(IEnumerable<PPElement> children)

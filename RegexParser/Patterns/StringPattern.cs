@@ -16,7 +16,7 @@ namespace RegexParser.Patterns
 
         public override PPElement ToPrettyPrint()
         {
-            return new PPText(Value.Show());
+            return new PPText(Type.ToString(), Value.Show());
         }
 
         bool IEquatable<StringPattern>.Equals(StringPattern other)

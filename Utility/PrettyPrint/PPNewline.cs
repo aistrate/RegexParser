@@ -2,10 +2,18 @@
 {
     public class PPNewline : PPElement
     {
-        public override string Format(int indentLevel, string newlineString, string indentString)
+        public PPNewline()
+            : base() { }
+
+        public PPNewline(string tag)
+            : base(tag) { }
+
+        public override string Format(int indentLevel, FormatSpecifier formatSpecifier)
         {
-            return newlineString +
-                   PPMoveToIndent.CalcIndent(indentLevel, indentString);
+            formatSpecifier = formatSpecifier.Recalc(Tag);
+
+            return formatSpecifier.NewlineString +
+                   PPMoveToIndent.CalcIndent(indentLevel, formatSpecifier.IndentString);
         }
     }
 }

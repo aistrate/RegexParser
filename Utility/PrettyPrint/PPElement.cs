@@ -2,19 +2,35 @@
 {
     public abstract class PPElement
     {
-        public static string FormatAsFlat(PPElement element)
+        public PPElement()
+            : this ("") { }
+
+        public PPElement(string tag)
         {
-            return element.Format(0, " ", "");
+            Tag = tag;
         }
 
-        public static string FormatAsTree(PPElement element, int indentLevel)
+        public string Tag { get; private set; }
+
+        public abstract string Format(int indentLevel, FormatSpecifier formatSpecifier);
+
+
+        public string FormatAsFlat()
+        {
+            return FormatAsTree(0, StaticFormatSpecifier.Collapsed);
+        }
+
+        public string FormatAsTree(int indentLevel)
+        {
+            return FormatAsTree(indentLevel, StaticFormatSpecifier.Expanded);
+        }
+
+        public string FormatAsTree(int indentLevel, FormatSpecifier formatSpecifier)
         {
             return new PPGroup(
                             new PPMoveToIndent(),
-                            element)
-                        .Format(indentLevel, "\n", "    ");
+                            this)
+                        .Format(indentLevel, formatSpecifier);
         }
-
-        public abstract string Format(int indentLevel, string newlineString, string indentString);
     }
 }

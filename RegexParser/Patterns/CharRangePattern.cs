@@ -23,7 +23,7 @@ namespace RegexParser.Patterns
 
         public override PPElement ToPrettyPrint()
         {
-            return new PPText(string.Format("[{0}-{1}]", From.Show(), To.Show()));
+            return new PPText(Type.ToString(), string.Format("[{0}-{1}]", From.Show(), To.Show()));
         }
 
         bool IEquatable<CharRangePattern>.Equals(CharRangePattern other)

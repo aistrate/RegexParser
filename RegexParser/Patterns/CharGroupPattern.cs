@@ -72,6 +72,7 @@ namespace RegexParser.Patterns
                                             .Concat(ChildPatterns.Select(p => p.ToPrettyPrint()));
 
             return new PPGroup(
+                            Type.ToString(),
                             new PPText(string.Format("CharClass{0}", IsPositive ? "" : " (Neg)")),
                             PPGroupWithDelimiters(childPPElements));
 

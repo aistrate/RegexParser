@@ -24,6 +24,7 @@ namespace RegexParser.Patterns
         public override PPElement ToPrettyPrint()
         {
             return new PPGroup(
+                            Type.ToString(),
                             new PPText("Altern"),
                             PPGroupWithDelimiters(
                                 new PPGroup(

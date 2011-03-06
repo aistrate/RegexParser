@@ -52,6 +52,7 @@
     <Compile Include="ConsLists\RepeaterConsList.cs" />
     <Compile Include="ConsLists\SimpleConsList.cs" />
     <Compile Include="ConsLists\StringConsList.cs" />
+    <Compile Include="PrettyPrint\FormatSpecifier.cs" />
     <Compile Include="PrettyPrint\PPGroup.cs" />
     <Compile Include="PrettyPrint\PPElement.cs" />
     <Compile Include="PrettyPrint\PPIncIndent.cs" />

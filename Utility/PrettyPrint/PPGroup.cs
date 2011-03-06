@@ -7,16 +7,33 @@ namespace Utility.PrettyPrint
     public class PPGroup : PPElement
     {
         public PPGroup(IEnumerable<PPElement> children)
-            : this(children.ToArray())
+            : this("", children)
         {
         }
 
         public PPGroup(params PPElement[] children)
+            : this("", children)
+        {
+        }
+
+        public PPGroup(PPElement separator, IEnumerable<PPElement> children)
+            : this ("", separator, children)
+        {
+        }
+
+        public PPGroup(string tag, IEnumerable<PPElement> children)
+            : this(tag, children.ToArray())
+        {
+        }
+
+        public PPGroup(string tag, params PPElement[] children)
+            : base(tag)
         {
             Children = children;
         }
 
-        public PPGroup(PPElement separator, IEnumerable<PPElement> children)
+        public PPGroup(string tag, PPElement separator, IEnumerable<PPElement> children)
+            : base(tag)
         {
             Children = children.SelectMany(child => new PPElement[] { separator, child })
                                .Skip(1)
@@ -25,9 +42,11 @@ namespace Utility.PrettyPrint
 
         public PPElement[] Children { get; private set; }
 
-        public override string Format(int indentLevel, string newlineString, string indentString)
+        public override string Format(int indentLevel, FormatSpecifier formatSpecifier)
         {
-            return Children.Select(c => c.Format(indentLevel, newlineString, indentString))
+            formatSpecifier = formatSpecifier.Recalc(Tag);
+
+            return Children.Select(c => c.Format(indentLevel, formatSpecifier))
                            .JoinStrings();
         }
     }

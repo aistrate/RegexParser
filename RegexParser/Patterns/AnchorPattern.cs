@@ -27,7 +27,7 @@ namespace RegexParser.Patterns
 
         public override PPElement ToPrettyPrint()
         {
-            return new PPText(string.Format("Anchor ({0})", AnchorType.ToString()));
+            return new PPText(Type.ToString(), string.Format("Anchor ({0})", AnchorType.ToString()));
         }
 
         bool IEquatable<AnchorPattern>.Equals(AnchorPattern other)

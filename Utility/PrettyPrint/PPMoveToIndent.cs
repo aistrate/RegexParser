@@ -5,9 +5,17 @@ namespace Utility.PrettyPrint
 {
     public class PPMoveToIndent : PPElement
     {
-        public override string Format(int indentLevel, string newlineString, string indentString)
+        public PPMoveToIndent()
+            : base() { }
+
+        public PPMoveToIndent(string tag)
+            : base(tag) { }
+
+        public override string Format(int indentLevel, FormatSpecifier formatSpecifier)
         {
-            return CalcIndent(indentLevel, indentString);
+            formatSpecifier = formatSpecifier.Recalc(Tag);
+
+            return CalcIndent(indentLevel, formatSpecifier.IndentString);
         }
 
         internal static string CalcIndent(int indentLevel, string indentString)

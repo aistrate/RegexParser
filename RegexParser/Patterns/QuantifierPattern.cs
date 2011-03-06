@@ -53,6 +53,7 @@ namespace RegexParser.Patterns
         public override PPElement ToPrettyPrint()
         {
             return new PPGroup(
+                            Type.ToString(),
                             new PPText(string.Format("Quant (Min={0}{1}{2})",
                                                      MinOccurrences,
                                                      MaxOccurrences != null ? string.Format(", Max={0}", MaxOccurrences) : "",

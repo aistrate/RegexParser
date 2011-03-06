@@ -19,7 +19,7 @@ namespace RegexParser.Patterns
 
         public override PPElement ToPrettyPrint()
         {
-            return new PPText(string.Format("AnyChar (AcceptNL={0})", AcceptNewline));
+            return new PPText(Type.ToString(), string.Format("AnyChar (AcceptNL={0})", AcceptNewline));
         }
 
         bool IEquatable<AnyCharPattern>.Equals(AnyCharPattern other)
