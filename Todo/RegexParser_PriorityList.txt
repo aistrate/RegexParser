@@ -20,7 +20,7 @@ RegexParser - priority list:
 = Regex options:
     * Singleline
     - Multiline
-    - IgnoreCase
+    * IgnoreCase
     - IgnorePatternWhitespace
     - ExplicitCapture
    [- RightToLeft]
