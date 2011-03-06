@@ -20,17 +20,16 @@ namespace RegexParser.Patterns
             Patterns = patterns;
         }
 
-        public static GroupPattern Empty = new GroupPattern(false);
-
         public bool IsCapturing { get; private set; }
-
         public BasePattern[] Patterns { get; private set; }
+
+        public static GroupPattern Empty = new GroupPattern(false);
 
         public override PPElement ToPrettyPrint()
         {
             return new PPGroup(
                             Type.ToString(),
-                            new PPText(string.Format("Group ({0})", IsCapturing ? "Capt" : "NC")),
+                            new PPText(string.Format("Group (Capt={0})", IsCapturing)),
                             PPGroupWithDelimiters(Patterns.Select(p => p.ToPrettyPrint())));
         }
 

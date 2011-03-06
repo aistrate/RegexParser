@@ -3,10 +3,15 @@
 namespace RegexParser.Transforms
 {
     /// <summary>
-    /// An Abstract Syntax Tree (AST) transform which helps implementing RegexOptions.
+    /// An Abstract Syntax Tree (AST) transform which helps with implementing RegexOptions.
     /// </summary>
     public class RegexOptionsASTTransform : BaseASTTransform
     {
+        public RegexOptionsASTTransform(RegexOptions options)
+            : this(new RegexOptionsEx(options))
+        {
+        }
+
         public RegexOptionsASTTransform(RegexOptionsEx options)
         {
             Options = options;

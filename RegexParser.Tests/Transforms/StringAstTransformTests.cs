@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using RegexParser.Matchers;
 using RegexParser.Patterns;
 using RegexParser.Tests.Asserts;
 using RegexParser.Transforms;
