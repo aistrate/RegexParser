@@ -27,7 +27,7 @@ namespace RegexParser.Patterns
                             PPGroupWithDelimiters(
                                 new PPGroup(
                                     new PPNewline(),
-                                    new PPText("Excluded:")),
+                                    new PPText("Excluding")),
                                 new PPElement[]
                                 {
                                     BaseClass.ToPrettyPrint(),
