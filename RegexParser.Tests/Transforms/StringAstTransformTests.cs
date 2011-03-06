@@ -16,11 +16,8 @@ namespace RegexParser.Tests.Transforms
         {
             string patternText = "x";
 
-            //BasePattern expected = new GroupPattern(new BasePattern[]
-            //                       {
-            //                           new CharEscapePattern('x'),
-            //                       });
-            BasePattern expected = new CharEscapePattern('x');
+            BasePattern expected = new GroupPattern(true,
+                                            new CharEscapePattern('x'));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
@@ -30,11 +27,8 @@ namespace RegexParser.Tests.Transforms
         {
             string patternText = "cd";
 
-            //BasePattern expected = new GroupPattern(new BasePattern[]
-            //                       {
-            //                           new StringPattern("cd"),
-            //                       });
-            BasePattern expected = new StringPattern("cd");
+            BasePattern expected = new GroupPattern(true,
+                                            new StringPattern("cd"));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
@@ -44,12 +38,8 @@ namespace RegexParser.Tests.Transforms
         {
             string patternText = @"A longer string\.";
 
-            //BasePattern expected = new GroupPattern(new BasePattern[]
-            //                       {
-            //                           new StringPattern("A longer string."),
-            //                       });
-            BasePattern expected = new StringPattern("A longer string.");
-
+            BasePattern expected = new GroupPattern(true,
+                                            new StringPattern("A longer string."));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
@@ -59,15 +49,13 @@ namespace RegexParser.Tests.Transforms
         {
             string patternText = @"ab[cd][efg]hijk\dm";
 
-            BasePattern expected = new GroupPattern(new BasePattern[]
-                                   {
-                                       new StringPattern("ab"),
-                                       new CharGroupPattern(true, "cd"),
-                                       new CharGroupPattern(true, "efg"),
-                                       new StringPattern("hijk"),
-                                       CharGroupPattern.DigitChar,
-                                       new CharEscapePattern('m'),
-                                   });
+            BasePattern expected = new GroupPattern(true,
+                                            new StringPattern("ab"),
+                                            new CharGroupPattern(true, "cd"),
+                                            new CharGroupPattern(true, "efg"),
+                                            new StringPattern("hijk"),
+                                            CharGroupPattern.DigitChar,
+                                            new CharEscapePattern('m'));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }

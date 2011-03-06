@@ -10,13 +10,13 @@ namespace RegexParser.Tests.Patterns
         public void Ranges()
         {
             BasePattern actual = BasePattern.CreatePattern("[A-Z]");
-            BasePattern expected = new GroupPattern(new BasePattern[] { new CharGroupPattern(true, new[] { uppercase }) });
+            BasePattern expected = new GroupPattern(true, new BasePattern[] { new CharGroupPattern(true, new[] { uppercase }) });
             Assert.AreEqual(expected, actual, "One Range");
 
 
             actual = BasePattern.CreatePattern("[A-Z][a-z][0-9][a-zA-Z][A-Za-z0-9][a-zm-wA-M]");
 
-            expected = new GroupPattern(new BasePattern[] {
+            expected = new GroupPattern(true, new BasePattern[] {
                 new CharGroupPattern(true, new[] { uppercase }),
                 new CharGroupPattern(true, new[] { lowercase }),
                 new CharGroupPattern(true, new[] { digits }),
@@ -35,13 +35,13 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern("[A-Z]");
 
-            BasePattern expected = new GroupPattern(new BasePattern[] { new CharGroupPattern(true, new[] { uppercase }) });
+            BasePattern expected = new GroupPattern(true, new BasePattern[] { new CharGroupPattern(true, new[] { uppercase }) });
             Assert.AreEqual(expected, actual, "One Range");
 
 
             actual = BasePattern.CreatePattern("[.,;:?!A-Za-z][xya-zm-wA-M][msabcdm ;xyz]");
 
-            expected = new GroupPattern(new BasePattern[] {
+            expected = new GroupPattern(true, new BasePattern[] {
                 new CharGroupPattern(true, ".,;:?!", new[] { uppercase, lowercase }),
                 new CharGroupPattern(true, "xy", new[] { lowercase,
                                                          new CharRangePattern('m', 'w'),
@@ -56,7 +56,7 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern("[A-Z][^x][^a-z][0-9]");
 
-            BasePattern expected = new GroupPattern(new BasePattern[] {
+            BasePattern expected = new GroupPattern(true, new BasePattern[] {
                 new CharGroupPattern(true, new[] { uppercase }),
                 new CharGroupPattern(false, "x"),
                 new CharGroupPattern(false, new[] { lowercase }),

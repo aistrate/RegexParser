@@ -15,12 +15,14 @@ namespace RegexParser.Transforms
             switch (pattern.Type)
             {
                 case PatternType.Group:
-                    BasePattern[] newChildren = ((GroupPattern)pattern).Patterns
-                                                                       .Select(p => Transform(p))
-                                                                       .Where(IsNotEmpty)
-                                                                       .ToArray();
+                    GroupPattern group = (GroupPattern)pattern;
 
-                    return CreateGroupOrSingleton(newChildren);
+                    BasePattern[] newChildren = group.Patterns
+                                                     .Select(p => Transform(p))
+                                                     .Where(IsNotEmpty)
+                                                     .ToArray();
+
+                    return CreateGroupOrSingleton(group.IsCapturing, newChildren);
 
 
                 case PatternType.Quantifier:
@@ -43,12 +45,12 @@ namespace RegexParser.Transforms
             }
         }
 
-        protected BasePattern CreateGroupOrSingleton(BasePattern[] children)
+        protected BasePattern CreateGroupOrSingleton(bool isCapturing, BasePattern[] children)
         {
-            if (children.Length == 1)
+            if (!isCapturing && children.Length == 1)
                 return children[0];
             else
-                return new GroupPattern(children);
+                return new GroupPattern(isCapturing, children);
         }
 
         protected bool IsNotEmpty(BasePattern pattern)

@@ -100,11 +100,12 @@ namespace RegexParser.Tests.Asserts
         {
             var result = PatternParsers.Regex(new ArrayConsList<char>(pattern));
 
-            Console.WriteLine("Pattern: {0}", pattern.ShowVerbatim());
-            Console.WriteLine("Parsed:  {0}", result.Value);
+            Console.WriteLine("Pattern:\n    {0}", pattern.ShowVerbatim());
+            Console.WriteLine("Parsed:");
+            Console.WriteLine(result.Value.FormatAsTree(1));
 
             if (!result.Rest.IsEmpty)
-                Console.WriteLine("Rest:    {0}", result.Rest.AsEnumerable().AsString().ShowVerbatim());
+                Console.WriteLine("Rest:\n    {0}", result.Rest.AsEnumerable().AsString().ShowVerbatim());
 
             Console.Write("\n");
         }

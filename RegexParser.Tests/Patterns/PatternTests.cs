@@ -15,7 +15,7 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern("abc");
 
-            BasePattern expected = new GroupPattern(new BasePattern[] {
+            BasePattern expected = new GroupPattern(true, new BasePattern[] {
                 new CharEscapePattern('a'),
                 new CharEscapePattern('b'),
                 new CharEscapePattern('c')
@@ -29,7 +29,7 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern("");
 
-            BasePattern expected = new GroupPattern(new BasePattern[] { });
+            BasePattern expected = new GroupPattern(true, new BasePattern[] { });
 
             Assert.AreEqual(expected, actual);
         }
@@ -41,11 +41,11 @@ namespace RegexParser.Tests.Patterns
 
             BasePattern actual = BasePattern.CreatePattern(pattern);
 
-            BasePattern expected = new GroupPattern(new BasePattern[] {
+            BasePattern expected = new GroupPattern(true, new BasePattern[] {
                 new CharEscapePattern('t'),
-                new GroupPattern(new BasePattern[] {
+                new GroupPattern(true, new BasePattern[] {
                     new CharEscapePattern('h'),
-                    new GroupPattern(new BasePattern[] {
+                    new GroupPattern(true, new BasePattern[] {
                         new CharEscapePattern('i'),
                         new CharEscapePattern('n')
                     }),

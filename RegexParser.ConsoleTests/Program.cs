@@ -62,6 +62,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.DisplayPattern(@"(ab[a-z-[m-p]])*efg");
                 //RegexAssert.DisplayPattern(@".x[^abc0-9A-M]");
                 //RegexAssert.DisplayPattern(@"^.x[abc0-9A-M]");
+                //RegexAssert.DisplayPattern(@"abc++");
 
                 //displayMatches("abbbc", @"(a|ab)bbbc", AlgorithmType.Backtracking, RegexOptions.Singleline | RegexOptions.Multiline);
                 //RegexAssert.ThrowsSameExceptionAsMsoft("abab", @"(ab)++", AlgorithmType.Backtracking,

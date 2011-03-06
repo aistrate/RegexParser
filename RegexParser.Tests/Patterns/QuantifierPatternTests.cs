@@ -15,16 +15,18 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern(@"\d*\s?\W+x*?\n??y+?");
 
-            BasePattern expected = new GroupPattern(new BasePattern[]
-                                   {
-                                       new QuantifierPattern(CharGroupPattern.DigitChar, 0, null, true),
-                                       new QuantifierPattern(CharGroupPattern.WhitespaceChar, 0, 1, true),
-                                       new QuantifierPattern(CharGroupPattern.WordChar.Negated, 1, null, true),
+            BasePattern expected = new GroupPattern(
+                                        true,
+                                        new BasePattern[]
+                                        {
+                                            new QuantifierPattern(CharGroupPattern.DigitChar, 0, null, true),
+                                            new QuantifierPattern(CharGroupPattern.WhitespaceChar, 0, 1, true),
+                                            new QuantifierPattern(CharGroupPattern.WordChar.Negated, 1, null, true),
 
-                                       new QuantifierPattern(new CharEscapePattern('x'), 0, null, false),
-                                       new QuantifierPattern(new CharEscapePattern('\n'), 0, 1, false),
-                                       new QuantifierPattern(new CharEscapePattern('y'), 1, null, false)
-                                   });
+                                            new QuantifierPattern(new CharEscapePattern('x'), 0, null, false),
+                                            new QuantifierPattern(new CharEscapePattern('\n'), 0, 1, false),
+                                            new QuantifierPattern(new CharEscapePattern('y'), 1, null, false)
+                                        });
 
             Assert.AreEqual(expected, actual);
         }
@@ -34,11 +36,11 @@ namespace RegexParser.Tests.Patterns
         {
             BasePattern actual = BasePattern.CreatePattern(@"((ab)+)+");
 
-            BasePattern expected = new GroupPattern(
+            BasePattern expected = new GroupPattern(true,
                                        new QuantifierPattern(
-                                           new GroupPattern(
+                                           new GroupPattern(true,
                                                new QuantifierPattern(
-                                                   new GroupPattern(
+                                                   new GroupPattern(true,
                                                        new CharEscapePattern('a'),
                                                        new CharEscapePattern('b')),
                                                    1, null, true)),

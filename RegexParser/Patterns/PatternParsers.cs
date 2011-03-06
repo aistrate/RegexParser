@@ -136,7 +136,7 @@ namespace RegexParser.Patterns
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
                                select ps.Count() == 1 ? ps.First() :
-                                                        (BasePattern)new GroupPattern(ps);
+                                                        (BasePattern)new GroupPattern(false, ps);
 
             Alternation = from alts in SepBy(2, AlternationGroup, Char('|'))
                           select new AlternationPattern(alts);
@@ -150,13 +150,15 @@ namespace RegexParser.Patterns
                                             from p in Anchor select (BasePattern)p,
                                             from p in CharEscapeOutsideClass select (BasePattern)p,
                                             from p in CharClass select (BasePattern)p))
-                        select new GroupPattern(ps);
+                        select new GroupPattern(false, ps);
 
-            ParenGroup = Between(Char('('),
-                                 Char(')'),
-                                 BareGroup);
+            ParenGroup = from bare in Between(Char('('),
+                                              Char(')'),
+                                              BareGroup)
+                         select new GroupPattern(true, bare.Patterns);
 
-            Regex = BareGroup;
+            Regex = from bare in BareGroup
+                    select new GroupPattern(true, bare.Patterns);
         }
 
 

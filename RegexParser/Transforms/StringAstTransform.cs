@@ -15,11 +15,11 @@ namespace RegexParser.Transforms
             {
                 // TODO: use groupBy (Haskell-style)
 
-                BasePattern[] oldChildPatterns = ((GroupPattern)pattern).Patterns;
+                GroupPattern group = (GroupPattern)pattern;
                 List<BasePattern> newChildPatterns = new List<BasePattern>();
                 StringBuilder currentString = new StringBuilder();
 
-                foreach (BasePattern oldChildPattern in oldChildPatterns)
+                foreach (BasePattern oldChildPattern in group.Patterns)
                     if (oldChildPattern is CharEscapePattern)
                         currentString.Append(((CharEscapePattern)oldChildPattern).Value);
                     else
@@ -36,7 +36,7 @@ namespace RegexParser.Transforms
                 if (currentString.Length > 0)
                     addStringPattern(newChildPatterns, currentString.ToString());
 
-                return CreateGroupOrSingleton(newChildPatterns.ToArray());
+                return CreateGroupOrSingleton(group.IsCapturing, newChildPatterns.ToArray());
             }
             else
                 return base.Transform(pattern);

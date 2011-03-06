@@ -28,6 +28,7 @@ namespace RegexParser.Transforms
                                                  quant.IsGreedy);
 
                 return new GroupPattern(
+                    false,
                     new QuantifierPattern(transformedChild,
                                           quant.MinOccurrences,
                                           quant.MinOccurrences,
