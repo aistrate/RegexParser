@@ -53,9 +53,14 @@ namespace RegexParser.Transforms
                 return new GroupPattern(isCapturing, children);
         }
 
+        protected bool IsEmpty(BasePattern pattern)
+        {
+            return pattern.Type == PatternType.Group && pattern.Equals(GroupPattern.Empty);
+        }
+
         protected bool IsNotEmpty(BasePattern pattern)
         {
-            return !(pattern.Type == PatternType.Group && pattern.Equals(GroupPattern.Empty));
+            return !IsEmpty(pattern);
         }
     }
 }

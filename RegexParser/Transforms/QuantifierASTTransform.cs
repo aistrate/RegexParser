@@ -1,4 +1,6 @@
-﻿using RegexParser.Patterns;
+﻿using System;
+using System.Linq;
+using RegexParser.Patterns;
 
 namespace RegexParser.Transforms
 {
@@ -15,44 +17,43 @@ namespace RegexParser.Transforms
             if (pattern.Type == PatternType.Quantifier)
             {
                 QuantifierPattern quant = (QuantifierPattern)pattern;
-
-                if (quant.MaxOccurrences == 0)
-                    return GroupPattern.Empty;
-
                 BasePattern transformedChild = Transform(quant.ChildPattern);
 
-                if (quant.MinOccurrences == 0)
-                    return new QuantifierPattern(transformedChild,
-                                                 0,
-                                                 quant.MaxOccurrences,
-                                                 quant.IsGreedy);
-                else if (quant.MinOccurrences == quant.MaxOccurrences)
-                    return createQuantifier(transformedChild,
-                                            quant.MinOccurrences,
-                                            quant.IsGreedy);
-                else
-                    return new GroupPattern(
-                        false,
-                        createQuantifier(transformedChild,
-                                         quant.MinOccurrences,
-                                         quant.IsGreedy),
+                if (IsEmpty(transformedChild))
+                    return GroupPattern.Empty;
+
+                BasePattern[] newPatterns = new[]
+                    {
+                        new QuantifierPattern(transformedChild,
+                                              quant.MinOccurrences,
+                                              quant.MinOccurrences,
+                                              quant.IsGreedy),
                         new QuantifierPattern(transformedChild,
                                               0,
-                                              quant.MaxOccurrences != null ?
-                                                        quant.MaxOccurrences - quant.MinOccurrences :
-                                                        null,
-                                              quant.IsGreedy));
+                                              quant.MaxOccurrences != null ? quant.MaxOccurrences - quant.MinOccurrences : null,
+                                              quant.IsGreedy),
+                    }
+                    .Select(q => reduceQuantifier(q))
+                    .Where(IsNotEmpty)
+                    .ToArray();
+
+                if (newPatterns.Length == 1)
+                    return newPatterns[0];
+                else
+                    return new GroupPattern(false, newPatterns);
             }
             else
                 return base.Transform(pattern);
         }
 
-        private BasePattern createQuantifier(BasePattern childPattern, int occurrences, bool isGreedy)
+        private BasePattern reduceQuantifier(QuantifierPattern quant)
         {
-            if (occurrences == 1)
-                return childPattern;
+            if (quant.MaxOccurrences == 0)
+                return GroupPattern.Empty;
+            else if (quant.MinOccurrences == 1 && quant.MaxOccurrences == 1)
+                return quant.ChildPattern;
             else
-                return new QuantifierPattern(childPattern, occurrences, occurrences, isGreedy);
+                return quant;
         }
     }
 }

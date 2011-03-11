@@ -128,7 +128,7 @@ namespace RegexParser.Tests.Transforms
         }
 
         [Test]
-        public void Quantifier_Zero()
+        public void Quantifier_0()
         {
             string patternText = "a(bc){0}";
 
@@ -138,5 +138,18 @@ namespace RegexParser.Tests.Transforms
 
             RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
+
+        //[Test]
+        //public void Quantifier_EmptyChild()
+        //{
+        //    // use ExplicitCapture
+        //    string patternText = "a()+";
+
+        //    BasePattern expected = new GroupPattern(
+        //                                    true,
+        //                                    new CharEscapePattern('a'));
+
+        //    RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
+        //}
     }
 }
