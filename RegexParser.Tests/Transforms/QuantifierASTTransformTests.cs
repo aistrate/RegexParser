@@ -83,6 +83,7 @@ namespace RegexParser.Tests.Transforms
                                             new CharEscapePattern('b'),
                                             new CharEscapePattern('c'));
 
+            // Unchanged
             BasePattern expected = new GroupPattern(
                                             true,
                                             new CharEscapePattern('a'),
@@ -101,6 +102,7 @@ namespace RegexParser.Tests.Transforms
                                             new CharEscapePattern('b'),
                                             new CharEscapePattern('c'));
 
+            // Unchanged
             BasePattern expected = new GroupPattern(
                                             true,
                                             new CharEscapePattern('a'),
