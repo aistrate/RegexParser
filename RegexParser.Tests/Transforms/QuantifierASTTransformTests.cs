@@ -139,6 +139,7 @@ namespace RegexParser.Tests.Transforms
             RegexAssert.IsASTTransformCorrect(expected, patternText, transform);
         }
 
+        // TODO: uncomment when ExplicitCapture is working
         //[Test]
         //public void Quantifier_EmptyChild()
         //{
