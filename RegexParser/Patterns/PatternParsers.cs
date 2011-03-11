@@ -234,12 +234,12 @@ namespace RegexParser.Patterns
             {
                 { '^', AnchorType.StartOfStringOrLine},
                 { '$', AnchorType.EndOfStringOrLine },
+                { 'A', AnchorType.StartOfStringOnly },
+                { 'z', AnchorType.EndOfStringOnly },
+                { 'Z', AnchorType.EndOfStringOrBeforeEndingNewline },
+                { 'G', AnchorType.ContiguousMatch },
                 { 'b', AnchorType.WordBoundary },
                 { 'B', AnchorType.NonWordBoundary },
-                { 'A', AnchorType.StartOfStringOnly },
-                { 'Z', AnchorType.EndOfStringOrBeforeEndingNewline },
-                { 'z', AnchorType.EndOfStringOnly },
-                { 'G', AnchorType.ContiguousMatch },
             };
         private static string bareAnchorKeys = "^$";
         private static string backslashAnchorKeys = anchorTypes.Keys.Cast<char>()

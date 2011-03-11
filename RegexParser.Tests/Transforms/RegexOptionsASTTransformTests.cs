@@ -63,5 +63,45 @@ namespace RegexParser.Tests.Transforms
             RegexAssert.IsASTTransformCorrect(expected, patternText,
                                               new RegexOptionsASTTransform(RegexOptions.IgnoreCase));
         }
+
+        [Test]
+        public void Multiline_False()
+        {
+            string patternText = @"^\b\B\z\Z\A\G$";
+
+            BasePattern expected = new GroupPattern(
+                                        true,
+                                        new AnchorPattern(AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfString),
+                                        new AnchorPattern(AnchorType.WordBoundary),
+                                        new AnchorPattern(AnchorType.NonWordBoundary),
+                                        new AnchorPattern(AnchorType.EndOfStringOnly),
+                                        new AnchorPattern(AnchorType.EndOfStringOrBeforeEndingNewline),
+                                        new AnchorPattern(AnchorType.StartOfStringOnly),
+                                        new AnchorPattern(AnchorType.ContiguousMatch),
+                                        new AnchorPattern(AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfString));
+
+            RegexAssert.IsASTTransformCorrect(expected, patternText,
+                                              new RegexOptionsASTTransform(RegexOptions.None));
+        }
+
+        [Test]
+        public void Multiline_True()
+        {
+            string patternText = @"^\b\B\z\Z\A\G$";
+
+            BasePattern expected = new GroupPattern(
+                                        true,
+                                        new AnchorPattern(AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfLine),
+                                        new AnchorPattern(AnchorType.WordBoundary),
+                                        new AnchorPattern(AnchorType.NonWordBoundary),
+                                        new AnchorPattern(AnchorType.EndOfStringOnly),
+                                        new AnchorPattern(AnchorType.EndOfStringOrBeforeEndingNewline),
+                                        new AnchorPattern(AnchorType.StartOfStringOnly),
+                                        new AnchorPattern(AnchorType.ContiguousMatch),
+                                        new AnchorPattern(AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfLine));
+
+            RegexAssert.IsASTTransformCorrect(expected, patternText,
+                                              new RegexOptionsASTTransform(RegexOptions.Multiline));
+        }
     }
 }

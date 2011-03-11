@@ -31,6 +31,16 @@ namespace RegexParser.Transforms
                 if (Options.IgnoreCase)
                     transformed = ((CharPattern)transformed).CaseInsensitive;
             }
+            else if (pattern.Type == PatternType.Anchor &&
+                     Options.Multiline)
+            {
+                AnchorPattern anchor = (AnchorPattern)pattern;
+
+                if (anchor.AnchorType == AnchorType.StartOfStringOrLine)
+                    transformed = new AnchorPattern(AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfLine);
+                else if (anchor.AnchorType == AnchorType.EndOfStringOrLine)
+                    transformed = new AnchorPattern(AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfLine);
+            }
 
             if (transformed != pattern)
                 return transformed;
