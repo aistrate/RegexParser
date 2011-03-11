@@ -12,28 +12,28 @@ namespace RegexParser.Patterns
         {
             // Character Escapes
             CharEscape = (specialChars, charEscapeKeys) =>
-                            Choice(from c in NoneOf(specialChars)
-                                   select new CharEscapePattern(c),
+                                from esc in Choice(
+                                    NoneOf(specialChars),
 
-                                   from b in Char('\\')
-                                   from esc in
-                                       Choice(
-                                           OneOf(specialChars),
+                                    PrefixedBy(
+                                        Char('\\'),
+                                        Choice(
+                                            OneOf(specialChars),
 
-                                           from c in OneOf(charEscapeKeys)
-                                           select charEscapes[c],
+                                            from c in OneOf(charEscapeKeys)
+                                            select charEscapes[c],
 
-                                           from k in
+                                            from k in
                                                Choice(from c in Char('x') select 2,
                                                       from c in Char('u') select 4)
-                                           from hs in Count(k, HexDigit)
-                                           select (char)Numeric.ReadHex(hs),
+                                            from hs in Count(k, HexDigit)
+                                            select (char)Numeric.ReadHex(hs),
 
-                                           from os in Count(2, 3, OctDigit)
-                                           select (char)Numeric.ReadOct(os),
+                                            from os in Count(2, 3, OctDigit)
+                                            select (char)Numeric.ReadOct(os),
 
-                                           Satisfy(c => !char.IsLetterOrDigit(c) && c != '_'))
-                                   select new CharEscapePattern(esc));
+                                            Satisfy(c => !char.IsLetterOrDigit(c) && c != '_'))))
+                                select new CharEscapePattern(esc);
 
             CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass,
                                                 charEscapeKeysOutsideClass);
@@ -44,8 +44,8 @@ namespace RegexParser.Patterns
 
 
             // Character Classes
-            NamedCharClass = from b in Char('\\')
-                             from cls in OneOf(namedCharClassKeys)
+            NamedCharClass = from cls in PrefixedBy(Char('\\'),
+                                                    OneOf(namedCharClassKeys))
                              select namedCharClasses[cls];
 
             CharRange = (isFirstPos, isSubtract) =>
