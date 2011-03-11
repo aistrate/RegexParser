@@ -3,10 +3,10 @@
 namespace RegexParser.Transforms
 {
     /// <summary>
-    /// An Abstract Syntax Tree (AST) transform that converts quantifiers into their canonic form:
-    ///     - quantifier {n,m} becomes the pair {n,n}, {0,m-n}
-    ///     - quantifier {n,}  becomes the pair {n,n}, {0,}
-    ///     - quantifiers that are already in target form ({n,n}, {0,m}, or {0,}) remain unchanged
+    /// An Abstract Syntax Tree (AST) transform that converts quantifiers to their canonic form:
+    ///     - quantifier {n,m} becomes pair {n,n}, {0,m-n}
+    ///     - quantifier {n,}  becomes pair {n,n}, {0,}
+    ///     - quantifiers already in target form ({n,n}, {0,m}, or {0,}) remain unchanged
     /// </summary>
     public class QuantifierASTTransform : BaseASTTransform
     {
@@ -21,27 +21,38 @@ namespace RegexParser.Transforms
 
                 BasePattern transformedChild = Transform(quant.ChildPattern);
 
-                if (quant.MinOccurrences == 0 || quant.MinOccurrences == quant.MaxOccurrences)
+                if (quant.MinOccurrences == 0)
                     return new QuantifierPattern(transformedChild,
-                                                 quant.MinOccurrences,
+                                                 0,
                                                  quant.MaxOccurrences,
                                                  quant.IsGreedy);
-
-                return new GroupPattern(
-                    false,
-                    new QuantifierPattern(transformedChild,
-                                          quant.MinOccurrences,
-                                          quant.MinOccurrences,
-                                          quant.IsGreedy),
-                    new QuantifierPattern(transformedChild,
-                                          0,
-                                          quant.MaxOccurrences != null ?
-                                                    quant.MaxOccurrences - quant.MinOccurrences :
-                                                    null,
-                                          quant.IsGreedy));
+                else if (quant.MinOccurrences == quant.MaxOccurrences)
+                    return createQuantifier(transformedChild,
+                                            quant.MinOccurrences,
+                                            quant.IsGreedy);
+                else
+                    return new GroupPattern(
+                        false,
+                        createQuantifier(transformedChild,
+                                         quant.MinOccurrences,
+                                         quant.IsGreedy),
+                        new QuantifierPattern(transformedChild,
+                                              0,
+                                              quant.MaxOccurrences != null ?
+                                                        quant.MaxOccurrences - quant.MinOccurrences :
+                                                        null,
+                                              quant.IsGreedy));
             }
             else
                 return base.Transform(pattern);
+        }
+
+        private BasePattern createQuantifier(BasePattern childPattern, int occurrences, bool isGreedy)
+        {
+            if (occurrences == 1)
+                return childPattern;
+            else
+                return new QuantifierPattern(childPattern, occurrences, occurrences, isGreedy);
         }
     }
 }

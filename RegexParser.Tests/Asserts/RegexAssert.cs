@@ -151,7 +151,7 @@ namespace RegexParser.Tests.Asserts
             Console.WriteLine("Pattern Text:\n    {0}", patternText.ShowVerbatim());
             Console.WriteLine("Before Transform:");
             Console.WriteLine(beforePattern.FormatAsTree(1));
-            Console.WriteLine("After Transform:");
+            Console.WriteLine("After Transform{0}:", afterPattern.Equals(beforePattern) ? " (unchanged)" : "");
             Console.WriteLine(afterPattern.FormatAsTree(1));
 
             Console.Write("\n");

@@ -67,6 +67,7 @@
     <Compile Include="Performance\MatcherPerformanceTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
     <Compile Include="Performance\TransformPerformanceTests.cs" />
+    <Compile Include="Transforms\QuantifierASTTransformTests.cs" />
     <Compile Include="Transforms\RegexOptionsASTTransformTests.cs" />
     <Compile Include="Transforms\StringASTTransformTests.cs" />
     <Compile Include="MatchCollectionTests.cs" />
