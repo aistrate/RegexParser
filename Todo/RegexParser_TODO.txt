@@ -1,6 +1,10 @@
 RegexParser TODO:
 
-- solve case when Quantifier has Anchor as a child (e.g.: "^+"); for now, it enters an infinite loop
+- write tests for AnyCharPattern(false) with input strings containg "\r", "\r\n", "\n\r", etc.
+
+- ExplicitDFAMatcher: check BasePattern.MinCharLength (write a MinLength parser, which wraps around a child parser; add a Length property to IConsList; distinguish between the properties Length and TotalLength (or InitialLength/ArrayLength) in ArrayConstList)
+
+- solve case when Quantifier has Anchor as a child (e.g.: "^+"); for now, it enters an infinite loop (maybe introduce a property BasePattern.CanBeZeroLength, and set QuantifierPattern.MaxOccurrences to 1 if ChildPattern.CanBeZeroLength is True; or, in BacktrackingMatcher.Parse, stop expanding the QuantifierPattern if the actual match length of the child was zero)
 
 - RegexParsers: "unify" all group patterns that are part of various patterns (alternation, quantifier, etc.) (groups are similar, except for each excluding their own parent pattern); use Lazy() for all patterns in a group
 
