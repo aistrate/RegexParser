@@ -84,12 +84,10 @@ namespace RegexParser.Patterns
 
 
             // Anchors
-            Anchor = Choice(from c in Char('^') select new AnchorPattern(AnchorType.StartOfStringOrLine),
-                            from c in Char('$') select new AnchorPattern(AnchorType.EndOfStringOrLine),
-
-                            from b in Char('\\')
-                            from anc in OneOf(anchorTypeKeys)
-                            select new AnchorPattern(anchorTypes[anc]));
+            Anchor = from a in Choice(OneOf(bareAnchorKeys),
+                                      PrefixedBy(Char('\\'),
+                                                 OneOf(backslashAnchorKeys)))
+                     select new AnchorPattern(anchorTypes[a]);
 
 
             // Quantifiers
@@ -234,13 +232,18 @@ namespace RegexParser.Patterns
         private static Dictionary<char, AnchorType> anchorTypes =
             new Dictionary<char, AnchorType>()
             {
+                { '^', AnchorType.StartOfStringOrLine},
+                { '$', AnchorType.EndOfStringOrLine },
+                { 'b', AnchorType.WordBoundary },
+                { 'B', AnchorType.NonWordBoundary },
                 { 'A', AnchorType.StartOfStringOnly },
                 { 'Z', AnchorType.EndOfStringOrBeforeEndingNewline },
                 { 'z', AnchorType.EndOfStringOnly },
                 { 'G', AnchorType.ContiguousMatch },
-                { 'b', AnchorType.WordBoundary },
-                { 'B', AnchorType.NonWordBoundary },
             };
-        private static string anchorTypeKeys = anchorTypes.Keys.AsString();
+        private static string bareAnchorKeys = "^$";
+        private static string backslashAnchorKeys = anchorTypes.Keys.Cast<char>()
+                                                                    .Except(bareAnchorKeys)
+                                                                    .AsString();
     }
 }

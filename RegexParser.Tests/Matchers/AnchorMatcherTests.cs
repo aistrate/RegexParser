@@ -18,7 +18,7 @@ namespace RegexParser.Tests.Matchers
         //[Test]
         public void StartAndEndOfString()
         {
-            string input = "One thing or another";
+            string input = "One thing or another\nAnd then some";
 
             string[] patterns = new[] {
                 @"^\w+",
@@ -28,6 +28,8 @@ namespace RegexParser.Tests.Matchers
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType, RegexOptions.Multiline);
         }
     }
 

@@ -7,6 +7,8 @@ namespace ParserCombinators
 {
     public class Parsers<TToken>
     {
+        // TODO: 'Try' parser (see [Leijen 2001], page 7), to improve performance (?)
+
         public static Parser<TToken, TToken> Token
         {
             get { return consList => !consList.IsEmpty ? new Result<TToken, TToken>(consList.Head, consList.Tail) : null; }
@@ -119,6 +121,14 @@ namespace ParserCombinators
 
                 return new Result<TToken, IEnumerable<TValue>>(values, consList);
             };
+        }
+
+        public static Parser<TToken, TValue> PrefixedBy<TPrefix, TValue>(Parser<TToken, TPrefix> prefix,
+                                                                         Parser<TToken, TValue> parser)
+        {
+            return from p in prefix
+                   from x in parser
+                   select x;
         }
 
         public static Parser<TToken, TValue> Between<TOpen, TClose, TValue>(Parser<TToken, TOpen> open,
