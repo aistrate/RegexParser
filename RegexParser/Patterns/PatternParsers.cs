@@ -234,8 +234,8 @@ namespace RegexParser.Patterns
             {
                 { '^', AnchorType.StartOfStringOrLine},
                 { '$', AnchorType.EndOfStringOrLine },
-                { 'A', AnchorType.StartOfStringOnly },
-                { 'z', AnchorType.EndOfStringOnly },
+                { 'A', AnchorType.StartOfString },
+                { 'z', AnchorType.EndOfString },
                 { 'Z', AnchorType.EndOfStringOrBeforeEndingNewline },
                 { 'G', AnchorType.ContiguousMatch },
                 { 'b', AnchorType.WordBoundary },

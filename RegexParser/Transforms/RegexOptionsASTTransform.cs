@@ -31,15 +31,14 @@ namespace RegexParser.Transforms
                 if (Options.IgnoreCase)
                     transformed = ((CharPattern)transformed).CaseInsensitive;
             }
-            else if (pattern.Type == PatternType.Anchor &&
-                     Options.Multiline)
+            else if (pattern.Type == PatternType.Anchor)
             {
                 AnchorPattern anchor = (AnchorPattern)pattern;
 
                 if (anchor.AnchorType == AnchorType.StartOfStringOrLine)
-                    transformed = new AnchorPattern(AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfLine);
+                    transformed = new AnchorPattern(Options.Multiline ? AnchorType.StartOfLine : AnchorType.StartOfString);
                 else if (anchor.AnchorType == AnchorType.EndOfStringOrLine)
-                    transformed = new AnchorPattern(AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfLine);
+                    transformed = new AnchorPattern(Options.Multiline ? AnchorType.EndOfLine : AnchorType.EndOfString);
             }
 
             if (transformed != pattern)

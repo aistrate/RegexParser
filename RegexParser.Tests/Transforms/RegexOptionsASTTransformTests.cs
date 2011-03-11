@@ -71,14 +71,14 @@ namespace RegexParser.Tests.Transforms
 
             BasePattern expected = new GroupPattern(
                                         true,
-                                        new AnchorPattern(AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfString),
+                                        new AnchorPattern(AnchorType.StartOfString),
                                         new AnchorPattern(AnchorType.WordBoundary),
                                         new AnchorPattern(AnchorType.NonWordBoundary),
-                                        new AnchorPattern(AnchorType.EndOfStringOnly),
+                                        new AnchorPattern(AnchorType.EndOfString),
                                         new AnchorPattern(AnchorType.EndOfStringOrBeforeEndingNewline),
-                                        new AnchorPattern(AnchorType.StartOfStringOnly),
+                                        new AnchorPattern(AnchorType.StartOfString),
                                         new AnchorPattern(AnchorType.ContiguousMatch),
-                                        new AnchorPattern(AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfString));
+                                        new AnchorPattern(AnchorType.EndOfString));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText,
                                               new RegexOptionsASTTransform(RegexOptions.None));
@@ -91,14 +91,14 @@ namespace RegexParser.Tests.Transforms
 
             BasePattern expected = new GroupPattern(
                                         true,
-                                        new AnchorPattern(AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfLine),
+                                        new AnchorPattern(AnchorType.StartOfLine),
                                         new AnchorPattern(AnchorType.WordBoundary),
                                         new AnchorPattern(AnchorType.NonWordBoundary),
-                                        new AnchorPattern(AnchorType.EndOfStringOnly),
+                                        new AnchorPattern(AnchorType.EndOfString),
                                         new AnchorPattern(AnchorType.EndOfStringOrBeforeEndingNewline),
-                                        new AnchorPattern(AnchorType.StartOfStringOnly),
+                                        new AnchorPattern(AnchorType.StartOfString),
                                         new AnchorPattern(AnchorType.ContiguousMatch),
-                                        new AnchorPattern(AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfLine));
+                                        new AnchorPattern(AnchorType.EndOfLine));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText,
                                               new RegexOptionsASTTransform(RegexOptions.Multiline));

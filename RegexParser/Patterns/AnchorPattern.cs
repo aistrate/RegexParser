@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using Utility.General;
 using Utility.PrettyPrint;
 
 namespace RegexParser.Patterns
 {
     public enum AnchorType
     {
-        StartOfStringOrLine = 1,
-        EndOfStringOrLine,
-        StartOfStringOnly,
-        EndOfStringOnly,
-        EndOfStringOrBeforeEndingNewline,
-        ContiguousMatch = 32,
-        WordBoundary,
-        NonWordBoundary,
-    }
-
-    public enum ExplicitAnchorType
-    {
-        StartOfString = 16,
+        StartOfStringOrLine,
+        StartOfString,
         StartOfLine,
+
+        EndOfStringOrLine,
         EndOfString,
         EndOfLine,
         EndOfStringOrBeforeEndingNewline,
-        ContiguousMatch = 32,
+
+        ContiguousMatch,
         WordBoundary,
         NonWordBoundary,
     }
@@ -35,53 +25,23 @@ namespace RegexParser.Patterns
             : base(PatternType.Anchor, 0)
         {
             AnchorType = anchorType;
-
-            if (anchorType < AnchorType.ContiguousMatch)
-                ExplicitAnchorType = defaultExplicitAnchorType[anchorType];
-            else
-                ExplicitAnchorType = (ExplicitAnchorType)anchorType;
-        }
-
-        public AnchorPattern(AnchorType anchorType, ExplicitAnchorType explicitAnchorType)
-            : base(PatternType.Anchor, 0)
-        {
-            AnchorType = anchorType;
-            ExplicitAnchorType = explicitAnchorType;
         }
 
         public AnchorType AnchorType { get; private set; }
-        public ExplicitAnchorType ExplicitAnchorType { get; private set; }
-
-        private static Dictionary<AnchorType, ExplicitAnchorType> defaultExplicitAnchorType =
-            new Dictionary<AnchorType, ExplicitAnchorType>()
-            {
-                { AnchorType.StartOfStringOrLine, ExplicitAnchorType.StartOfString },
-                { AnchorType.EndOfStringOrLine, ExplicitAnchorType.EndOfString },
-                { AnchorType.StartOfStringOnly, ExplicitAnchorType.StartOfString },
-                { AnchorType.EndOfStringOnly, ExplicitAnchorType.EndOfString },
-                { AnchorType.EndOfStringOrBeforeEndingNewline, ExplicitAnchorType.EndOfStringOrBeforeEndingNewline },
-            };
 
         public override PPElement ToPrettyPrint()
         {
-            return new PPText(Type.ToString(),
-                              string.Format("Anchor ({0}{1})",
-                                            AnchorType.ToString(),
-                                            ExplicitAnchorType.ToString() != AnchorType.ToString() ?
-                                                ", " + ExplicitAnchorType.ToString() :
-                                                ""));
+            return new PPText(Type.ToString(), string.Format("Anchor ({0})", AnchorType.ToString()));
         }
 
         bool IEquatable<AnchorPattern>.Equals(AnchorPattern other)
         {
-            return other != null &&
-                   this.AnchorType == other.AnchorType &&
-                   this.ExplicitAnchorType == other.ExplicitAnchorType;
+            return other != null && this.AnchorType == other.AnchorType;
         }
 
         public override int GetHashCode()
         {
-            return HashCodeCombiner.Combine(AnchorType.GetHashCode(), ExplicitAnchorType.GetHashCode());
+            return AnchorType.GetHashCode();
         }
 
         public override bool Equals(object obj)
