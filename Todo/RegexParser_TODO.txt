@@ -17,7 +17,7 @@ RegexParser TODO:
 - replace the use of 'string' in Result<char, string> with an immutable class which stores all 'Value' chars in a tree structure (with cheap 'append', and branch re-use); maybe revive the idea of a non-deterministic parser (as in the 'experimental' Git branch) (Value is not a single string/char tree, but a list of them, possibly empty); replace the current implementation of backtracking
 
 
-* write tests for AnyCharPattern(false) with input strings containg "\r", "\r\n", "\n\r", etc.
+* write tests for AnyCharPattern(false) with input strings containing "\r", "\r\n", "\n\r", etc.
 * display pattern in multi-line indented format (with level of indent depending on element depth within the tree)
 * (Base)ASTTransform: when calculating GroupPattern.Patterns, QuantifierPattern.ChildPattern, AlternationPattern.Alternation, filter out all children that are 'null', or empty GroupPatterns; if the pattern that should dissapear is a CharPattern, return 'null'; if a QuantifierPattern, return an empty GroupPattern
 * add RegexOptions.RightToLeft
