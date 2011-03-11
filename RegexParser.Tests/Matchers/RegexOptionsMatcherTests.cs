@@ -38,6 +38,21 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
+        public void Singleline_Newlines()
+        {
+            string input = "AB\nCD\r\nEF\n\rGH\rIJ\n\nKL\r\rMN\n\r\nOP\r\n\rQR\n";
+
+            string[] patterns = new[] {
+                @".",
+                @".+",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType, RegexOptions.Singleline);
+        }
+
+        [Test]
         public void IgnoreCase()
         {
             string input = "First line\nSecond line.\nAnd a third\nThe last";

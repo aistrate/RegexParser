@@ -1,7 +1,5 @@
 RegexParser TODO:
 
-- write tests for AnyCharPattern(false) with input strings containg "\r", "\r\n", "\n\r", etc.
-
 - ExplicitDFAMatcher: check BasePattern.MinCharLength (write a MinLength parser, which wraps around a child parser; add a Length property to IConsList; distinguish between the properties Length and TotalLength (or InitialLength/ArrayLength) in ArrayConstList)
 
 - solve case when Quantifier has Anchor as a child (e.g.: "^+"); for now, it enters an infinite loop (maybe introduce a property BasePattern.CanBeZeroLength, and set QuantifierPattern.MaxOccurrences to 1 if ChildPattern.CanBeZeroLength is True; or, in BacktrackingMatcher.Parse, stop expanding the QuantifierPattern if the actual match length of the child was zero)
@@ -19,6 +17,7 @@ RegexParser TODO:
 - replace the use of 'string' in Result<char, string> with an immutable class which stores all 'Value' chars in a tree structure (with cheap 'append', and branch re-use); maybe revive the idea of a non-deterministic parser (as in the 'experimental' Git branch) (Value is not a single string/char tree, but a list of them, possibly empty); replace the current implementation of backtracking
 
 
+* write tests for AnyCharPattern(false) with input strings containg "\r", "\r\n", "\n\r", etc.
 * display pattern in multi-line indented format (with level of indent depending on element depth within the tree)
 * (Base)ASTTransform: when calculating GroupPattern.Patterns, QuantifierPattern.ChildPattern, AlternationPattern.Alternation, filter out all children that are 'null', or empty GroupPatterns; if the pattern that should dissapear is a CharPattern, return 'null'; if a QuantifierPattern, return an empty GroupPattern
 * add RegexOptions.RightToLeft
