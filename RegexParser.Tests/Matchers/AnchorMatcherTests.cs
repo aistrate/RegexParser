@@ -128,6 +128,8 @@ namespace RegexParser.Tests.Matchers
             string[] inputs = new[] {
                 "?Que?",
                 "Woman: without her, man is nothing.",
+                "(a_x-b_x)+ a_y - b_y",
+                "123+567+3.14-a+a2",
             };
 
             string[] patterns = new[] {
