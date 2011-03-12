@@ -31,7 +31,7 @@ namespace RegexParser.ConsoleTests
                 MatcherPerformanceTests.VeryLongMatches();
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
 
-                //new AnchorMatcherTests(AlgorithmType.Backtracking).StartAndEndOfStringOrLine();
+                //new AnchorMatcherTests(AlgorithmType.Backtracking).ContiguousMatch_2();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"(^\w)+")));

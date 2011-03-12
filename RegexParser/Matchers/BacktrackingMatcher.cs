@@ -22,7 +22,7 @@ namespace RegexParser.Matchers
             return new QuantifierASTTransform().Transform(pattern);
         }
 
-        protected override Result<char, string> Parse(ArrayConsList<char> consList)
+        protected override Result<char, string> Parse(ArrayConsList<char> consList, ArrayConsList<char> afterLastMatch)
         {
             BacktrackPoint lastBacktrackPoint = null;
 
@@ -84,8 +84,9 @@ namespace RegexParser.Matchers
 
 
                         case PatternType.Anchor:
-                            if (!doesAnchorMatch((ArrayConsList<char>)partialResult.Rest,
-                                                 ((AnchorPattern)currentPattern).AnchorType))
+                            if (!doesAnchorMatch(((AnchorPattern)currentPattern).AnchorType,
+                                                 (ArrayConsList<char>)partialResult.Rest,
+                                                 afterLastMatch))
                                 partialResult = null;
                             break;
 
@@ -146,7 +147,7 @@ namespace RegexParser.Matchers
             return new SimpleConsList<BasePattern>(quant.ChildPattern, tail);
         }
 
-        private bool doesAnchorMatch(ArrayConsList<char> consList, AnchorType anchorType)
+        private bool doesAnchorMatch(AnchorType anchorType, ArrayConsList<char> consList, ArrayConsList<char> afterLastMatch)
         {
             switch (anchorType)
             {
@@ -167,9 +168,8 @@ namespace RegexParser.Matchers
                     return consList.DropWhile(c => c == '\n').IsEmpty;
 
 
-                //case AnchorType.ContiguousMatch:
-                //    break;
-
+                case AnchorType.ContiguousMatch:
+                    return consList.Equals(afterLastMatch);
 
                 case AnchorType.WordBoundary:
                     return isWordBoundary(consList);

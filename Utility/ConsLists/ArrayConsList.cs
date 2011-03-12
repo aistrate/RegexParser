@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Utility.General;
 
 namespace Utility.ConsLists
 {
@@ -7,7 +9,7 @@ namespace Utility.ConsLists
     /// Traversal is very fast (slightly faster than LinkedConsList).
     /// The constructor is very fast.
     /// </summary>
-    public class ArrayConsList<T> : IConsList<T>
+    public class ArrayConsList<T> : IConsList<T>, IEquatable<ArrayConsList<T>>
     {
         public ArrayConsList(IEnumerable<T> collection)
             : this(collection.ToArray(), 0)
@@ -41,5 +43,23 @@ namespace Utility.ConsLists
         public bool IsStartOfArray { get { return index <= 0; } }
 
         public T Prev { get { return array[index - 1]; } }
+
+
+        bool IEquatable<ArrayConsList<T>>.Equals(ArrayConsList<T> other)
+        {
+            return other != null &&
+                   this.index == other.index &&
+                   this.array == other.array;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCodeCombiner.Combine(array.GetHashCode(), index.GetHashCode());
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ((IEquatable<ArrayConsList<T>>)this).Equals(obj as ArrayConsList<T>);
+        }
     }
 }
