@@ -19,7 +19,7 @@ RegexParser - priority list:
 = anchors: ^, $, \b, \B
 - Regex options:
     * Singleline
-    = Multiline
+    * Multiline
     * IgnoreCase
     - IgnorePatternWhitespace
     - ExplicitCapture

@@ -22,7 +22,7 @@ namespace RegexParser.Matchers
             return new QuantifierASTTransform().Transform(pattern);
         }
 
-        protected override Result<char, string> Parse(IConsList<char> consList, int length)
+        protected override Result<char, string> Parse(ArrayConsList<char> consList)
         {
             BacktrackPoint lastBacktrackPoint = null;
 
@@ -33,7 +33,7 @@ namespace RegexParser.Matchers
             {
                 BasePattern currentPattern = callStack.RemainingChildren.Head;
 
-                if (partialResult.Value + currentPattern.MinCharLength > length)
+                if (partialResult.Value + currentPattern.MinCharLength > consList.Length)
                     partialResult = null;
                 else
                 {
@@ -84,6 +84,9 @@ namespace RegexParser.Matchers
 
 
                         case PatternType.Anchor:
+                            if (!doesAnchorMatch((ArrayConsList<char>)partialResult.Rest,
+                                                 ((AnchorPattern)currentPattern).AnchorType))
+                                partialResult = null;
                             break;
 
 
@@ -129,10 +132,10 @@ namespace RegexParser.Matchers
 
         private IConsList<BasePattern> splitQuantifier(QuantifierPattern quant)
         {
-            var rest = SimpleConsList<BasePattern>.Empty;
+            var tail = SimpleConsList<BasePattern>.Empty;
 
             if (quant.MaxOccurrences != 1)
-                rest = new SimpleConsList<BasePattern>(
+                tail = new SimpleConsList<BasePattern>(
                                 quant.MaxOccurrences == null ?
                                     quant :
                                     new QuantifierPattern(quant.ChildPattern,
@@ -140,7 +143,43 @@ namespace RegexParser.Matchers
                                                           quant.MaxOccurrences - 1,
                                                           quant.IsGreedy));
 
-            return new SimpleConsList<BasePattern>(quant.ChildPattern, rest);
+            return new SimpleConsList<BasePattern>(quant.ChildPattern, tail);
+        }
+
+        private bool doesAnchorMatch(ArrayConsList<char> consList, AnchorType anchorType)
+        {
+            switch (anchorType)
+            {
+                case AnchorType.StartOfString:
+                    return consList.IsStartOfArray;
+
+                case AnchorType.StartOfLine:
+                    return consList.IsStartOfArray || consList.Prev == '\n';
+
+
+                case AnchorType.EndOfString:
+                    return consList.IsEmpty;
+
+                case AnchorType.EndOfLine:
+                    return consList.IsEmpty || consList.Head == '\n';
+
+                case AnchorType.EndOfStringOrBeforeEndingNewline:
+                    return consList.DropWhile(c => c == '\n').IsEmpty;
+
+
+                //case AnchorType.ContiguousMatch:
+                //    break;
+                //case AnchorType.WordBoundary:
+                //    break;
+                //case AnchorType.NonWordBoundary:
+                //    break;
+
+
+                default:
+                    throw new ApplicationException(
+                        string.Format("BacktrackingMatcher: illegal anchor type ({0}).",
+                                      anchorType.ToString()));
+            }
         }
 
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)

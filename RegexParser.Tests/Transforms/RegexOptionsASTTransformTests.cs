@@ -78,7 +78,7 @@ namespace RegexParser.Tests.Transforms
                                         new AnchorPattern(AnchorType.EndOfStringOrBeforeEndingNewline),
                                         new AnchorPattern(AnchorType.StartOfString),
                                         new AnchorPattern(AnchorType.ContiguousMatch),
-                                        new AnchorPattern(AnchorType.EndOfString));
+                                        new AnchorPattern(AnchorType.EndOfStringOrBeforeEndingNewline));
 
             RegexAssert.IsASTTransformCorrect(expected, patternText,
                                               new RegexOptionsASTTransform(RegexOptions.None));

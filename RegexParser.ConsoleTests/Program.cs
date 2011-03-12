@@ -28,10 +28,10 @@ namespace RegexParser.ConsoleTests
         {
             try
             {
-                //MatcherPerformanceTests.VeryLongMatches();
+                MatcherPerformanceTests.VeryLongMatches();
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
 
-                new AnchorMatcherTests(AlgorithmType.Backtracking).StartAndEndOfString();
+                //new AnchorMatcherTests(AlgorithmType.Backtracking).StartAndEndOfStringOrLine();
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"(^\w)+")));

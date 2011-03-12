@@ -34,5 +34,12 @@ namespace Utility.ConsLists
         public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new ArrayConsList<T>(array, index + 1); } }
 
         public bool IsEmpty { get { return index >= array.Length; } }
+
+
+        public int Length { get { return array.Length - index; } }
+
+        public bool IsStartOfArray { get { return index <= 0; } }
+
+        public T Prev { get { return array[index - 1]; } }
     }
 }

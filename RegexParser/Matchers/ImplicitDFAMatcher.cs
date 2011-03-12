@@ -10,7 +10,7 @@ namespace RegexParser.Matchers
         {
         }
 
-        protected override Result<char, string> Parse(IConsList<char> consList, int length)
+        protected override Result<char, string> Parse(ArrayConsList<char> consList)
         {
             return null;
         }

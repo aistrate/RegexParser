@@ -38,7 +38,7 @@ namespace RegexParser.Transforms
                 if (anchor.AnchorType == AnchorType.StartOfStringOrLine)
                     transformed = new AnchorPattern(Options.Multiline ? AnchorType.StartOfLine : AnchorType.StartOfString);
                 else if (anchor.AnchorType == AnchorType.EndOfStringOrLine)
-                    transformed = new AnchorPattern(Options.Multiline ? AnchorType.EndOfLine : AnchorType.EndOfString);
+                    transformed = new AnchorPattern(Options.Multiline ? AnchorType.EndOfLine : AnchorType.EndOfStringOrBeforeEndingNewline);
             }
 
             if (transformed != pattern)

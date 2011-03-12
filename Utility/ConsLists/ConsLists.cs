@@ -29,6 +29,16 @@ namespace Utility.ConsLists
             return result;
         }
 
+        public static IConsList<T> DropWhile<T>(this IConsList<T> source, Func<T, bool> predicate)
+        {
+            IConsList<T> result = source;
+
+            while (!result.IsEmpty && predicate(result.Head))
+                result = result.Tail;
+
+            return result;
+        }
+
         public static SimpleConsList<T> Cons<T>(this T value, SimpleConsList<T> list)
         {
             return new SimpleConsList<T>(value, list);

@@ -25,7 +25,7 @@ namespace RegexParser.Matchers
 
         protected Parser<char, string> Parser { get; private set; }
 
-        protected override Result<char, string> Parse(IConsList<char> consList, int length)
+        protected override Result<char, string> Parse(ArrayConsList<char> consList)
         {
             return Parser(consList);
         }

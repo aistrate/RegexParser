@@ -1,5 +1,7 @@
 RegexParser TODO:
 
+- "integrate" the parsing of various groups (quantifier, alternation, etc.), so that there are less "dead ends" during parsing (e.g., parsing "^^^^^^^" creates an AnchorPattern(StartOfStringOrLine) 70 times)
+
 - ExplicitDFAMatcher: check BasePattern.MinCharLength (write a MinLength parser, which wraps around a child parser; add a Length property to IConsList; distinguish between the properties Length and TotalLength (or InitialLength/ArrayLength) in ArrayConstList)
 
 - solve case when Quantifier has Anchor as a child (e.g.: "^+"); for now, it enters an infinite loop (maybe introduce a property BasePattern.CanBeZeroLength, and set QuantifierPattern.MaxOccurrences to 1 if ChildPattern.CanBeZeroLength is True; or, in BacktrackingMatcher.Parse, stop expanding the QuantifierPattern if the actual match length of the child was zero)
