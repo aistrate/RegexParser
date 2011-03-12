@@ -67,6 +67,82 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
+        public void WordBoundary()
+        {
+            string input = "One thing or another\nAnd then some";
+
+            string[] patterns = new[] {
+                @"\b\w+",
+                @"\w+\b",
+                @"\b\w+\b",
+
+                @"\b.+",
+                @".+\b",
+                @"\b.+\b",
+                @"\b.+?\b",
+                @"\b.*?\b",
+
+                @"\b[a-z]+",
+                @"[a-z]+\b",
+                @"\b[a-z]+\b",
+
+                @"\bt\w*",
+                @"\b[Aa]\w*",
+                @"\w*e\b",
+                @"\b[A-Z]\w*",
+
+                @"\B\w+",
+                @"\w+\B",
+                @"\B\w+\B",
+
+                @"(\B.)+",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void WordBoundary_Empty()
+        {
+            string input = "";
+
+            string[] patterns = new[] {
+                @"\b",
+                @"\b\w*",
+                @"\b\w*\b",
+                @"\b\b",
+
+                @"\B",
+                @"\b\B",
+                @"\B\b",
+                @"\B\B",
+                @"\B\w*\B",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void WordBoundary_Punctuation()
+        {
+            string[] inputs = new[] {
+                "?Que?",
+                "Woman: without her, man is nothing.",
+            };
+
+            string[] patterns = new[] {
+                @"\b.+?\b",
+                @"(\A|\b).+?(\b|\z)",
+                @"\B",
+            };
+
+            foreach (string input in inputs)
+                RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        // TODO: @"(^)+", @"(^\w*)+"
+
+        [Test]
         public void EscapedChars()
         {
             string input = @"abc^d ef gh i$ jk    \A \z\Z \b\B \G   \g \a\n";

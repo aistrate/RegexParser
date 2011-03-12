@@ -169,10 +169,13 @@ namespace RegexParser.Matchers
 
                 //case AnchorType.ContiguousMatch:
                 //    break;
-                //case AnchorType.WordBoundary:
-                //    break;
-                //case AnchorType.NonWordBoundary:
-                //    break;
+
+
+                case AnchorType.WordBoundary:
+                    return isWordBoundary(consList);
+
+                case AnchorType.NonWordBoundary:
+                    return !isWordBoundary(consList);
 
 
                 default:
@@ -180,6 +183,12 @@ namespace RegexParser.Matchers
                         string.Format("BacktrackingMatcher: illegal anchor type ({0}).",
                                       anchorType.ToString()));
             }
+        }
+
+        private bool isWordBoundary(ArrayConsList<char> consList)
+        {
+            return (!consList.IsStartOfArray && CharGroupPattern.WordChar.IsMatch(consList.Prev)) ^
+                   (!consList.IsEmpty && CharGroupPattern.WordChar.IsMatch(consList.Head));
         }
 
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)
