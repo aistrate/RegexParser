@@ -1,0 +1,16 @@
+Parsing a pattern of the form "^...^" creates this many AnchorPatterns:
+
+^'s:		AnchorPatterns:
+1			 4
+2			10
+3			18
+4			28
+5			40
+6			54
+7			70
+
+
+
+Related to this TODO item:
+
+- "integrate" the parsing of various groups (quantifier, alternation, etc.), so that there are less "dead ends" during parsing (e.g., parsing "^^^^^^^" creates an AnchorPattern(StartOfStringOrLine) 70 times)

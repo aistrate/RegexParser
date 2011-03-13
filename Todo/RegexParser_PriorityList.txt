@@ -16,7 +16,7 @@ RegexParser - priority list:
 
 [-possessive quantifiers: ?+, *+, ++, {m,n}+ ]
 
-= anchors: ^, $, \b, \B
+* anchors: ^, $, \b, \B
 - Regex options:
     * Singleline
     * Multiline
