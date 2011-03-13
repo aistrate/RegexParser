@@ -63,6 +63,7 @@
     <Compile Include="Matchers\RegexOptionsMatcherTests.cs" />
     <Compile Include="Patterns\CharGroupPatternTests.cs" />
     <Compile Include="Patterns\QuantifierPatternTests.cs" />
+    <Compile Include="Performance\BacktrackingPerformanceTests.cs" />
     <Compile Include="Performance\GeneralPerformanceTests.cs" />
     <Compile Include="Performance\MatcherPerformanceTests.cs" />
     <Compile Include="Performance\PatternPerformanceTests.cs" />
