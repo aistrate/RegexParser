@@ -22,7 +22,7 @@ namespace RegexParser.Matchers
             return new QuantifierASTTransform().Transform(pattern);
         }
 
-        protected override Result<char, string> Parse(ArrayConsList<char> consList, ArrayConsList<char> afterLastMatch)
+        protected override Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
         {
             BacktrackPoint lastBacktrackPoint = null;
 
@@ -86,7 +86,7 @@ namespace RegexParser.Matchers
                         case PatternType.Anchor:
                             if (!doesAnchorMatch(((AnchorPattern)currentPattern).AnchorType,
                                                  (ArrayConsList<char>)partialResult.Rest,
-                                                 afterLastMatch))
+                                                 afterLastMatchIndex))
                                 partialResult = null;
                             break;
 
@@ -147,35 +147,35 @@ namespace RegexParser.Matchers
             return new SimpleConsList<BasePattern>(quant.ChildPattern, tail);
         }
 
-        private bool doesAnchorMatch(AnchorType anchorType, ArrayConsList<char> consList, ArrayConsList<char> afterLastMatch)
+        private bool doesAnchorMatch(AnchorType anchorType, ArrayConsList<char> currentPos, int afterLastMatchIndex)
         {
             switch (anchorType)
             {
                 case AnchorType.StartOfString:
-                    return consList.IsStartOfArray;
+                    return currentPos.IsStartOfArray;
 
                 case AnchorType.StartOfLine:
-                    return consList.IsStartOfArray || consList.Prev == '\n';
+                    return currentPos.IsStartOfArray || currentPos.Prev == '\n';
 
 
                 case AnchorType.EndOfString:
-                    return consList.IsEmpty;
+                    return currentPos.IsEmpty;
 
                 case AnchorType.EndOfLine:
-                    return consList.IsEmpty || consList.Head == '\n';
+                    return currentPos.IsEmpty || currentPos.Head == '\n';
 
                 case AnchorType.EndOfStringOrBeforeEndingNewline:
-                    return consList.DropWhile(c => c == '\n').IsEmpty;
+                    return currentPos.DropWhile(c => c == '\n').IsEmpty;
 
 
                 case AnchorType.ContiguousMatch:
-                    return consList.Equals(afterLastMatch);
+                    return currentPos.ArrayIndex == afterLastMatchIndex;
 
                 case AnchorType.WordBoundary:
-                    return isWordBoundary(consList);
+                    return isWordBoundary(currentPos);
 
                 case AnchorType.NonWordBoundary:
-                    return !isWordBoundary(consList);
+                    return !isWordBoundary(currentPos);
 
 
                 default:

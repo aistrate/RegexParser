@@ -220,19 +220,60 @@ namespace RegexParser.Tests.Matchers
         }
 
         [Test]
+        public void ContiguousMatch_5()
+        {
+            string input = "abc";
+
+            string[] patterns = new[] {
+                @"\G\w?",
+                @"\G\w*",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
+        public void ContiguousMatch_NotAtBeginning()
+        {
+            string input = "abc";
+
+            string[] patterns = new[] {
+                @"a\G",
+                @"a?\G",
+                @"a??\G",
+                @"\w*\G",
+                @"\w+\G",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
+
+        [Test]
         public void ContiguousMatch_Empty()
         {
             string input = "";
 
             string[] patterns = new[] {
                 @"\G",
+                @"\G\w*",
                 @"\G\G",
             };
 
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
-        // TODO: @"(^)+", @"(^\w*)+"
+        //[Test]
+        //public void QuantifierWithAnchorChild()
+        //{
+        //    string input = "One thing or another";
+
+        //    string[] patterns = new [] {
+        //        @"^+",
+        //        //@"(^\d*)+",
+        //    };
+
+        //    RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        //}
 
         [Test]
         public void EscapedChars()

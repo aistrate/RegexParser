@@ -55,18 +55,17 @@ namespace RegexParser.Matchers
             return new RegexOptionsASTTransform(Options).Transform(pattern);
         }
 
-        protected abstract Result<char, string> Parse(ArrayConsList<char> consList, ArrayConsList<char> afterLastMatch);
+        protected abstract Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex);
 
         public IEnumerable<Match2> GetMatches(string inputText)
         {
             ArrayConsList<char> consList = new ArrayConsList<char>(inputText);
-            ArrayConsList<char> afterLastMatch = consList;
 
-            int index = 0;
+            int index = 0, afterLastMatchIndex = 0;
 
             while (index <= inputText.Length)
             {
-                Result<char, string> result = Parse(consList, afterLastMatch);
+                Result<char, string> result = Parse(consList, afterLastMatchIndex);
 
                 if (result != null)
                 {
@@ -75,8 +74,8 @@ namespace RegexParser.Matchers
                     if (result.Value.Length > 0)
                     {
                         consList = (ArrayConsList<char>)result.Rest;
-                        afterLastMatch = consList;
                         index += result.Value.Length;
+                        afterLastMatchIndex = index;
                         continue;
                     }
                 }

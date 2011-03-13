@@ -25,7 +25,7 @@ namespace RegexParser.Matchers
 
         protected Parser<char, string> Parser { get; private set; }
 
-        protected override Result<char, string> Parse(ArrayConsList<char> consList, ArrayConsList<char> afterLastMatch)
+        protected override Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
         {
             return Parser(consList);
         }
