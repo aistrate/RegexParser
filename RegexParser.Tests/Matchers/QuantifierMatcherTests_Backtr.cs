@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using RegexParser.Matchers;
 using RegexParser.Tests.Asserts;
 using Utility.BaseTypes;
+using Msoft = System.Text.RegularExpressions;
 
 namespace RegexParser.Tests.Matchers
 {
@@ -38,7 +40,35 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, pattern, AlgorithmType);
         }
 
-        // TODO: add test: regex that decides whether a number is prime
+        // TODO: enable this test when captures work properly
+        //[Test]
+        public void PrimeNumbers()
+        {
+            int[] numbers = new[]
+                {
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                    10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                    20, 23, 24, 25, 26, 29,
+                    31, 37,
+                    41, 43, 47,
+                    53, 59,
+                    60, 61, 64, 67,
+                    71, 72, 73,
+                };
+
+            string pattern = @"^1?$|^(11+?)\1+$";
+
+            foreach (int n in numbers)
+            {
+                string input = new string('1', n);
+
+                Console.WriteLine("Number:   {0}", n);
+                Console.WriteLine("Prime:    {0}", Msoft.Regex.Matches(input, pattern).Count == 0);
+
+                RegexAssert.AreMatchesSameAsMsoft(input, pattern, AlgorithmType);
+                //RegexAssert.DisplayMsoftMatches(input, pattern);
+            }
+        }
     }
 
 #endif

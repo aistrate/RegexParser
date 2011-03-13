@@ -28,10 +28,7 @@ namespace RegexParser.Tests.Asserts
 
             DisplayMatches(input, pattern, algorithmType, options, actual);
 
-            Match2[] expected = Msoft.Regex.Matches(input, pattern, ToMsoftRegexOptions(options))
-                                           .Cast<Msoft.Match>()
-                                           .Select(m => createMatch(m))
-                                           .ToArray();
+            Match2[] expected = CreateMatches(Msoft.Regex.Matches(input, pattern, ToMsoftRegexOptions(options)));
 
             try
             {
@@ -52,6 +49,21 @@ namespace RegexParser.Tests.Asserts
         {
             foreach (string pattern in patterns)
                 AreMatchesSameAsMsoft(input, pattern, algorithmType, options);
+        }
+
+        public static Match2[] CreateMatches(Msoft.MatchCollection msoftMatches)
+        {
+            return msoftMatches.Cast<Msoft.Match>()
+                               .Select(m => CreateMatch(m))
+                               .ToArray();
+        }
+
+        public static Match2 CreateMatch(Msoft.Match msoftMatch)
+        {
+            if (msoftMatch.Success)
+                return Factory.CreateMatch(msoftMatch.Index, msoftMatch.Length, msoftMatch.Value);
+            else
+                return Match2.Empty;
         }
 
         public static void ThrowsSameExceptionAsMsoft(string input, string pattern, AlgorithmType algorithmType)
@@ -167,7 +179,25 @@ namespace RegexParser.Tests.Asserts
             return BaseMatcher.CreateMatcher(algorithmType, patternText, options).Pattern;
         }
 
+        public static void DisplayMsoftMatches(string input, string pattern)
+        {
+            DisplayMsoftMatches(input, pattern, RegexOptions.None);
+        }
+
+        public static void DisplayMsoftMatches(string input, string pattern, RegexOptions options)
+        {
+            Match2[] matches = CreateMatches(Msoft.Regex.Matches(input, pattern, ToMsoftRegexOptions(options)));
+
+            DisplayMatches(input, pattern, "Microsoft", options, matches);
+        }
+
         public static void DisplayMatches(string input, string pattern, AlgorithmType algorithmType, RegexOptions options,
+                                          IEnumerable<Match2> matches)
+        {
+            DisplayMatches(input, pattern, algorithmType.ToString(), options, matches);
+        }
+
+        public static void DisplayMatches(string input, string pattern, string algorithmName, RegexOptions options,
                                           IEnumerable<Match2> matches)
         {
             displayHeader(input, pattern, options);
@@ -176,7 +206,7 @@ namespace RegexParser.Tests.Asserts
             Console.WriteLine("{0} match{1} ({2}){3}",
                               count,
                               count == 1 ? "" : "es",
-                              algorithmType.ToString(),
+                              algorithmName,
                               count > 0 ? ":" : ".");
 
             if (count > 0)
@@ -212,14 +242,6 @@ namespace RegexParser.Tests.Asserts
 
             if (options != RegexOptions.None)
                 Console.WriteLine("Options: [{0}]", options.ToString());
-        }
-
-        private static Match2 createMatch(Msoft.Match msoftMatch)
-        {
-            if (msoftMatch.Success)
-                return Factory.CreateMatch(msoftMatch.Index, msoftMatch.Length, msoftMatch.Value);
-            else
-                return Match2.Empty;
         }
 
         private static string formatException(string input, string pattern, RegexOptions options, Exception ex)
