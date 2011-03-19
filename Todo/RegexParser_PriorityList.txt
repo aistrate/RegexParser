@@ -49,9 +49,19 @@ RegexParser - priority list:
 
 Short version:
 
-- options (global & inline)
-- anchors
-- captures
+* anchors
+~ options (global & inline)
+= captures
 - Replace()
 - group-related (named groups, atomic groups, backreferences)
 - look-ahead and look-behind
+
+
+
+Implemented (since 06-02-2011):
+
+- backtracking for greedy quantifiers
+- backtracking for alternations
+- lazy quantifiers
+- anchors
+- global options: Singleline, Multiline, IgnoreCase
