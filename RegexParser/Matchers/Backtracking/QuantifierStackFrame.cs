@@ -26,7 +26,33 @@ namespace RegexParser.Matchers.Backtracking
         public bool IsGreedy { get; private set; }
         public int LastPosition { get; private set; }
 
-        public QuantifierStackFrame MoveToNextChild(int lastPosition)
+
+        public bool IsPositionChanged(int lastPosition)
+        {
+            return lastPosition > LastPosition;
+        }
+
+        public StackFrame FirstAlternative(int lastPosition)
+        {
+            return IsGreedy ? nonEmptyBranch(lastPosition) : emptyBranch();
+        }
+
+        public StackFrame SecondAlternative(int lastPosition)
+        {
+            return IsGreedy ? emptyBranch() : nonEmptyBranch(lastPosition);
+        }
+
+        private StackFrame nonEmptyBranch(int lastPosition)
+        {
+            return new GroupStackFrame(moveToNextChild(lastPosition), RemainingChildren.Head);
+        }
+
+        private StackFrame emptyBranch()
+        {
+            return Parent;
+        }
+
+        private QuantifierStackFrame moveToNextChild(int lastPosition)
         {
             return new QuantifierStackFrame(Parent, RemainingChildren.Tail, IsGreedy, lastPosition);
         }

@@ -32,28 +32,25 @@ namespace RegexParser.Matchers
 
             while (callStack != null)
             {
-                BasePattern currentPattern = callStack.RemainingChildren.Head;
-
                 if (callStack is QuantifierStackFrame)
                 {
                     QuantifierStackFrame quantStackFrame = (QuantifierStackFrame)callStack;
 
-                    if (partialResult.Value > quantStackFrame.LastPosition)
+                    if (quantStackFrame.IsPositionChanged(partialResult.Value))
                     {
-                        StackFrame nonEmptyBranch = new GroupStackFrame(quantStackFrame.MoveToNextChild(partialResult.Value), currentPattern),
-                                   emptyBranch = quantStackFrame.Parent;
-
                         lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
-                                                                quantStackFrame.IsGreedy ? emptyBranch : nonEmptyBranch,
+                                                                quantStackFrame.SecondAlternative(partialResult.Value),
                                                                 partialResult);
 
-                        callStack = quantStackFrame.IsGreedy ? nonEmptyBranch : emptyBranch;
+                        callStack = quantStackFrame.FirstAlternative(partialResult.Value);
                     }
                     else
                         callStack = quantStackFrame.Parent;
                 }
                 else
                 {
+                    BasePattern currentPattern = callStack.RemainingChildren.Head;
+
                     if (currentPattern.MinCharLength > partialResult.Rest.Length)
                         partialResult = null;
                     else
