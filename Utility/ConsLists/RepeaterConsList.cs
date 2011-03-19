@@ -3,12 +3,11 @@
     public class RepeaterConsList<T> : IConsList<T>
     {
         public RepeaterConsList(T value)
+            : this(value, null)
         {
-            this.value = value;
-            this.count = null;
         }
 
-        public RepeaterConsList(T value, int count)
+        public RepeaterConsList(T value, int? count)
         {
             this.value = value;
             this.count = count;

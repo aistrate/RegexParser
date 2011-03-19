@@ -33,6 +33,7 @@ namespace RegexParser.ConsoleTests
                 //RegexAssert.AreMatchesSameAsMsoft("", @"", AlgorithmType.Backtracking);
 
                 //new AnchorMatcherTests(AlgorithmType.Backtracking).ContiguousMatch_2();
+                //RegexAssert.AreMatchesSameAsMsoft("?Que?", @"\b.+?\b", AlgorithmType.Backtracking);
 
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"^+abc")));
                 //Console.WriteLine(formatMsoftMatches(Msoft.Regex.Matches("abc", @"(^\w)+")));
