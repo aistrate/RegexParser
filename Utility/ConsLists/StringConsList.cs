@@ -30,6 +30,8 @@ namespace Utility.ConsLists
 
         public IConsList<char> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new StringConsList(Value.Substring(1)); } }
 
-        public bool IsEmpty { get { return Value.Length == 0; } }
+        public bool IsEmpty { get { return Length == 0; } }
+
+        public int Length { get { return Value.Length; } }
     }
 }

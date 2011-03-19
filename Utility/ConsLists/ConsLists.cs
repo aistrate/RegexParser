@@ -39,7 +39,7 @@ namespace Utility.ConsLists
             return result;
         }
 
-        public static SimpleConsList<T> Cons<T>(this T value, SimpleConsList<T> list)
+        public static SimpleConsList<T> Cons<T>(this T value, IConsList<T> list)
         {
             return new SimpleConsList<T>(value, list);
         }

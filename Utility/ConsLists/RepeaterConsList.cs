@@ -1,4 +1,6 @@
-﻿namespace Utility.ConsLists
+﻿using System;
+
+namespace Utility.ConsLists
 {
     public class RepeaterConsList<T> : IConsList<T>
     {
@@ -29,6 +31,17 @@
         }
 
         public bool IsEmpty { get { return !IsInfinite && (int)count <= 0; } }
+
+        public int Length
+        {
+            get
+            {
+                if (IsInfinite)
+                    throw new ApplicationException("Cannot calculate length of infinite list.");
+
+                return (int)count;
+            }
+        }
 
 
         public bool IsInfinite { get { return count == null; } }

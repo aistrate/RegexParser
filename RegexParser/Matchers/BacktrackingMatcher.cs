@@ -49,7 +49,7 @@ namespace RegexParser.Matchers
                 }
                 else
                 {
-                    if (partialResult.Value + currentPattern.MinCharLength > consList.Length)
+                    if (currentPattern.MinCharLength > partialResult.Rest.Length)
                         partialResult = null;
                     else
                     {
@@ -176,10 +176,10 @@ namespace RegexParser.Matchers
             }
         }
 
-        private bool isWordBoundary(ArrayConsList<char> consList)
+        private bool isWordBoundary(ArrayConsList<char> currentPos)
         {
-            return (!consList.IsStartOfArray && CharGroupPattern.WordChar.IsMatch(consList.Prev)) ^
-                   (!consList.IsEmpty && CharGroupPattern.WordChar.IsMatch(consList.Head));
+            return (!currentPos.IsStartOfArray && CharGroupPattern.WordChar.IsMatch(currentPos.Prev)) ^
+                   (!currentPos.IsEmpty && CharGroupPattern.WordChar.IsMatch(currentPos.Head));
         }
 
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)

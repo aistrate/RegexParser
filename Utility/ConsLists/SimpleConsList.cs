@@ -23,7 +23,7 @@ namespace Utility.ConsLists
         {
         }
 
-        public SimpleConsList(T value, SimpleConsList<T> next)
+        public SimpleConsList(T value, IConsList<T> next)
         {
             if (next == null)
                 throw new NullReferenceException("Reference to next node in SimpleConsList cannot be null.");
@@ -33,7 +33,7 @@ namespace Utility.ConsLists
         }
 
         private T value;
-        private SimpleConsList<T> next;
+        private IConsList<T> next;
 
 
         public T Head { get { this.AssertNotEmpty(ConsOp.Head); return value; } }
@@ -41,6 +41,8 @@ namespace Utility.ConsLists
         public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return next; } }
 
         public bool IsEmpty { get { return next == null; } }
+
+        public int Length { get { return IsEmpty ? 0 : (1 + next.Length); } }
 
 
         public static SimpleConsList<T> Empty = new SimpleConsList<T>();
@@ -55,8 +57,6 @@ namespace Utility.ConsLists
             return head;
         }
 
-
-        public int Length { get { return IsEmpty ? 0 : (1 + next.Length); } }
 
         public SimpleConsList<T> Prepend(T val)
         {

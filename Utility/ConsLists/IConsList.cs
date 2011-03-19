@@ -7,5 +7,7 @@
         IConsList<T> Tail { get; }
 
         bool IsEmpty { get; }
+
+        int Length { get; }
     }
 }

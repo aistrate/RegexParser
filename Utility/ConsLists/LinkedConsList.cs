@@ -25,5 +25,7 @@ namespace Utility.ConsLists
         public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new LinkedConsList<T>(firstNode.Next); } }
 
         public bool IsEmpty { get { return firstNode == null; } }
+
+        public int Length { get { return IsEmpty ? 0 : (1 + Tail.Length); } }
     }
 }

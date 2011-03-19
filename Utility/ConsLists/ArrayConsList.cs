@@ -33,10 +33,10 @@ namespace Utility.ConsLists
 
         public IConsList<T> Tail { get { this.AssertNotEmpty(ConsOp.Tail); return new ArrayConsList<T>(array, index + 1); } }
 
-        public bool IsEmpty { get { return index >= array.Length; } }
-
+        public bool IsEmpty { get { return Length <= 0; } }
 
         public int Length { get { return array.Length - index; } }
+
 
         public int ArrayIndex { get { return index; } }
 
