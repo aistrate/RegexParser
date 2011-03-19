@@ -262,18 +262,32 @@ namespace RegexParser.Tests.Matchers
             RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
         }
 
-        //[Test]
-        //public void QuantifierWithAnchorChild()
-        //{
-        //    string input = "One thing or another";
+        [Test]
+        public void QuantifierWithAnchorChild()
+        {
+            string input = "One thing or another";
 
-        //    string[] patterns = new [] {
-        //        @"^+",
-        //        //@"(^\d*)+",
-        //    };
+            string[] patterns = new[] {
+                @"^+",
+                @"(^\d*)+",
 
-        //    RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
-        //}
+                @"(^\w*)+",
+                @"(^\w*?)+",
+
+                @"^+?",
+                @"(^\d*)+?",
+                @"(^\w*?)+?",
+
+                @"([A-Z]*)+",
+                @"([A-Z]*)+?",
+
+                @"(^[A-Z]*)+",
+                @"(^[A-Zm-z]*)+",
+                @"(^[A-Zm-z]?)+",
+            };
+
+            RegexAssert.AreMatchesSameAsMsoft(input, patterns, AlgorithmType);
+        }
 
         [Test]
         public void EscapedChars()

@@ -38,14 +38,19 @@ namespace RegexParser.Matchers
                 {
                     QuantifierStackFrame quantStackFrame = (QuantifierStackFrame)callStack;
 
-                    StackFrame nonEmptyBranch = new StackFrame(quantStackFrame.MoveToNextChild(), currentPattern),
-                               emptyBranch = quantStackFrame.Parent;
+                    if (partialResult.Value > quantStackFrame.LastPosition)
+                    {
+                        StackFrame nonEmptyBranch = new StackFrame(quantStackFrame.MoveToNextChild(partialResult.Value), currentPattern),
+                                   emptyBranch = quantStackFrame.Parent;
 
-                    lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
-                                                            quantStackFrame.IsGreedy ? emptyBranch : nonEmptyBranch,
-                                                            partialResult);
+                        lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
+                                                                quantStackFrame.IsGreedy ? emptyBranch : nonEmptyBranch,
+                                                                partialResult);
 
-                    callStack = quantStackFrame.IsGreedy ? nonEmptyBranch : emptyBranch;
+                        callStack = quantStackFrame.IsGreedy ? nonEmptyBranch : emptyBranch;
+                    }
+                    else
+                        callStack = quantStackFrame.Parent;
                 }
                 else
                 {
