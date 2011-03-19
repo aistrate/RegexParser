@@ -1,6 +1,6 @@
 ﻿using ParserCombinators;
 
-namespace RegexParser.Matchers
+namespace RegexParser.Matchers.Backtracking
 {
     /// <summary>
     /// Immutable class.

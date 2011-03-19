@@ -48,11 +48,12 @@
     <Compile Include="Match2.cs" />
     <Compile Include="MatchCollection2.cs" />
     <Compile Include="Matchers\BacktrackingMatcher.cs" />
-    <Compile Include="Matchers\BacktrackPoint.cs" />
+    <Compile Include="Matchers\Backtracking\BacktrackPoint.cs" />
     <Compile Include="Matchers\BaseMatcher.cs" />
     <Compile Include="Matchers\ExplicitDFAMatcher.cs" />
     <Compile Include="Matchers\ImplicitDFAMatcher.cs" />
-    <Compile Include="Matchers\StackFrame.cs" />
+    <Compile Include="Matchers\Backtracking\QuantifierStackFrame.cs" />
+    <Compile Include="Matchers\Backtracking\StackFrame.cs" />
     <Compile Include="Patterns\AlternationPattern.cs" />
     <Compile Include="Patterns\AnchorPattern.cs" />
     <Compile Include="Patterns\AnyCharPattern.cs" />

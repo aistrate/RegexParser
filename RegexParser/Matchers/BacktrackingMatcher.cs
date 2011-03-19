@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ParserCombinators;
+using RegexParser.Matchers.Backtracking;
 using RegexParser.Patterns;
 using RegexParser.Transforms;
 using Utility.BaseTypes;
