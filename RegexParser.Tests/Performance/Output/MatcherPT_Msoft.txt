@@ -94,3 +94,11 @@ Pattern: @"[A-M]+"
 Options: [IgnoreCase]
 Matches: 38,462
 Time:    0.124 sec.
+
+Pattern: @"(\w{1,100000})+"
+Matches: 1
+Time:    0.090 sec.
+
+Pattern: @"(\w{1,1000000})+"
+Matches: 1
+Time:    0.091 sec.

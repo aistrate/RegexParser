@@ -91,6 +91,11 @@ namespace RegexParser.Tests.Performance
             testRegexMatches(lowercaseChars, @"[a-m]+", times);
 
             testRegexMatches(lowercaseChars, @"[A-M]+", RegexOptions.IgnoreCase, times);
+
+
+            testRegexMatches(lowercaseChars, @"(\w{1,100000})+", times);
+
+            testRegexMatches(lowercaseChars, @"(\w{1,1000000})+", times);
         }
 
         private const bool useMemoryProfiler = false;
