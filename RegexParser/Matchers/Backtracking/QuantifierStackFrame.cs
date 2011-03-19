@@ -26,12 +26,7 @@ namespace RegexParser.Matchers.Backtracking
         public bool IsGreedy { get; private set; }
         public int LastPosition { get; private set; }
 
-        public override StackFrame MoveToNextChild()
-        {
-            return MoveToNextChild(-1);
-        }
-
-        public StackFrame MoveToNextChild(int lastPosition)
+        public QuantifierStackFrame MoveToNextChild(int lastPosition)
         {
             return new QuantifierStackFrame(Parent, RemainingChildren.Tail, IsGreedy, lastPosition);
         }

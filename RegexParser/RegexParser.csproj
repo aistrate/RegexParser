@@ -49,6 +49,7 @@
     <Compile Include="MatchCollection2.cs" />
     <Compile Include="Matchers\BacktrackingMatcher.cs" />
     <Compile Include="Matchers\Backtracking\BacktrackPoint.cs" />
+    <Compile Include="Matchers\Backtracking\GroupStackFrame.cs" />
     <Compile Include="Matchers\BaseMatcher.cs" />
     <Compile Include="Matchers\ExplicitDFAMatcher.cs" />
     <Compile Include="Matchers\ImplicitDFAMatcher.cs" />

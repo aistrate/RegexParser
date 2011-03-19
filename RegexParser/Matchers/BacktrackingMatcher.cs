@@ -27,7 +27,7 @@ namespace RegexParser.Matchers
         {
             BacktrackPoint lastBacktrackPoint = null;
 
-            var callStack = new StackFrame(null, Pattern);
+            StackFrame callStack = new GroupStackFrame(null, Pattern);
             var partialResult = new Result<char, int>(0, consList);
 
             while (callStack != null)
@@ -40,7 +40,7 @@ namespace RegexParser.Matchers
 
                     if (partialResult.Value > quantStackFrame.LastPosition)
                     {
-                        StackFrame nonEmptyBranch = new StackFrame(quantStackFrame.MoveToNextChild(partialResult.Value), currentPattern),
+                        StackFrame nonEmptyBranch = new GroupStackFrame(quantStackFrame.MoveToNextChild(partialResult.Value), currentPattern),
                                    emptyBranch = quantStackFrame.Parent;
 
                         lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
@@ -58,12 +58,12 @@ namespace RegexParser.Matchers
                         partialResult = null;
                     else
                     {
-                        callStack = callStack.MoveToNextChild();
+                        callStack = ((GroupStackFrame)callStack).MoveToNextChild();
 
                         switch (currentPattern.Type)
                         {
                             case PatternType.Group:
-                                callStack = new StackFrame(callStack, ((GroupPattern)currentPattern).Patterns);
+                                callStack = new GroupStackFrame(callStack, ((GroupPattern)currentPattern).Patterns);
                                 break;
 
 
@@ -73,9 +73,9 @@ namespace RegexParser.Matchers
                                 quant.AssertCanonicalForm();
 
                                 if (quant.MinOccurrences == quant.MaxOccurrences)
-                                    callStack = new StackFrame(callStack,
-                                                               new RepeaterConsList<BasePattern>(quant.ChildPattern,
-                                                                                                 quant.MinOccurrences));
+                                    callStack = new GroupStackFrame(callStack,
+                                                                    new RepeaterConsList<BasePattern>(quant.ChildPattern,
+                                                                                                      quant.MinOccurrences));
 
                                 else
                                     callStack = new QuantifierStackFrame(callStack, quant);
@@ -87,10 +87,10 @@ namespace RegexParser.Matchers
 
                                 foreach (var alt in alternatives.Skip(1).Reverse())
                                     lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
-                                                                            new StackFrame(callStack, alt),
+                                                                            new GroupStackFrame(callStack, alt),
                                                                             partialResult);
 
-                                callStack = new StackFrame(callStack, alternatives.First());
+                                callStack = new GroupStackFrame(callStack, alternatives.First());
                                 break;
 
 
