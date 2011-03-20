@@ -25,9 +25,16 @@ namespace RegexParser.Matchers
 
         protected Parser<char, string> Parser { get; private set; }
 
-        protected override Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
+        protected override Result<char, Match2> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
         {
-            return Parser(consList);
+            Result<char, string> result = Parser(consList);
+
+            if (result != null)
+                return new Result<char, Match2>(
+                                new Match2(consList.ArrayIndex, result.Value.Length, result.Value),
+                                result.Rest);
+            else
+                return new Result<char, Match2>(Match2.Empty, consList);
         }
 
         private Parser<char, string> createParser(BasePattern pattern)

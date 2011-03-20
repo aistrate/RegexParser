@@ -23,7 +23,7 @@ namespace RegexParser.Matchers
             return new QuantifierASTTransform().Transform(pattern);
         }
 
-        protected override Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
+        protected override Result<char, Match2> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
         {
             BacktrackPoint lastBacktrackPoint = null;
 
@@ -121,15 +121,18 @@ namespace RegexParser.Matchers
                             lastBacktrackPoint = lastBacktrackPoint.Previous;
                         }
                         else
-                            return null;
+                            return new Result<char, Match2>(Match2.Empty, consList);
                     }
                 }
 
                 callStack = unwindEmptyFrames(callStack);
             }
 
-            return new Result<char, string>(consList.AsEnumerable().Take(partialResult.Value).AsString(),
-                                            partialResult.Rest);
+            return new Result<char, Match2>(
+                            new Match2(consList.ArrayIndex,
+                                       partialResult.Value,
+                                       consList.AsEnumerable().Take(partialResult.Value).AsString()),
+                            partialResult.Rest);
         }
 
         private StackFrame unwindEmptyFrames(StackFrame callStack)

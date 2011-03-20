@@ -10,9 +10,9 @@ namespace RegexParser.Matchers
         {
         }
 
-        protected override Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
+        protected override Result<char, Match2> Parse(ArrayConsList<char> consList, int afterLastMatchIndex)
         {
-            return null;
+            return new Result<char, Match2>(Match2.Empty, consList);
         }
     }
 }

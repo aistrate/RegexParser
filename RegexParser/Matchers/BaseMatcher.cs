@@ -55,7 +55,7 @@ namespace RegexParser.Matchers
             return new RegexOptionsASTTransform(Options).Transform(pattern);
         }
 
-        protected abstract Result<char, string> Parse(ArrayConsList<char> consList, int afterLastMatchIndex);
+        protected abstract Result<char, Match2> Parse(ArrayConsList<char> consList, int afterLastMatchIndex);
 
         public IEnumerable<Match2> GetMatches(string inputText)
         {
@@ -65,11 +65,11 @@ namespace RegexParser.Matchers
 
             while (index <= inputText.Length)
             {
-                Result<char, string> result = Parse(consList, afterLastMatchIndex);
+                Result<char, Match2> result = Parse(consList, afterLastMatchIndex);
 
-                if (result != null)
+                if (result.Value.Success)
                 {
-                    yield return new Match2(index, result.Value.Length, result.Value);
+                    yield return result.Value;
 
                     if (result.Value.Length > 0)
                     {

@@ -1,30 +1,41 @@
 ﻿using System;
 using Utility.BaseTypes;
-using Utility.General;
+using Utility.ConsLists;
 
 namespace RegexParser
 {
-    public class Match2 : IEquatable<Match2>
+    /// <summary>
+    /// Immutable class.
+    /// </summary>
+    public class Match2 : Group2, IEquatable<Match2>
     {
-        private Match2()
-        {
-            Success = false;
-            Value = "";
-        }
-
         internal Match2(int index, int length, string value)
+            : this(new Group2(index, length, value))
         {
-            Success = true;
-            Index = index;
-            Length = length;
-            Value = value;
         }
 
-        public bool Success { get; private set; }
+        internal Match2(Group2 onlyGroup)
+        {
+            groupConsList = new SimpleConsList<Group2>(onlyGroup);
+            firstGroup = onlyGroup;
+        }
 
-        public int Index { get; private set; }
-        public int Length { get; private set; }
-        public string Value { get; private set; }
+        internal Match2(Match2 oldMatch, Group2 group)
+        {
+            groupConsList = new SimpleConsList<Group2>(group, oldMatch.groupConsList);
+            firstGroup = oldMatch.firstGroup;
+        }
+
+        private SimpleConsList<Group2> groupConsList;
+        private Group2 firstGroup;
+
+        public override bool Success { get { return firstGroup.Success; } }
+        public override int Index { get { return firstGroup.Index; } }
+        public override int Length { get { return firstGroup.Length; } }
+        public override string Value { get { return firstGroup.Value; } }
+
+        public static new Match2 Empty = new Match2(Group2.Empty);
+
 
         public MatchCollection2 Parent { get; internal set; }
         public int ParentIndex { get; internal set; }
@@ -34,7 +45,6 @@ namespace RegexParser
             return Parent != null && Parent.IsValidIndex(ParentIndex + 1) ? Parent[ParentIndex + 1] : Match2.Empty;
         }
 
-        public static Match2 Empty = new Match2();
 
         public override string ToString()
         {
@@ -46,13 +56,13 @@ namespace RegexParser
 
         bool IEquatable<Match2>.Equals(Match2 other)
         {
-            return other != null && this.Success == other.Success &&
-                   this.Index == other.Index && this.Length == other.Length && this.Value == other.Value;
+            return other != null &&
+                   this.firstGroup.Equals(other.firstGroup);
         }
 
         public override int GetHashCode()
         {
-            return HashCodeCombiner.Combine(Success.GetHashCode(), Index.GetHashCode(), Length.GetHashCode(), Value.GetHashCode());
+            return firstGroup.GetHashCode();
         }
 
         public override bool Equals(object obj)
