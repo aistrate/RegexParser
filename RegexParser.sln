@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexParser", "RegexParser\RegexParser.csproj", "{F870A64D-2B11-4804-BD5E-36D9B0984CB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexParser.ConsoleTests", "RegexParser.ConsoleTests\RegexParser.ConsoleTests.csproj", "{469FF3BE-59C4-4BCB-A621-0CF9D42E8DAA}"
