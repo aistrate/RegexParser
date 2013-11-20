@@ -8,11 +8,11 @@ Regex Parser
     - **`\r`**: carriage return
     - **`\t`**: tab
     - **`\b`**: backspace (only inside a character class, <code><strong>&#91;</strong>_chars_<strong>&#93;</strong></code>; outside a character class, it is an anchor that matches a word boundary)
-    - <code><strong>\</strong>_nnn_</code>: ASCII character, where _`nnn`_ consists of two or three digits that represent the octal character code
+    - <code><strong>&#92;</strong>_nnn_</code>: ASCII character, where _`nnn`_ consists of two or three digits that represent the octal character code
     - <code><strong>\x</strong>_nn_</code>: ASCII character, where _`nn`_ is a two-digit hexadecimal character code
     - <code><strong>\u</strong>_nnnn_</code>: UTF-16 code unit whose value is _`nnnn`_ hexadecimal
-    - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?\</code>**: no special meaning; it matches itself
-    - **`\`** followed by a character not recognized as an escaped character (including one of **<code>.&#36;^{&#91;(|)&#42;+?\</code>**): it matches that character
+    - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**: no special meaning, it matches itself
+    - **`\`** followed by a character not recognized as an escaped character (including one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**): it matches that character
 - Character classes
 - Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
