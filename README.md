@@ -14,7 +14,7 @@ Regex Parser
     - <code><strong>\u</strong>_nnnn_</code>: UTF-16 code unit whose value is _`nnnn`_ hexadecimal
     - backslash (**`\`**) followed by a character not recognized as escaped (including any of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**) matches that character
 - Character classes:
-    - <code>**.**</code> matches any character except **`\n`** (if the `Singleline` option is set, it matches any character _including_ **`\n`**)
+    - <code>**.**</code> matches any character except <code>**\n**</code> (if the `Singleline` option is set, it matches any character _including_ <code>**\n**</code>)
     - positive character groups (e.g., <code>**&#91;aeiou&#93;**</code>, <code>**&#91;a-zA-Z&#93;**</code>, <code>**&#91;abA-H\d\n&#93;**</code>)
     - negative character groups (e.g., <code>**&#91;^a-zA-Z&#93;**</code>)
     - named character classes:
