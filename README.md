@@ -7,8 +7,8 @@ Regex Parser
 - Character classes
 - Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
-    - Greedy: <code>**\***</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
-    - Lazy: <code>**\*?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
+    - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
+    - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
 > The difference between greedy and lazy quantifiers is in the way they control backtracking. _Greedy_ quantifiers will first try to match as _many_ characters as possible; then, if the rest of the Regex does not match, will backtrack to one character _less_ and try again the rest; and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.
 - Alternation: **`|`**
 - Anchors:
@@ -37,7 +37,7 @@ See also: [Missing Features](#missing-features).
     - atomic groups (non-backtracking)
 - Substitution:
     - `Regex.Replace()` method
-    - substitution patterns: <code>**$$**</code>, <code>**$1**</code>, etc,
+    - substitution patterns: <code>**$$**</code>, <code>**$1**</code>, etc.
 - Look-ahead
 - Look-behind
 - Regex options:
