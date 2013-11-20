@@ -1,28 +1,29 @@
 Regex Parser
 ============
 
-### Implemented Regex Constructs ###
+### Implemented Regex Features ###
 
 - Character escapes
 - Character classes
-- Grouping (no capture): <code>**(**_subexpr_**)**</code>
+- Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
-    - greedy: <code>__*__</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
-    - non-greedy: <code>__*?__</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
+    - Greedy: <code>**\***</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
+    - Lazy: <code>**\*?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
+> The difference between greedy and lazy quantifiers is in the way they control backtracking. _Greedy_ quantifiers will first try to match as _many_ characters as possible; then, if the rest of the Regex does not match, will backtrack to one character _less_ and try again the rest; and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.
 - Alternation: **`|`**
 - Anchors:
-    - start of string or line (depending on `Multiline` option): **`^`**
-    - end of string or line (depending on `Multiline` option): **`$`**
-    - start of string only: **`\A`**
-    - end of string or before ending newline: **`\Z`**
-    - end of string only: **`\z`**
-    - contiguous match (must start where previous match ended): **`\G`**
-    - word boundary: **`\b`**
-    - non-word boundary: **`\B`**
-- Regex options:
+    - **`^`**: start of string or line (depending on the `Multiline` option)
+    - **`$`**: end of string or line (depending on the `Multiline` option)
+    - **`\A`**: start of string only
+    - **`\Z`**: end of string or before ending newline
+    - **`\z`**: end of string only
+    - **`\G`**: contiguous match (must start where previous match ended)
+    - **`\b`**: word boundary
+    - **`\B`**: non-word boundary
+- Regex options (global):
     - `IgnoreCase`
-    - `Multiline`
-    - `Singleline`
+    - `Multiline`: **`^`** and **`$`** match the beginning and end of each line (instead of the beginning and end of the input string)
+    - `Singleline`: the period (**`.`**) matches every character (instead of every character except **`\n`**)
 
 See also: [Missing Features](#missing-features).
 
