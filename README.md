@@ -7,8 +7,8 @@ Regex Parser
 - Character classes
 - Grouping (no capture): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
-    - greedy: **`*`**, **`+`**, **`?`**, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
-    - non-greedy: **`*?`**, **`+?`**, **`??`**, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
+    - greedy: <code>__*__</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
+    - non-greedy: <code>__*?__</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
 - Alternation: **`|`**
 - Anchors:
     - start of string or line (depending on `Multiline` option): **`^`**
@@ -36,7 +36,7 @@ See also: [Missing Features](#missing-features).
     - atomic groups (non-backtracking)
 - Substitution:
     - `Regex.Replace()` method
-    - substitution patterns: **`$$`**, **`$1`**, etc,
+    - substitution patterns: <code>**$$**</code>, <code>**$1**</code>, etc,
 - Look-ahead
 - Look-behind
 - Regex options:
