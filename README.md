@@ -4,7 +4,7 @@ Regex Parser
 ### Implemented Regex Features ###
 
 - Character escapes:
-    - any character except one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**: matches itself
+    - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>** matches itself
     - **`\n`**: new line
     - **`\r`**: carriage return
     - **`\t`**: tab
@@ -12,13 +12,13 @@ Regex Parser
     - <code><strong>&#92;</strong>_nnn_</code>: ASCII character, where _`nnn`_ is a two- or three-digit octal character code
     - <code><strong>\x</strong>_nn_</code>: ASCII character, where _`nn`_ is a two-digit hexadecimal character code
     - <code><strong>\u</strong>_nnnn_</code>: UTF-16 code unit whose value is _`nnnn`_ hexadecimal
-    - **`\`** followed by character not recognized as escaped (including **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**): matches the character
+    - backslash (**`\`**) followed by a character not recognized as escaped (including **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**) matches that character
 - Character classes
 - Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
     - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
-    <blockquote>The difference between greedy and lazy quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match as _many_ characters as possible. Then, if the rest of the Regex does not match, they will backtrack to one character _less_, then try again the rest--and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
+    <blockquote>The difference between greedy and lazy quantifiers is in how they control backtracking. _Greedy quantifiers_ will first try to match as _many_ characters as possible. Then, if the rest of the Regex does not match, they will backtrack to match one character _less_, then try again the rest of the Regex--and so on, one character _less_ every time. _Lazy quantifiers_, on the other hand, will first try to match as _few_ characters as possible, then backtrack to match one character _more_ every time.</blockquote>
 - Alternation: **`|`**
 - Anchors:
     - <code>**^**</code>: start of string or line (depending on the `Multiline` option)
