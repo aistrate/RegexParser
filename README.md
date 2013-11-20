@@ -14,8 +14,8 @@ Regex Parser
     - <code><strong>\u</strong>_nnnn_</code>: UTF-16 code unit whose value is _`nnnn`_ hexadecimal
     - backslash (**`\`**) followed by a character not recognized as escaped (including any of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**) matches that character
 - Character classes:
-    - <code>**.**</code> matches any character except <code>**\n**</code> (if the `Singleline` option is set, it matches any character _including_ <code>**\n**</code>)
-    - positive character groups (e.g., <code>**&#91;aeiou&#93;**</code>, <code>**&#91;a-zA-Z&#93;**</code>, <code>**&#91;abA-H\d\n&#93;**</code>)
+    - <code>**.**</code> matches any character except <code>**\n**</code> (or, if the `Singleline` option is on, any character _including_ <code>**\n**</code>)
+    - positive character groups (e.g., <code>**&#91;aeiou&#93;**</code>, <code>**&#91;a-zA-Z&#93;**</code>, <code>**&#91;abcA-H\d\n&#93;**</code>)
     - negative character groups (e.g., <code>**&#91;^a-zA-Z&#93;**</code>)
     - named character classes:
         - **`\w`**: a word character; same as <code>**&#91;0-9A-Z&#95;a-z&#93;**</code>
@@ -24,7 +24,7 @@ Regex Parser
         - **`\S`**: a non-whitespace character; same as <code>**&#91;^ \n\r\t&#93;**</code>
         - **`\d`**: a digit character; same as <code>**&#91;0-9&#93;**</code>
         - **`\D`**: a non-digit character; same as <code>**&#91;^0-9&#93;**</code>
-    - character class subtraction (e.g., <code>**&#91;0-9-&#91;246&#93;&#93;**</code>, meaning any digit except for 2, 4, and 6)
+    - character class subtraction (e.g., <code>**&#91;0-9-&#91;246&#93;&#93;**</code> matches any digit except for 2, 4, and 6)
 - Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
