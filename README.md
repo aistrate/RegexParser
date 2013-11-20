@@ -1,7 +1,7 @@
 Regex Parser
 ============
 
-### Implemented Regex Features ###
+### Regex Features Implemented ###
 
 - Character escapes:
     - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>** matches itself
@@ -12,13 +12,24 @@ Regex Parser
     - <code><strong>&#92;</strong>_nnn_</code>: ASCII character, where _`nnn`_ is a two- or three-digit octal character code
     - <code><strong>\x</strong>_nn_</code>: ASCII character, where _`nn`_ is a two-digit hexadecimal character code
     - <code><strong>\u</strong>_nnnn_</code>: UTF-16 code unit whose value is _`nnnn`_ hexadecimal
-    - backslash (**`\`**) followed by a character not recognized as escaped (including **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**) matches that character
-- Character classes
+    - backslash (**`\`**) followed by a character not recognized as escaped (including any of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**) matches that character
+- Character classes:
+    - <code>**.**</code> matches any character except **`\n`** (if the `Singleline` option is set, it matches any character _including_ **`\n`**)
+    - positive character groups (e.g., <code>**&#91;aeiou&#93;**</code>, <code>**&#91;a-zA-Z&#93;**</code>, <code>**&#91;abA-H\d\n&#93;**</code>)
+    - negative character groups (e.g., <code>**&#91;^a-zA-Z&#93;**</code>)
+    - named character classes:
+        - **`\w`**: a word character; same as <code>**&#91;0-9A-Z&#95;a-z&#93;**</code>
+        - **`\W`**: a non-word character; same as <code>**&#91;^0-9A-Z&#95;a-z&#93;**</code>
+        - **`\s`**: a whitespace character; same as <code>**&#91; \n\r\t&#93;**</code>
+        - **`\S`**: a non-whitespace character; same as <code>**&#91;^ \n\r\t&#93;**</code>
+        - **`\d`**: a digit character; same as <code>**&#91;0-9&#93;**</code>
+        - **`\D`**: a non-digit character; same as <code>**&#91;^0-9&#93;**</code>
+    - character class subtraction (e.g., <code>**&#91;0-9-&#91;246&#93;&#93;**</code>, meaning any digit except for 2, 4, and 6)
 - Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
     - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
-    <blockquote>The difference between greedy and lazy quantifiers is in how they control backtracking. _Greedy quantifiers_ will first try to match as _many_ characters as possible. Then, if the rest of the Regex does not match, they will backtrack to match one character _less_, then try again the rest of the Regex--and so on, one character _less_ every time. _Lazy quantifiers_, on the other hand, will first try to match as _few_ characters as possible, then backtrack to match one character _more_ every time.</blockquote>
+    <blockquote>The difference between greedy and lazy quantifiers is in how they control backtracking. _Greedy quantifiers_ will first try to match as _many_ characters as possible. Then, if the rest of the Regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the Regex--and so on, one character _less_ every time. _Lazy quantifiers_, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
 - Alternation: **`|`**
 - Anchors:
     - <code>**^**</code>: start of string or line (depending on the `Multiline` option)
