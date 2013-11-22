@@ -50,38 +50,32 @@ See also: [Missing Regex Features](#missing-regex-features).
 
 ### Architecture ###
 
-The Regex Parser library has three layers, each defined by a parsing phase:
+The Regex Parser has three layers, corresponding to the three parsing phases:
 
 1. Parsing the regex pattern, which produces an [Abstract Syntax Tree][1] (AST)
 2. Transforming  the AST
 3. Parsing the target string using the AST
 
-Phases 1 and 2 will happen only once for a given regex. Phase 3 can happen multiple times, on different target strings.
+Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple times, for different target strings.
 
   [1]: http://en.wikipedia.org/wiki/Abstract_Syntax_Tree
 
 
 ### The Parser Type ###
 
-The `Parser` type emulates the following _Haskell_ type:
-
-```Haskell
-newtype Parser s t = P ([s] -> (t, [s]))
-```
-
-In _C#_, it is defined like this:
+The `Parser` type is defined like this:
 
 ```C#
-public delegate Result<TToken, TValue> Parser<TToken, TValue>(IConsList<TToken> consList);
+public delegate Result<TToken, TTree> Parser<TToken, TTree>(IConsList<TToken> consList);
 
-public class Result<TToken, TValue>
+public class Result<TToken, TTree>
 {
-    public Result(TValue value, IConsList<TToken> rest)
+    public Result(TTree tree, IConsList<TToken> rest)
     {
-        Value = value;
+        Tree = tree;
         Rest = rest;
     }
-    public TValue Value { get; private set; }
+    public TTree Tree { get; private set; }
     public IConsList<TToken> Rest { get; private set; }
 }
 
@@ -94,6 +88,30 @@ public interface IConsList<T>
     int Length { get; }
 }
 ```
+
+A parser is a function that takes a list of tokens (e.g., characters), and returns a syntax tree and the list of unconsumed tokens. To indicate failure to match, it returns `null`.
+
+The `Parser` type emulates the following _Haskell_ type:
+
+```Haskell
+newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
+```
+
+> **NOTE**: The idea (and syntax) of parser combinators came from these articles (_Haskell_):
+
+> - [Combinator Parsing: A Short Tutorial][2] (Swierstra) (2008)
+> - [Monadic Parsing in Haskell][3] (Hutton, Meijer) (1998)
+
+> In the articles, the type is defined:
+
+> `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
+
+> This allows the parser to be ambiguous (there may be multiple ways to parse a string). It returns either a list of one or more “successes”, or an empty list to indicate failure.
+
+> The regex syntax is non-ambigious, so the first definition was preferred.
+
+  [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Combinator%20Parsing%20-%20A%20Short%20Tutorial%20(Swierstra%3B%202008).pdf
+  [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
 
 
 ### Missing Regex Features ###
