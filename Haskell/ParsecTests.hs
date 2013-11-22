@@ -1,3 +1,6 @@
+{-
+    Parsec non-determinism tests
+-}
 import Text.ParserCombinators.Parsec
 
 
