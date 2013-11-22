@@ -2,15 +2,15 @@
 
 namespace ParserCombinators
 {
-    public class Result<TToken, TValue>
+    public class Result<TToken, TTree>
     {
-        public Result(TValue value, IConsList<TToken> rest)
+        public Result(TTree tree, IConsList<TToken> rest)
         {
-            Value = value;
+            Tree = tree;
             Rest = rest;
         }
 
-        public TValue Value { get; private set; }
+        public TTree Tree { get; private set; }
 
         public IConsList<TToken> Rest { get; private set; }
     }

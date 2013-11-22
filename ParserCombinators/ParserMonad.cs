@@ -7,37 +7,37 @@ namespace ParserCombinators
 {
     public static class ParserMonad
     {
-        public static Parser<TToken, TValue> Where<TToken, TValue>(this Parser<TToken, TValue> parser,
-                                                                   Func<TValue, bool> predicate)
+        public static Parser<TToken, TTree> Where<TToken, TTree>(this Parser<TToken, TTree> parser,
+                                                                 Func<TTree, bool> predicate)
         {
             return consList =>
             {
                 var result = parser(consList);
                 
-                if (result != null && predicate(result.Value))
+                if (result != null && predicate(result.Tree))
                     return result;
                 else
                     return null;
             };
         }
 
-        public static Parser<TToken, TValue2> Select<TToken, TValue, TValue2>(this Parser<TToken, TValue> parser,
-                                                                              Func<TValue, TValue2> selector)
+        public static Parser<TToken, TTree2> Select<TToken, TTree, TTree2>(this Parser<TToken, TTree> parser,
+                                                                           Func<TTree, TTree2> selector)
         {
             return consList =>
             {
                 var result = parser(consList);
                 
                 if (result != null)
-                    return new Result<TToken, TValue2>(selector(result.Value), result.Rest);
+                    return new Result<TToken, TTree2>(selector(result.Tree), result.Rest);
                 else
                     return null;
             };
         }
 
-        public static Parser<TToken, TValue2> SelectMany<TToken, TValue, TIntermediate, TValue2>(this Parser<TToken, TValue> parser,
-                                                                                                 Func<TValue, Parser<TToken, TIntermediate>> selector,
-                                                                                                 Func<TValue, TIntermediate, TValue2> projector)
+        public static Parser<TToken, TTree2> SelectMany<TToken, TTree, TIntermediate, TTree2>(this Parser<TToken, TTree> parser,
+                                                                                              Func<TTree, Parser<TToken, TIntermediate>> selector,
+                                                                                              Func<TTree, TIntermediate, TTree2> projector)
         {
             return consList =>
             {
@@ -45,10 +45,10 @@ namespace ParserCombinators
 
                 if (result != null)
                 {
-                    var result2 = selector(result.Value)(result.Rest);
+                    var result2 = selector(result.Tree)(result.Rest);
                     
                     if (result2 != null)
-                        return new Result<TToken, TValue2>(projector(result.Value, result2.Value), result2.Rest);
+                        return new Result<TToken, TTree2>(projector(result.Tree, result2.Tree), result2.Rest);
                 }
                 
                 return null;

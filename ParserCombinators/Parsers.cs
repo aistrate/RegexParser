@@ -14,17 +14,17 @@ namespace ParserCombinators
             get { return consList => !consList.IsEmpty ? new Result<TToken, TToken>(consList.Head, consList.Tail) : null; }
         }
 
-        public static Parser<TToken, TValue> Succeed<TValue>(TValue value)
+        public static Parser<TToken, TTree> Succeed<TTree>(TTree tree)
         {
-            return consList => new Result<TToken, TValue>(value, consList);
+            return consList => new Result<TToken, TTree>(tree, consList);
         }
 
-        public static Parser<TToken, TValue> Fail<TValue>()
+        public static Parser<TToken, TTree> Fail<TTree>()
         {
             return consList => null;
         }
 
-        public static Parser<TToken, TValue> Choice<TValue>(params Parser<TToken, TValue>[] choices)
+        public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[] choices)
         {
             return consList =>
             {
@@ -39,45 +39,45 @@ namespace ParserCombinators
             };
         }
 
-        public static Parser<TToken, TValue> Option<TValue>(TValue defaultValue, Parser<TToken, TValue> parser)
+        public static Parser<TToken, TTree> Option<TTree>(TTree defaultTree, Parser<TToken, TTree> parser)
         {
-            return Choice(parser, Succeed(defaultValue));
+            return Choice(parser, Succeed(defaultTree));
         }
 
-        public static Parser<TToken, TValue?> OptionNullable<TValue>(Parser<TToken, TValue> parser)
-            where TValue : struct
+        public static Parser<TToken, TTree?> OptionNullable<TTree>(Parser<TToken, TTree> parser)
+            where TTree : struct
         {
             return Option(null,
-                          from x in parser select (TValue?)x);
+                          from x in parser select (TTree?)x);
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> Many<TValue>(Parser<TToken, TValue> parser)
+        public static Parser<TToken, IEnumerable<TTree>> Many<TTree>(Parser<TToken, TTree> parser)
         {
             return Count(0, null, parser);
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> Many1<TValue>(Parser<TToken, TValue> parser)
+        public static Parser<TToken, IEnumerable<TTree>> Many1<TTree>(Parser<TToken, TTree> parser)
         {
             return Count(1, null, parser);
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int count, Parser<TToken, TValue> parser)
+        public static Parser<TToken, IEnumerable<TTree>> Count<TTree>(int count, Parser<TToken, TTree> parser)
         {
             return Count(count, count, parser);
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> Count<TValue>(int min, int? max, Parser<TToken, TValue> parser)
+        public static Parser<TToken, IEnumerable<TTree>> Count<TTree>(int min, int? max, Parser<TToken, TTree> parser)
         {
             min = Math.Max(0, min);
             max = max ?? int.MaxValue;
 
             if (min > max)
-                return Fail<IEnumerable<TValue>>();
+                return Fail<IEnumerable<TTree>>();
 
             return consList =>
             {
-                List<TValue> values = new List<TValue>();
-                Result<TToken, TValue> result;
+                List<TTree> trees = new List<TTree>();
+                Result<TToken, TTree> result;
                 int count = 0;
 
                 if (max > 0)
@@ -87,7 +87,7 @@ namespace ParserCombinators
 
                         if (result != null)
                         {
-                            values.Add(result.Value);
+                            trees.Add(result.Tree);
                             consList = result.Rest;
                             count++;
                         }
@@ -95,18 +95,18 @@ namespace ParserCombinators
                     while (result != null && count < max);
 
                 if (count >= min)
-                    return new Result<TToken, IEnumerable<TValue>>(values, consList);
+                    return new Result<TToken, IEnumerable<TTree>>(trees, consList);
                 else
                     return null;
             };
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> Sequence<TValue>(IEnumerable<Parser<TToken, TValue>> parsers)
+        public static Parser<TToken, IEnumerable<TTree>> Sequence<TTree>(IEnumerable<Parser<TToken, TTree>> parsers)
         {
             return consList =>
             {
-                List<TValue> values = new List<TValue>();
-                Result<TToken, TValue> result;
+                List<TTree> trees = new List<TTree>();
+                Result<TToken, TTree> result;
 
                 foreach (var parser in parsers)
                 {
@@ -115,25 +115,25 @@ namespace ParserCombinators
                     if (result == null)
                         return null;
 
-                    values.Add(result.Value);
+                    trees.Add(result.Tree);
                     consList = result.Rest;
                 }
 
-                return new Result<TToken, IEnumerable<TValue>>(values, consList);
+                return new Result<TToken, IEnumerable<TTree>>(trees, consList);
             };
         }
 
-        public static Parser<TToken, TValue> PrefixedBy<TPrefix, TValue>(Parser<TToken, TPrefix> prefix,
-                                                                         Parser<TToken, TValue> parser)
+        public static Parser<TToken, TTree> PrefixedBy<TPrefix, TTree>(Parser<TToken, TPrefix> prefix,
+                                                                       Parser<TToken, TTree> parser)
         {
             return from p in prefix
                    from x in parser
                    select x;
         }
 
-        public static Parser<TToken, TValue> Between<TOpen, TClose, TValue>(Parser<TToken, TOpen> open,
-                                                                            Parser<TToken, TClose> close,
-                                                                            Parser<TToken, TValue> parser)
+        public static Parser<TToken, TTree> Between<TOpen, TClose, TTree>(Parser<TToken, TOpen> open,
+                                                                          Parser<TToken, TClose> close,
+                                                                          Parser<TToken, TTree> parser)
         {
             return from o in open
                    from x in parser
@@ -141,25 +141,25 @@ namespace ParserCombinators
                    select x;
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> SepBy<TValue, TSep>(Parser<TToken, TValue> parser,
-                                                                              Parser<TToken, TSep> sep)
+        public static Parser<TToken, IEnumerable<TTree>> SepBy<TTree, TSep>(Parser<TToken, TTree> parser,
+                                                                            Parser<TToken, TSep> sep)
         {
             return SepBy(0, parser, sep);
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> SepBy1<TValue, TSep>(Parser<TToken, TValue> parser,
-                                                                               Parser<TToken, TSep> sep)
+        public static Parser<TToken, IEnumerable<TTree>> SepBy1<TTree, TSep>(Parser<TToken, TTree> parser,
+                                                                             Parser<TToken, TSep> sep)
         {
             return SepBy(1, parser, sep);
         }
 
-        public static Parser<TToken, IEnumerable<TValue>> SepBy<TValue, TSep>(int minItemCount,
-                                                                              Parser<TToken, TValue> parser,
-                                                                              Parser<TToken, TSep> sep)
+        public static Parser<TToken, IEnumerable<TTree>> SepBy<TTree, TSep>(int minItemCount,
+                                                                            Parser<TToken, TTree> parser,
+                                                                            Parser<TToken, TSep> sep)
         {
             if (minItemCount <= 0)
                 return Choice(SepBy(1, parser, sep),
-                              Succeed(Enumerable.Empty<TValue>()));
+                              Succeed(Enumerable.Empty<TTree>()));
             else
                 return from first in parser
                        from rest in
@@ -171,7 +171,7 @@ namespace ParserCombinators
                        select new[] { first }.Concat(rest);
         }
 
-        public static Parser<TToken, UnitType> NotFollowedBy<TValue>(Parser<TToken, TValue> parser)
+        public static Parser<TToken, UnitType> NotFollowedBy<TTree>(Parser<TToken, TTree> parser)
         {
             return consList => parser(consList) != null ? null : new Result<TToken, UnitType>(UnitType.Unit, consList);
         }
@@ -181,7 +181,7 @@ namespace ParserCombinators
             get { return NotFollowedBy(Token); }
         }
 
-        public static Parser<TToken, TValue> Lazy<TValue>(Func<Parser<TToken, TValue>> thunk)
+        public static Parser<TToken, TTree> Lazy<TTree>(Func<Parser<TToken, TTree>> thunk)
         {
             return consList => thunk()(consList);
         }

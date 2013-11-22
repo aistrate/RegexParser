@@ -31,7 +31,7 @@ namespace RegexParser.Matchers
 
             if (result != null)
                 return new Result<char, Match2>(
-                                new Match2(consList.ArrayIndex, result.Value.Length, result.Value),
+                                new Match2(consList.ArrayIndex, result.Tree.Length, result.Tree),
                                 result.Rest);
             else
                 return new Result<char, Match2>(Match2.Empty, consList);

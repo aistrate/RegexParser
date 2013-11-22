@@ -37,13 +37,13 @@ namespace ParserCombinators.Tests.Performance
             // 37.55 sec. (maxItemCount = 2,000,000)
         }
 
-        public static void CharParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount)
+        public static void CharParserTest<TTree>(Parser<char, TTree> parser, int times, int maxItemCount)
         {
             CharParserTest(parser, times, maxItemCount,
                            EnumerablePerformanceTests.RepeatDigitChars(maxItemCount).AsString());
         }
 
-        public static void CharParserTest<TValue>(Parser<char, TValue> parser, int times, int maxItemCount, string inputText)
+        public static void CharParserTest<TTree>(Parser<char, TTree> parser, int times, int maxItemCount, string inputText)
         {
             IConsList<char> consList = new ArrayConsList<char>(inputText);
 
@@ -52,7 +52,7 @@ namespace ParserCombinators.Tests.Performance
             IConsList<char> rest = null;
             for (int i = 0; i < times; i++)
             {
-                Result<char, TValue> result = parser(consList);
+                Result<char, TTree> result = parser(consList);
 
                 while (result != null)
                 {

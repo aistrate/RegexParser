@@ -2,5 +2,5 @@
 
 namespace ParserCombinators
 {
-    public delegate Result<TToken, TValue> Parser<TToken, TValue>(IConsList<TToken> consList);
+    public delegate Result<TToken, TTree> Parser<TToken, TTree>(IConsList<TToken> consList);
 }

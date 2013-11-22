@@ -114,7 +114,7 @@ namespace RegexParser.Tests.Asserts
 
             Console.WriteLine("Pattern:\n    {0}", pattern.ShowVerbatim());
             Console.WriteLine("Parsed:");
-            Console.WriteLine(result.Value.FormatAsTree(1));
+            Console.WriteLine(result.Tree.FormatAsTree(1));
 
             if (!result.Rest.IsEmpty)
                 Console.WriteLine("Rest:\n    {0}", result.Rest.AsEnumerable().AsString().ShowVerbatim());

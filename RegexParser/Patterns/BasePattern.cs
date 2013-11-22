@@ -81,7 +81,7 @@ namespace RegexParser.Patterns
             var result = PatternParsers.Regex(new ArrayConsList<char>(patternText));
 
             if (result.Rest.IsEmpty)
-                return result.Value;
+                return result.Tree;
             else
                 throw new ArgumentException(
                                 string.Format("Could not understand part of the regex pattern: {0}.",

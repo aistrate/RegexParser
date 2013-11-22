@@ -118,7 +118,7 @@ namespace RegexParser.Tests.Performance
 
         private static CharClassPattern parseCharClass(string pattern)
         {
-            return PatternParsers.CharClass(new ArrayConsList<char>(pattern)).Value;
+            return PatternParsers.CharClass(new ArrayConsList<char>(pattern)).Tree;
         }
 
         private static void charClassPatternTest(CharClassPattern charClassPattern, int times, int maxItemCount, string inputText)

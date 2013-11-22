@@ -67,14 +67,14 @@ namespace RegexParser.Matchers
             {
                 Result<char, Match2> result = Parse(consList, afterLastMatchIndex);
 
-                if (result.Value.Success)
+                if (result.Tree.Success)
                 {
-                    yield return result.Value;
+                    yield return result.Tree;
 
-                    if (result.Value.Length > 0)
+                    if (result.Tree.Length > 0)
                     {
                         consList = (ArrayConsList<char>)result.Rest;
-                        index += result.Value.Length;
+                        index += result.Tree.Length;
                         afterLastMatchIndex = index;
                         continue;
                     }

@@ -132,7 +132,7 @@ namespace RegexParser.ConsoleTests
             return CharParsers.Sequence(s.Select(c => CharParsers.Char(c)));
         }
 
-        private static Result<char, TValue> runParser<TValue>(Parser<char, TValue> parser, string input)
+        private static Result<char, TTree> runParser<TTree>(Parser<char, TTree> parser, string input)
         {
             Console.WriteLine("Input:  {0}", input.Show());
             return parser(new ArrayConsList<char>(input));
@@ -148,11 +148,11 @@ namespace RegexParser.ConsoleTests
             displayResult(result, v => v.AsString().Show());
         }
 
-        private static void displayResult<TValue>(Result<char, TValue> result, Func<TValue, string> toString)
+        private static void displayResult<TTree>(Result<char, TTree> result, Func<TTree, string> toString)
         {
             if (result != null)
             {
-                Console.WriteLine("Result: {0}", toString(result.Value));
+                Console.WriteLine("Result: {0}", toString(result.Tree));
                 Console.WriteLine("Rest:   {0}\n", result.Rest.AsEnumerable().AsString().Show());
             }
             else

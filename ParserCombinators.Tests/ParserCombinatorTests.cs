@@ -43,7 +43,7 @@ let if = \b. \l. \r. ((b l) r) in
                 .TrimStart();
 
             Assert.True(result.Rest.IsEmpty, "Rest.IsEmpty.");
-            Assert.AreEqual(expected, result.Value.ToString(), "Value.");
+            Assert.AreEqual(expected, result.Tree.ToString(), "Tree.");
         }
     }
 }

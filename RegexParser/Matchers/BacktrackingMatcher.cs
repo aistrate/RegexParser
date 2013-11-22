@@ -36,13 +36,13 @@ namespace RegexParser.Matchers
                 {
                     QuantifierStackFrame quantStackFrame = (QuantifierStackFrame)callStack;
 
-                    if (quantStackFrame.IsPositionChanged(partialResult.Value))
+                    if (quantStackFrame.IsPositionChanged(partialResult.Tree))
                     {
                         lastBacktrackPoint = new BacktrackPoint(lastBacktrackPoint,
-                                                                quantStackFrame.SecondAlternative(partialResult.Value),
+                                                                quantStackFrame.SecondAlternative(partialResult.Tree),
                                                                 partialResult);
 
-                        callStack = quantStackFrame.FirstAlternative(partialResult.Value);
+                        callStack = quantStackFrame.FirstAlternative(partialResult.Tree);
                     }
                     else
                         callStack = quantStackFrame.Parent;
@@ -130,8 +130,8 @@ namespace RegexParser.Matchers
 
             return new Result<char, Match2>(
                             new Match2(consList.ArrayIndex,
-                                       partialResult.Value,
-                                       consList.AsEnumerable().Take(partialResult.Value).AsString()),
+                                       partialResult.Tree,
+                                       consList.AsEnumerable().Take(partialResult.Tree).AsString()),
                             partialResult.Rest);
         }
 
@@ -190,7 +190,7 @@ namespace RegexParser.Matchers
         private Result<char, int> parseChar(Result<char, int> partialResult, Func<char, bool> isMatch)
         {
             if (!partialResult.Rest.IsEmpty && isMatch(partialResult.Rest.Head))
-                return new Result<char, int>(partialResult.Value + 1,
+                return new Result<char, int>(partialResult.Tree + 1,
                                              partialResult.Rest.Tail);
             else
                 return null;
