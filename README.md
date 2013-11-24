@@ -12,9 +12,9 @@ Regex Parser
     - <code><strong>&#92;</strong>_nnn_</code>: ASCII character, where _`nnn`_ is a two- or three-digit octal character code
     - <code><strong>\x</strong>_nn_</code>: ASCII character, where _`nn`_ is a two-digit hexadecimal character code
     - <code><strong>\u</strong>_nnnn_</code>: UTF-16 code unit whose value is _`nnnn`_ hexadecimal
-    - backslash (**`\`**) followed by a character not recognized as escaped (including any of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>**) matches that character
+    - **`\`** followed by a character not recognized as escaped matches that character
 - Character classes:
-    - <code>**.**</code> matches any character except <code>**\n**</code> (or, if the `Singleline` option is on, any character _including_ <code>**\n**</code>)
+    - <code>**.**</code> matches any character except <code>**\n**</code>
     - positive character groups (e.g., <code>**&#91;aeiou&#93;**</code>, <code>**&#91;a-zA-Z&#93;**</code>, <code>**&#91;abcA-H\d\n&#93;**</code>)
     - negative character groups (e.g., <code>**&#91;^a-zA-Z&#93;**</code>)
     - named character classes:
@@ -24,7 +24,7 @@ Regex Parser
         - **`\S`**: a non-whitespace character; same as <code>**&#91;^ \n\r\t&#93;**</code>
         - **`\d`**: a digit character; same as <code>**&#91;0-9&#93;**</code>
         - **`\D`**: a non-digit character; same as <code>**&#91;^0-9&#93;**</code>
-    - character class subtraction (e.g., <code>**&#91;0-9-&#91;246&#93;&#93;**</code> matches any digit except for 2, 4, and 6)
+    - character class subtraction (e.g., <code>**&#91;0-9-&#91;246&#93;&#93;**</code> matches any digit except for 2, 4 and 6)
 - Grouping (without capturing): <code>**(**_subexpr_**)**</code>
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
@@ -52,8 +52,8 @@ See also: [Missing Regex Features](#missing-regex-features).
 
 The Regex Parser has three layers, corresponding to three parsing phases:
 
-1. Parsing the regex pattern, which produces an [Abstract Syntax Tree][1] (AST)
-2. Transforming  the AST
+1. Parsing the regex pattern, resulting in an [Abstract Syntax Tree][1] (AST)
+2. Transforming the AST
 3. Parsing the target string using the AST
 
 Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple times, for different target strings.
@@ -89,7 +89,7 @@ public interface IConsList<T>
 }
 ```
 
-A parser is simply a function that takes a list of tokens (e.g., characters), and returns a syntax tree and the list of unconsumed tokens. To indicate failure to match, it returns `null`.
+A parser is simply a function that takes a list of tokens (e.g., characters), and returns a syntax tree and the list of unconsumed tokens. To indicate failure to match, it will return `null`.
 
 The `Parser` type is equivalent to the following _Haskell_ type:
 
@@ -97,7 +97,7 @@ The `Parser` type is equivalent to the following _Haskell_ type:
 newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 ```
 
-> **NOTE**: The idea of parser combinators comes from these articles:
+> **NOTE**: The idea of parser combinators came from these articles:
 
 > - [Monadic Parsing in Haskell][2] (Hutton, Meijer) (1998)
 > - [Parsec, a fast combinator parser][3] (Leijen) (2001)
@@ -106,27 +106,12 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 > `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
 
-> This allows the parser to be ambiguous (to parse a string in multiple ways). It will return either a list of one or more “successes”, or an empty list to indicate failure.
+> This allows the parser to be ambiguous (to be able to parse a string in multiple ways). It will return either a list of one or more “successes”, or an empty list to indicate failure.
 
-> As regex syntax is non-ambigious, the `Maybe` definition was the one preferred.
+> As the regex syntax is non-ambigious, the `Maybe` definition was preferred.
 
   [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
   [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
-
-
-### Parser Combinators in C# ###
-
-These combinators take one or more parsers as arguments, and return a new parser (see full source):
-
-```C#
-// Try to apply the parsers in the 'choices' list in order, until one succeeds.
-// Return the tree returned by the succeeding parser.
-public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[] choices);
-
-// Try to apply 'parser'. If 'parser' succeeds, return the tree returned by it,
-// otherwise return 'defaultTree' (without consuming input).
-public static Parser<TToken, TTree> Option<TTree>(TTree defaultTree, Parser<TToken, TTree> parser)
-```
 
 
 ### Missing Regex Features ###
