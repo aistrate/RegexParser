@@ -50,7 +50,7 @@ See also: [Missing Regex Features](#missing-regex-features).
 
 ### Architecture ###
 
-The Regex Parser has three layers, corresponding to three parsing phases:
+The _Regex Parser_ has three layers, corresponding to three parsing phases:
 
 1. Parsing the regex pattern, resulting in an [Abstract Syntax Tree][1] (AST)
 2. Transforming the AST
@@ -97,21 +97,78 @@ The `Parser` type is equivalent to the following _Haskell_ type:
 newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 ```
 
-> **NOTE**: The idea of parser combinators came from these articles:
+> **NOTE**: The idea of _parser combinators_ came from these articles:
 
 > - [Monadic Parsing in Haskell][2] (Hutton, Meijer) (1998)
 > - [Parsec, a fast combinator parser][3] (Leijen) (2001)
 
-> In the articles, the type is defined like this:
+> In the articles, the type is defined similarly to this:
 
 > `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
 
-> This allows the parser to be ambiguous (to be able to parse a string in multiple ways). It will return either a list of one or more “successes”, or an empty list to indicate failure.
+> This allows the parser to be ambiguous (to be able to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
 
 > As the regex syntax is non-ambigious, the `Maybe` definition was preferred.
 
   [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
   [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
+
+
+### Parser Combinators in C# ###
+
+The following _parser combinators_ have been defined (see [definitions][4]):
+
+- `Choice`
+- `Option`
+- `Many`
+- `Many1`
+- `Count`
+- `Sequence`
+- `PrefixedBy`
+- `Between`
+- `SepBy`
+- `SepBy1`
+- `NotFollowedBy`
+- `Eof`
+- `AnyToken`
+- `Succeed`
+- `Fail`
+
+For example, the `Choice` combinator is defined as:
+
+```C#
+// Try to apply the parsers in the 'choices' list in order, until one succeeds.
+// Return the tree returned by the succeeding parser.
+public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[] choices)
+{
+    return consList =>
+    {
+        foreach (var parser in choices)
+        {
+            var result = parser(consList);
+            if (result != null)
+                return result;
+        }
+        return null;
+    };
+}
+```
+
+Beside combinators, there are also a number of "primitive" character parsers (see [definitions][5]):
+
+- `AnyChar`
+- `Satisfy`
+- `Char`
+- `Digit`
+- `OctDigit`
+- `HexDigit`
+- `OneOf`
+- `NoneOf`
+
+Each of these will match exactly _one_ character.
+
+  [4]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/Parsers.cs
+  [5]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/CharParsers.cs
 
 
 ### Missing Regex Features ###
