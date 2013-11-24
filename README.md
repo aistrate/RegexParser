@@ -63,7 +63,7 @@ Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple t
 
 ### The Parser Type ###
 
-The `Parser` type is defined like this:
+The `Parser` type is defined as:
 
 ```C#
 public delegate Result<TToken, TTree> Parser<TToken, TTree>(IConsList<TToken> consList);
@@ -102,13 +102,13 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 > - [Monadic Parsing in Haskell][2] (Hutton, Meijer) (1998)
 > - [Parsec, a fast combinator parser][3] (Leijen) (2001)
 
-> In the articles, the type is defined similarly to this:
+> In the articles, the type is defined similarly to:
 
 > `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
 
 > This allows the parser to be ambiguous (to be able to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
 
-> As the regex syntax is non-ambigious, the `Maybe` definition was preferred.
+> As the regex syntax is non-ambigious, the `Maybe` definition was the one preferred.
 
   [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
   [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
@@ -116,7 +116,7 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 ### Parser Combinators in C# ###
 
-The following _parser combinators_ have been defined (see [definitions][4]):
+The following parser combinators have been defined (see [definitions][4]):
 
 - `Choice`
 - `Option`
