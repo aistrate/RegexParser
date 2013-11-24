@@ -4,8 +4,9 @@ namespace ParserCombinators
 {
     public static class ParserMonad
     {
-        public static Parser<TToken, TTree2> Select<TToken, TTree, TTree2>(this Parser<TToken, TTree> parser,
-                                                                           Func<TTree, TTree2> selector)
+        public static Parser<TToken, TTree2> Select<TToken, TTree, TTree2>(
+                                                this Parser<TToken, TTree> parser,
+                                                Func<TTree, TTree2> selector)
         {
             return consList =>
             {
@@ -18,9 +19,10 @@ namespace ParserCombinators
             };
         }
 
-        public static Parser<TToken, TTree2> SelectMany<TToken, TTree, TIntermediate, TTree2>(this Parser<TToken, TTree> parser,
-                                                                                              Func<TTree, Parser<TToken, TIntermediate>> selector,
-                                                                                              Func<TTree, TIntermediate, TTree2> projector)
+        public static Parser<TToken, TTree2> SelectMany<TToken, TTree, TIntermediate, TTree2>(
+                                                this Parser<TToken, TTree> parser,
+                                                Func<TTree, Parser<TToken, TIntermediate>> selector,
+                                                Func<TTree, TIntermediate, TTree2> projector)
         {
             return consList =>
             {
@@ -38,8 +40,9 @@ namespace ParserCombinators
             };
         }
 
-        public static Parser<TToken, TTree> Where<TToken, TTree>(this Parser<TToken, TTree> parser,
-                                                                 Func<TTree, bool> predicate)
+        public static Parser<TToken, TTree> Where<TToken, TTree>(
+                                                this Parser<TToken, TTree> parser,
+                                                Func<TTree, bool> predicate)
         {
             return consList =>
             {
