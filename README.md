@@ -50,7 +50,7 @@ See also: [Missing Regex Features](#missing-regex-features).
 
 ### Architecture ###
 
-The Regex Parser has three layers, corresponding to the three parsing phases:
+The Regex Parser has three layers, corresponding to three parsing phases:
 
 1. Parsing the regex pattern, which produces an [Abstract Syntax Tree][1] (AST)
 2. Transforming  the AST
@@ -89,29 +89,44 @@ public interface IConsList<T>
 }
 ```
 
-A parser is a function that takes a list of tokens (e.g., characters), and returns a syntax tree and the list of unconsumed tokens. To indicate failure to match, it returns `null`.
+A parser is simply a function that takes a list of tokens (e.g., characters), and returns a syntax tree and the list of unconsumed tokens. To indicate failure to match, it returns `null`.
 
-The `Parser` type emulates the following _Haskell_ type:
+The `Parser` type is equivalent to the following _Haskell_ type:
 
 ```Haskell
 newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 ```
 
-> **NOTE**: The idea (and syntax) of parser combinators came from these articles (_Haskell_):
+> **NOTE**: The idea of parser combinators comes from these articles:
 
-> - [Combinator Parsing: A Short Tutorial][2] (Swierstra) (2008)
-> - [Monadic Parsing in Haskell][3] (Hutton, Meijer) (1998)
+> - [Monadic Parsing in Haskell][2] (Hutton, Meijer) (1998)
+> - [Parsec, a fast combinator parser][3] (Leijen) (2001)
 
-> In the articles, the type is defined:
+> In the articles, the type is defined like this:
 
 > `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
 
-> This allows the parser to be ambiguous (there may be multiple ways to parse a string). It returns either a list of one or more “successes”, or an empty list to indicate failure.
+> This allows the parser to be ambiguous (to parse a string in multiple ways). It will return either a list of one or more “successes”, or an empty list to indicate failure.
 
-> The regex syntax is non-ambigious, so the first definition was preferred.
+> As regex syntax is non-ambigious, the `Maybe` definition was the one preferred.
 
-  [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Combinator%20Parsing%20-%20A%20Short%20Tutorial%20(Swierstra%3B%202008).pdf
-  [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
+  [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
+  [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
+
+
+### Parser Combinators in C# ###
+
+These combinators take one or more parsers as arguments, and return a new parser (see full source):
+
+```C#
+// Try to apply the parsers in the 'choices' list in order, until one succeeds.
+// Return the tree returned by the succeeding parser.
+public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[] choices);
+
+// Try to apply 'parser'. If 'parser' succeeds, return the tree returned by it,
+// otherwise return 'defaultTree' (without consuming input).
+public static Parser<TToken, TTree> Option<TTree>(TTree defaultTree, Parser<TToken, TTree> parser)
+```
 
 
 ### Missing Regex Features ###
