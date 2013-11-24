@@ -24,8 +24,10 @@ namespace ParserCombinators
             return consList => null;
         }
 
-        // Try to apply the parsers in the 'choices' list in order, until one succeeds.
-        // Return the tree returned by the succeeding parser.
+        /// <summary>
+        /// Try to apply the parsers in the 'choices' list in order, until one succeeds.
+        /// Return the tree returned by the succeeding parser.
+        /// </summary>
         public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[] choices)
         {
             return consList =>
@@ -41,8 +43,10 @@ namespace ParserCombinators
             };
         }
 
-        // Try to apply 'parser'. If 'parser' succeeds, return the tree returned by it,
-        // otherwise return 'defaultTree' (without consuming input).
+        /// <summary>
+        /// Try to apply 'parser'. If 'parser' succeeds, return the tree returned,
+        /// otherwise return 'defaultTree' (without consuming input).
+        /// </summary>
         public static Parser<TToken, TTree> Option<TTree>(TTree defaultTree, Parser<TToken, TTree> parser)
         {
             return Choice(parser, Succeed(defaultTree));
@@ -55,26 +59,34 @@ namespace ParserCombinators
                           from x in parser select (TTree?)x);
         }
 
-        // Apply 'parser' zero or more times. Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Apply 'parser' zero or more times. Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> Many<TTree>(Parser<TToken, TTree> parser)
         {
             return Count(0, null, parser);
         }
 
-        // Apply 'parser' one or more times. Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Apply 'parser' one or more times. Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> Many1<TTree>(Parser<TToken, TTree> parser)
         {
             return Count(1, null, parser);
         }
 
-        // Apply 'parser' an exact number of times ('count'). Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Apply 'parser' an exact number of times ('count'). Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> Count<TTree>(int count, Parser<TToken, TTree> parser)
         {
             return Count(count, count, parser);
         }
 
-        // Apply 'parser' between 'min' and 'max' times (where max==null means infinity).
-        // Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Apply 'parser' between 'min' and 'max' times (where max==null means infinity).
+        /// Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> Count<TTree>(int min, int? max, Parser<TToken, TTree> parser)
         {
             min = Math.Max(0, min);
@@ -110,7 +122,9 @@ namespace ParserCombinators
             };
         }
 
-        // Apply the parsers in the 'parsers' list, each consuming more input. Return a list of the trees returned by the parsers.
+        /// <summary>
+        /// Apply the parsers in the 'parsers' list, consuming input in sequence. Return a list of the trees returned by the parsers.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> Sequence<TTree>(IEnumerable<Parser<TToken, TTree>> parsers)
         {
             return consList =>
@@ -133,7 +147,9 @@ namespace ParserCombinators
             };
         }
 
-        // Apply 'prefix', followed by 'parser'. Return the tree returned by 'parser'.
+        /// <summary>
+        /// Apply 'prefix', followed by 'parser'. Return the tree returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, TTree> PrefixedBy<TPrefix, TTree>(Parser<TToken, TPrefix> prefix,
                                                                        Parser<TToken, TTree> parser)
         {
@@ -142,7 +158,9 @@ namespace ParserCombinators
                    select x;
         }
 
-        // Apply 'open', followed by 'parser' and 'close'. Return the tree returned by 'parser'.
+        /// <summary>
+        /// Apply 'open', followed by 'parser' and 'close'. Return the tree returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, TTree> Between<TOpen, TClose, TTree>(Parser<TToken, TOpen> open,
                                                                           Parser<TToken, TClose> close,
                                                                           Parser<TToken, TTree> parser)
@@ -153,22 +171,28 @@ namespace ParserCombinators
                    select x;
         }
 
-        // Parse zero or more occurrences of 'parser', separated by 'sep'. Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Parse zero or more occurrences of 'parser', separated by 'sep'. Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> SepBy<TTree, TSep>(Parser<TToken, TTree> parser,
                                                                             Parser<TToken, TSep> sep)
         {
             return SepBy(0, parser, sep);
         }
 
-        // Parse one or more occurrences of 'parser', separated by 'sep'. Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Parse one or more occurrences of 'parser', separated by 'sep'. Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> SepBy1<TTree, TSep>(Parser<TToken, TTree> parser,
                                                                              Parser<TToken, TSep> sep)
         {
             return SepBy(1, parser, sep);
         }
 
-        // Parse a minimum of 'minItemCount' occurrences of 'parser', separated by 'sep'.
-        // Return a list of the trees returned by 'parser'.
+        /// <summary>
+        /// Parse a minimum of 'minItemCount' occurrences of 'parser', separated by 'sep'.
+        /// Return a list of the trees returned by 'parser'.
+        /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> SepBy<TTree, TSep>(int minItemCount,
                                                                             Parser<TToken, TTree> parser,
                                                                             Parser<TToken, TSep> sep)
@@ -187,13 +211,17 @@ namespace ParserCombinators
                        select new[] { first }.Concat(rest);
         }
 
-        // Succeed only when 'parser' fails. Do not consume any input.
+        /// <summary>
+        /// Succeed only when 'parser' fails. Do not consume input.
+        /// </summary>
         public static Parser<TToken, UnitType> NotFollowedBy<TTree>(Parser<TToken, TTree> parser)
         {
             return consList => parser(consList) != null ? null : new Result<TToken, UnitType>(UnitType.Unit, consList);
         }
 
-        // Only succeed at the end of the input.
+        /// <summary>
+        /// Only succeed at the end of the input.
+        /// </summary>
         public static Parser<TToken, UnitType> Eof
         {
             get { return NotFollowedBy(Token); }
