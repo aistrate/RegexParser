@@ -154,7 +154,7 @@ public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[]
 }
 ```
 
-Beside combinators, there are also a number of "primitive" character parsers (see [definitions][5]):
+Besides combinators, there are also a number of "primitive" character parsers (see [definitions][5]):
 
 - `AnyChar`
 - `Satisfy`
