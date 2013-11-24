@@ -7,23 +7,6 @@ namespace ParserCombinators
 {
     public class Parsers<TToken>
     {
-        // TODO: 'Try' parser (see [Leijen 2001], page 7), to improve performance (?)
-
-        public static Parser<TToken, TToken> AnyToken
-        {
-            get { return consList => !consList.IsEmpty ? new Result<TToken, TToken>(consList.Head, consList.Tail) : null; }
-        }
-
-        public static Parser<TToken, TTree> Succeed<TTree>(TTree tree)
-        {
-            return consList => new Result<TToken, TTree>(tree, consList);
-        }
-
-        public static Parser<TToken, TTree> Fail<TTree>()
-        {
-            return consList => null;
-        }
-
         /// <summary>
         /// Try to apply the parsers in the 'choices' list in order, until one succeeds.
         /// Return the tree returned by the succeeding parser.
@@ -123,7 +106,8 @@ namespace ParserCombinators
         }
 
         /// <summary>
-        /// Apply the parsers in the 'parsers' list, consuming input in sequence. Return a list of the trees returned by the parsers.
+        /// Apply the parsers in the 'parsers' list, consuming input in sequence.
+        /// Return a list of the trees returned by the parsers.
         /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> Sequence<TTree>(IEnumerable<Parser<TToken, TTree>> parsers)
         {
@@ -172,7 +156,8 @@ namespace ParserCombinators
         }
 
         /// <summary>
-        /// Parse zero or more occurrences of 'parser', separated by 'sep'. Return a list of the trees returned by 'parser'.
+        /// Parse zero or more occurrences of 'parser', separated by 'sep'.
+        /// Return a list of the trees returned by 'parser'.
         /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> SepBy<TTree, TSep>(Parser<TToken, TTree> parser,
                                                                             Parser<TToken, TSep> sep)
@@ -181,7 +166,8 @@ namespace ParserCombinators
         }
 
         /// <summary>
-        /// Parse one or more occurrences of 'parser', separated by 'sep'. Return a list of the trees returned by 'parser'.
+        /// Parse one or more occurrences of 'parser', separated by 'sep'.
+        /// Return a list of the trees returned by 'parser'.
         /// </summary>
         public static Parser<TToken, IEnumerable<TTree>> SepBy1<TTree, TSep>(Parser<TToken, TTree> parser,
                                                                              Parser<TToken, TSep> sep)
@@ -225,6 +211,30 @@ namespace ParserCombinators
         public static Parser<TToken, UnitType> Eof
         {
             get { return NotFollowedBy(AnyToken); }
+        }
+
+        /// <summary>
+        /// Accept any token. Return the accepted token.
+        /// </summary>
+        public static Parser<TToken, TToken> AnyToken
+        {
+            get { return consList => !consList.IsEmpty ? new Result<TToken, TToken>(consList.Head, consList.Tail) : null; }
+        }
+
+        /// <summary>
+        /// Always succeed. Do not consume input. Return the tree 'tree'.
+        /// </summary>
+        public static Parser<TToken, TTree> Succeed<TTree>(TTree tree)
+        {
+            return consList => new Result<TToken, TTree>(tree, consList);
+        }
+
+        /// <summary>
+        /// Always fail. Do not consume input.
+        /// </summary>
+        public static Parser<TToken, TTree> Fail<TTree>()
+        {
+            return consList => null;
         }
 
         public static Parser<TToken, TTree> Lazy<TTree>(Func<Parser<TToken, TTree>> thunk)
