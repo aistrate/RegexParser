@@ -7,6 +7,14 @@ namespace ParserCombinators
     public class CharParsers : Parsers<char>
     {
         /// <summary>
+        /// Succeed for any character. Return the parsed character.
+        /// </summary>
+        public static Parser<char, char> AnyChar
+        {
+            get { return Satisfy(c => true); }
+        }
+
+        /// <summary>
         /// Succeed for any character that satisfies 'predicate'. Return the parsed character.
         /// </summary>
         public static Parser<char, char> Satisfy(Func<char, bool> predicate)
@@ -14,14 +22,6 @@ namespace ParserCombinators
             return from c in AnyToken
                    where predicate(c)
                    select c;
-        }
-
-        /// <summary>
-        /// Succeed for any character. Return the parsed character.
-        /// </summary>
-        public static Parser<char, char> AnyChar
-        {
-            get { return Satisfy(c => true); }
         }
 
         /// <summary>
