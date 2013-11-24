@@ -9,7 +9,7 @@ namespace ParserCombinators
     {
         // TODO: 'Try' parser (see [Leijen 2001], page 7), to improve performance (?)
 
-        public static Parser<TToken, TToken> Token
+        public static Parser<TToken, TToken> AnyToken
         {
             get { return consList => !consList.IsEmpty ? new Result<TToken, TToken>(consList.Head, consList.Tail) : null; }
         }
@@ -224,7 +224,7 @@ namespace ParserCombinators
         /// </summary>
         public static Parser<TToken, UnitType> Eof
         {
-            get { return NotFollowedBy(Token); }
+            get { return NotFollowedBy(AnyToken); }
         }
 
         public static Parser<TToken, TTree> Lazy<TTree>(Func<Parser<TToken, TTree>> thunk)

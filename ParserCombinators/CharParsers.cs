@@ -10,7 +10,7 @@ namespace ParserCombinators
 
         public static Parser<char, char> Satisfy(Func<char, bool> predicate)
         {
-            return from c in Token
+            return from c in AnyToken
                    where predicate(c)
                    select c;
         }
