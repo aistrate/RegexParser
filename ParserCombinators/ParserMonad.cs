@@ -1,26 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ParserCombinators
 {
     public static class ParserMonad
     {
-        public static Parser<TToken, TTree> Where<TToken, TTree>(this Parser<TToken, TTree> parser,
-                                                                 Func<TTree, bool> predicate)
-        {
-            return consList =>
-            {
-                var result = parser(consList);
-                
-                if (result != null && predicate(result.Tree))
-                    return result;
-                else
-                    return null;
-            };
-        }
-
         public static Parser<TToken, TTree2> Select<TToken, TTree, TTree2>(this Parser<TToken, TTree> parser,
                                                                            Func<TTree, TTree2> selector)
         {
@@ -52,6 +35,20 @@ namespace ParserCombinators
                 }
                 
                 return null;
+            };
+        }
+
+        public static Parser<TToken, TTree> Where<TToken, TTree>(this Parser<TToken, TTree> parser,
+                                                                 Func<TTree, bool> predicate)
+        {
+            return consList =>
+            {
+                var result = parser(consList);
+
+                if (result != null && predicate(result.Tree))
+                    return result;
+                else
+                    return null;
             };
         }
     }
