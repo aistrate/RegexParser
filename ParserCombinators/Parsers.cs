@@ -35,13 +35,6 @@ namespace ParserCombinators
             return Choice(parser, Succeed(defaultTree));
         }
 
-        public static Parser<TToken, TTree?> OptionNullable<TTree>(Parser<TToken, TTree> parser)
-            where TTree : struct
-        {
-            return Option(null,
-                          from x in parser select (TTree?)x);
-        }
-
         /// <summary>
         /// Apply 'parser' zero or more times. Return a list of the trees returned by 'parser'.
         /// </summary>
