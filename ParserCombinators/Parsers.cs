@@ -230,6 +230,17 @@ namespace ParserCombinators
             return consList => null;
         }
 
+        /// <summary>
+        /// Transforms a parser that returns a value-type into one that returns the Nullable type
+        /// (e.g., a Parser<char, int> becomes Parser<char, Nullable<int>>, also written Parser<char, int?>).
+        /// </summary>
+        public static Parser<TToken, TTree?> Nullable<TTree>(Parser<TToken, TTree> parser)
+            where TTree : struct
+        {
+            return from x in parser
+                   select (TTree?)x;
+        }
+
         public static Parser<TToken, TTree> Lazy<TTree>(Func<Parser<TToken, TTree>> thunk)
         {
             return consList => thunk()(consList);

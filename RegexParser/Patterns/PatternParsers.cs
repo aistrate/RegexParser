@@ -92,7 +92,7 @@ namespace RegexParser.Patterns
 
             // Quantifiers
             NaturalNum = from ds in Many1(Digit)
-                         select (int?)Numeric.ReadDec(ds);
+                         select Numeric.ReadDec(ds);
 
             var RangeQuantifierSuffix = Between(Char('{'),
                                                 Char('}'),
@@ -100,9 +100,9 @@ namespace RegexParser.Patterns
                                                 from min in NaturalNum
                                                 from max in
                                                     Option(min, from comma in Char(',')
-                                                                from m in Option(null, NaturalNum)
+                                                                from m in Option(null, Nullable(NaturalNum))
                                                                 select m)
-                                                select new { Min = (int)min, Max = max });
+                                                select new { Min = min, Max = max });
 
             var QuantifierSuffix = from quant in
                                        Choice(
@@ -174,7 +174,7 @@ namespace RegexParser.Patterns
 
         public static Parser<char, AnchorPattern> Anchor;
 
-        public static Parser<char, int?> NaturalNum;
+        public static Parser<char, int> NaturalNum;
         public static Parser<char, QuantifierPattern> Quantifier;
 
         public static Parser<char, BasePattern> AlternationGroup;
