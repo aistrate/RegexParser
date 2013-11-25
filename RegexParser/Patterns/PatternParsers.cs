@@ -24,8 +24,8 @@ namespace RegexParser.Patterns
                                             select charEscapes[c],
 
                                             from k in
-                                               Choice(from c in Char('x') select 2,
-                                                      from c in Char('u') select 4)
+                                               Choice(from _c in Char('x') select 2,
+                                                      from _c in Char('u') select 4)
                                             from hs in Count(k, HexDigit)
                                             select (char)Numeric.ReadHex(hs),
 
@@ -50,8 +50,8 @@ namespace RegexParser.Patterns
 
             CharRange = (isFirstPos, isSubtract) =>
                             from frm in CharEscapeInsideClass(isFirstPos, isSubtract, false)
-                            from d in Char('-')
-                            from to in CharEscapeInsideClass(false, isSubtract, true)
+                            from _d  in Char('-')
+                            from to  in CharEscapeInsideClass(false, isSubtract, true)
                             select new CharRangePattern(frm.Value, to.Value);
 
             CharGroupElement = (isFirstPos, isSubtract) =>
@@ -61,7 +61,7 @@ namespace RegexParser.Patterns
 
             BareCharGroup = isSubtract =>
                                 from positive in
-                                    Option(true, from c in Char('^')
+                                    Option(true, from _c in Char('^')
                                                  select false)
                                 from first in CharGroupElement(true, isSubtract)
                                 from rest in Many(CharGroupElement(false, isSubtract))
@@ -69,7 +69,7 @@ namespace RegexParser.Patterns
                                 select (CharClassPattern)new CharGroupPattern(positive, childPatterns);
 
             CharClassSubtract = from baseGrp in BareCharGroup(true)
-                                from d in Char('-')
+                                from _d in Char('-')
                                 from excludedGrp in CharGroup
                                 select (CharClassPattern)new CharClassSubtractPattern(baseGrp, excludedGrp);
 
@@ -78,7 +78,7 @@ namespace RegexParser.Patterns
                                 Choice(CharClassSubtract,
                                        BareCharGroup(false)));
 
-            CharClass = Choice(from c in Char('.') select (CharClassPattern)new AnyCharPattern(false),
+            CharClass = Choice(from _c in Char('.') select (CharClassPattern)new AnyCharPattern(false),
                                NamedCharClass,
                                CharGroup);
 
@@ -99,19 +99,19 @@ namespace RegexParser.Patterns
 
                                                 from min in NaturalNum
                                                 from max in
-                                                    Option(min, from comma in Char(',')
+                                                    Option(min, from _comma in Char(',')
                                                                 from m in Option(null, Nullable(NaturalNum))
                                                                 select m)
                                                 select new { Min = min, Max = max });
 
             var QuantifierSuffix = from quant in
                                        Choice(
-                                           from q in Char('*') select new { Min = 0, Max = (int?)null },
-                                           from q in Char('+') select new { Min = 1, Max = (int?)null },
-                                           from q in Char('?') select new { Min = 0, Max = (int?)1 },
+                                           from _q in Char('*') select new { Min = 0, Max = (int?)null },
+                                           from _q in Char('+') select new { Min = 1, Max = (int?)null },
+                                           from _q in Char('?') select new { Min = 0, Max = (int?)1 },
                                            RangeQuantifierSuffix)
                                    from greedy in
-                                       Option(true, from c in Char('?')
+                                       Option(true, from _c in Char('?')
                                                     select false)
                                    select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
 

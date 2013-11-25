@@ -130,8 +130,8 @@ namespace ParserCombinators
         public static Parser<TToken, TTree> PrefixedBy<TPrefix, TTree>(Parser<TToken, TPrefix> prefix,
                                                                        Parser<TToken, TTree> parser)
         {
-            return from p in prefix
-                   from x in parser
+            return from _p in prefix
+                   from x  in parser
                    select x;
         }
 
@@ -142,9 +142,9 @@ namespace ParserCombinators
                                                                           Parser<TToken, TClose> close,
                                                                           Parser<TToken, TTree> parser)
         {
-            return from o in open
-                   from x in parser
-                   from c in close
+            return from _o in open
+                   from x  in parser
+                   from _c in close
                    select x;
         }
 
@@ -184,8 +184,8 @@ namespace ParserCombinators
                        from rest in
                            Count(minItemCount - 1,
                                  null,
-                                 from s in sep
-                                 from v in parser
+                                 from _s in sep
+                                 from v  in parser
                                  select v)
                        select new[] { first }.Concat(rest);
         }
