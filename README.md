@@ -50,7 +50,7 @@ See also: [Missing Regex Features](#missing-regex-features).
 
 ### Architecture ###
 
-The _Regex Parser_ has three layers, corresponding to three parsing phases:
+_RegexParser_ has three layers, corresponding to three parsing phases:
 
 1. Parsing the regex pattern, resulting in an [Abstract Syntax Tree][1] (AST)
 2. Transforming the AST
@@ -171,7 +171,7 @@ Each of these will match exactly _one_ character.
   [5]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/CharParsers.cs
 
 
-### Parser Monad in C# ###
+### The Parser Monad in C# ###
 
 [LINQ][6], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to the _Haskell_ `do` notation. This could greatly simplify the writing of more complex parsers.
 
@@ -229,7 +229,7 @@ naturalNum = do ds <- many1 digit
                 return (readInt ds)
 ```
 
-So far, we can only use the `from` keyword _once_ in an expression. By also defining a method called `SelectMany()` ([source][8]), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
+So far, we could only use the `from` keyword _once_ per expression. By also defining a _LINQ_-related method called `SelectMany()` ([source][8]), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
 
 ```C#
 Parser<char, int> integerNum = from sign in Option('+', Char('-'))
@@ -250,6 +250,37 @@ integerNum = do sign <- option '+' (char '-')
   [6]: http://en.wikipedia.org/wiki/Language_Integrated_Query
   [7]: http://en.wikipedia.org/wiki/Extension_method
   [8]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/ParserMonad.cs
+
+
+### Parsing the Regex Language ###
+
+Using parser combinators and primitives, as well as the _syntactic sugar_ notation described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code. See the [source code][9] for details.
+
+For example, a _range quantifier suffix_, having one of the forms <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code> or <code>**{**_n_**,**_m_**}**</code>, will be parsed by this parser:
+
+```C#
+var RangeQuantifierSuffix = Between(Char('{'),
+                                    Char('}'),
+
+                                    from min in NaturalNum
+                                    from max in
+                                        Option(min, from _comma in Char(',')
+                                                    from m in Option(null, Nullable(NaturalNum))
+                                                    select m)
+                                    select new { Min = min, Max = max });
+```
+
+More complex parsers get built from more simple ones. The topmost parser is simply called `Regex`. Its result will be a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
+
+- `CharEscapePattern`
+- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (all dealing with character classes)
+- `GroupPattern`
+- `QuantifierPattern`
+- `AlternationPattern`
+- `AnchorPattern`
+
+  [9]: https://github.com/aistrate/RegexParser/blob/master/RegexParser/Patterns/PatternParsers.cs
+  [10]: https://github.com/aistrate/RegexParser/tree/master/RegexParser/Patterns
 
 
 ### Missing Regex Features ###
