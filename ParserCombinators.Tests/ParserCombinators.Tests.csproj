@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParserMonadTests.cs" />
     <Compile Include="Performance\CharParsersPerformanceTests.cs" />
     <Compile Include="MiniML\MiniMLParsers.cs" />
     <Compile Include="MiniML\Terms.cs" />
