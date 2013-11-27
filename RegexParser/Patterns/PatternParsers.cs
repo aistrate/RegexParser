@@ -94,14 +94,12 @@ namespace RegexParser.Patterns
             NaturalNum = from ds in Many1(Digit)
                          select Numeric.ReadDec(ds);
 
-            var RangeQuantifierSuffix = Between(Char('{'),
-                                                Char('}'),
+            var RangeQuantifierSuffix = Between(Char('{'), Char('}'),
 
                                                 from min in NaturalNum
                                                 from max in
-                                                    Option(min, from _comma in Char(',')
-                                                                from m in Option(null, Nullable(NaturalNum))
-                                                                select m)
+                                                    Option(min, PrefixedBy(Char(','),
+                                                                           Option(null, Nullable(NaturalNum))))
                                                 select new { Min = min, Max = max });
 
             var QuantifierSuffix = from quant in
