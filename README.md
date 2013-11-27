@@ -171,6 +171,87 @@ Each of these will match exactly _one_ character.
   [5]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/CharParsers.cs
 
 
+### Parser Monad in C# ###
+
+[LINQ][6], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to the _Haskell_ `do` notation. This could greatly simplify the writing of more complex parsers.
+
+For example, let's say we want to write a parser called `naturalNum`, which reads a sequence of digits and returns an `int` as the syntactic tree. Using parser combinators and primitives from the previous section (i.e., `Many1` and `Digit`), we can define it like this:
+
+```C#
+Parser<char, int> naturalNum =
+    consList =>
+    {
+        var result = Many1(Digit)(consList);
+
+        if (result != null)
+            return new Result<char, int>(readInt(result.Tree), result.Rest);
+        else
+            return null;
+    };
+```
+
+Because this is a common pattern, we can define a helper [extension method][7], `Select()`:
+
+```C#
+public static Parser<TToken, TTree2> Select<TToken, TTree, TTree2>(
+                                        this Parser<TToken, TTree> parser,
+                                        Func<TTree, TTree2> selector)
+{
+    return consList =>
+    {
+        var result = parser(consList);
+
+        if (result != null)
+            return new Result<TToken, TTree2>(selector(result.Tree), result.Rest);
+        else
+            return null;
+    };
+}
+```
+
+Now the parser can be written more simply as:
+
+```C#
+Parser<char, int> naturalNum = Many1(Digit).Select(ds => readInt(ds));
+```
+
+A `Select()` method with a signature similar to ours has a special meaning for _LINQ_. Taking advantage of that, we can rewrite the parser in a _syntactic sugar_ form, which will be translated (_de-sugared_) by the C# preprocessor to the exact same form as the above:
+
+```C#
+Parser<char, int> naturalNum = from ds in Many1(Digit)
+                               select readInt(ds);
+```
+
+Notice the similarity to the `do` notation in _Haskell_:
+
+```Haskell
+naturalNum = do ds <- many1 digit
+                return (readInt ds)
+```
+
+So far, we can only use the `from` keyword _once_ in an expression. By also defining a method called `SelectMany()` ([source][8]), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
+
+```C#
+Parser<char, int> integerNum = from sign in Option('+', Char('-'))
+                               from ds in Many1(Digit)
+                               let s = (sign == '-' ? -1 : 1)
+                               select s * readInt(ds);
+```
+
+This is equivalent to the following _Haskell_ parser:
+
+```Haskell
+integerNum = do sign <- option '+' (char '-')
+                ds <- many1 digit
+                let s = if sign == '-' then -1 else 1
+                return (s * (readInt ds))
+```
+
+  [6]: http://en.wikipedia.org/wiki/Language_Integrated_Query
+  [7]: http://en.wikipedia.org/wiki/Extension_method
+  [8]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/ParserMonad.cs
+
+
 ### Missing Regex Features ###
 
 Still on the TODO list:
