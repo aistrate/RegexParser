@@ -29,7 +29,7 @@ Regex Parser
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
     - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
-    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match as _many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex--and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
+    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match _as many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex--and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match _as few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
 - Alternation: **`|`**
 - Anchors:
     - <code>**^**</code>: start of string or line (depending on the `Multiline` option)
@@ -108,7 +108,7 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 > This allows the parser to be ambiguous (able to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
 
-> As the regex syntax is non-ambigious, the `Maybe` definition was the one preferred.
+> As the regex syntax is non-ambigious, the `Maybe` definition was preferred.
 
   [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
   [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
@@ -154,7 +154,7 @@ public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[]
 }
 ```
 
-Besides combinators, there are also a number of "primitive" character parsers (see [source][5] for descriptions):
+Beside combinators, there are also a number of "primitive" character parsers (see [source][5] for descriptions):
 
 - `AnyChar`
 - `Satisfy`
@@ -175,7 +175,7 @@ Each of these will match exactly _one_ character.
 
 [LINQ][6], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to the _Haskell_ `do` notation. This greatly simplifies the writing of more complex parsers.
 
-For example, let's say we want to write a parser called `naturalNum`, which reads a sequence of digits and returns an `int` as the syntactic tree. Using parser combinators and primitives from the previous section (i.e., `Many1` and `Digit`), we can define it like this:
+For example, let's say we want to write a parser called `naturalNum`, which reads a sequence of digits and returns an `int` as syntactic tree. Using parser combinators and primitives from the previous section (i.e., `Many1` and `Digit`), we can define it like this:
 
 ```C#
 Parser<char, int> naturalNum =
@@ -215,7 +215,7 @@ Now the parser can be written more simply as:
 Parser<char, int> naturalNum = Many1(Digit).Select(ds => readInt(ds));
 ```
 
-A `Select()` method with a signature similar to ours has a special meaning for _LINQ_. Taking advantage of that, we can rewrite the parser in a _syntactic sugar_ form, which will be translated (_de-sugared_) by the C# preprocessor to exactly the same form as above:
+A `Select()` method with a signature similar to ours has special meaning for _LINQ_. Taking advantage of that, we can rewrite the parser in a _syntactic sugar_ form, which will be translated (_desugared_) by the C# preprocessor to exactly the same code as above:
 
 ```C#
 Parser<char, int> naturalNum = from ds in Many1(Digit)
@@ -256,7 +256,7 @@ integerNum = do sign <- option '+' (char '-')
 
 Using parser combinators and primitives, as well as _syntactic sugar_ notation as described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
 
-For example, a _quantifier_ parser, which parses any of the forms <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (greedy quantifiers), or <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (lazy quantifiers), is defined like this:
+For example, the `Quantifier` parser, which parses any of the forms <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (greedy quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (lazy quantifiers), is defined like this:
 
 ```C#
 var RangeQuantifierSuffix = Between(Char('{'),
@@ -284,7 +284,7 @@ Quantifier = from child in Atom
              select (BasePattern)new QuantifierPattern(child, sfx.Min, sfx.Max, sfx.Greedy);
 ```
 
-More complex parsers are built from more simple ones. The topmost parser is called simply `Regex`. The result of parsing will be a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
+More complex parsers are built from more simple ones. The topmost parser is called simply `Regex`. The result of parsing is a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
 
 - `CharEscapePattern`
 - `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (dealing with character classes)
