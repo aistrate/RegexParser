@@ -134,29 +134,27 @@ namespace RegexParser.Patterns
 
 
             // Alternations
-            AlternationBranch = from ps in Many(Choice(Quantifier,
-                                                       Atom))
-                                select ps.Count() == 1 ?
-                                            ps.First() :
-                                            (BasePattern)new GroupPattern(false, ps);
+            BareGroupNoAlt = Many(Choice(Quantifier,
+                                         Atom));
+
+            AlternationBranch = from ps in BareGroupNoAlt
+                                select (BasePattern)new GroupPattern(false, ps);
 
             Alternation = from alts in SepBy(2, AlternationBranch, Char('|'))
                           select (BasePattern)new AlternationPattern(alts);
 
 
             // Groups
-            BareGroup = from ps in Many(Choice(Alternation,
-                                               Quantifier,
-                                               Atom))
-                        select new GroupPattern(false, ps);
+            BareGroup = Choice(from a in Alternation select Enumerable.Repeat(a, 1),
+                               BareGroupNoAlt);
 
             ParenGroup = from bare in Between(Char('('),
                                               Char(')'),
                                               BareGroup)
-                         select (BasePattern)new GroupPattern(true, bare.Patterns);
+                         select (BasePattern)new GroupPattern(true, bare);
 
             Regex = from bare in BareGroup
-                    select new GroupPattern(true, bare.Patterns);
+                    select new GroupPattern(true, bare);
         }
 
 
@@ -183,7 +181,9 @@ namespace RegexParser.Patterns
         public static Parser<char, BasePattern> AlternationBranch;
         public static Parser<char, BasePattern> Alternation;
 
-        public static Parser<char, GroupPattern> BareGroup;
+        public static Parser<char, IEnumerable<BasePattern>> BareGroupNoAlt;
+        public static Parser<char, IEnumerable<BasePattern>> BareGroup;
+
         public static Parser<char, BasePattern> ParenGroup;
         public static Parser<char, GroupPattern> Regex;
 
