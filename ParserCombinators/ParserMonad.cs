@@ -54,5 +54,17 @@ namespace ParserCombinators
                     return null;
             };
         }
+
+        public static Parser<TToken, TTree2> Cast<TToken, TTree, TTree2>(this Parser<TToken, TTree> parser)
+            where TTree : TTree2
+        {
+            return parser.Select(tree => (TTree2)tree);
+        }
+
+        public static Parser<char, TTree2> Cast<TTree, TTree2>(this Parser<char, TTree> parser)
+            where TTree : TTree2
+        {
+            return parser.Select(tree => (TTree2)tree);
+        }
     }
 }

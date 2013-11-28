@@ -36,7 +36,8 @@ namespace RegexParser.Patterns
                                 select new CharEscapePattern(esc);
 
             CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass,
-                                                charEscapeKeysOutsideClass);
+                                                charEscapeKeysOutsideClass)
+                                        .Cast<CharEscapePattern, BasePattern>();
 
             CharEscapeInsideClass = (isFirstPos, isSubtract, isAfterDash) =>
                                         CharEscape(getSpecialCharsInsideClass(isFirstPos, isSubtract, isAfterDash),
@@ -44,6 +45,9 @@ namespace RegexParser.Patterns
 
 
             // Character Classes
+            AnyCharClass = from _c in Char('.')
+                           select (CharClassPattern)new AnyCharPattern(false);
+
             NamedCharClass = from cls in PrefixedBy(Char('\\'),
                                                     OneOf(namedCharClassKeys))
                              select namedCharClasses[cls];
@@ -52,12 +56,14 @@ namespace RegexParser.Patterns
                             from frm in CharEscapeInsideClass(isFirstPos, isSubtract, false)
                             from _d  in Char('-')
                             from to  in CharEscapeInsideClass(false, isSubtract, true)
-                            select new CharRangePattern(frm.Value, to.Value);
+                            select (CharPattern)new CharRangePattern(frm.Value, to.Value);
 
             CharGroupElement = (isFirstPos, isSubtract) =>
-                                    Choice(from p in NamedCharClass select (CharPattern)p,
-                                           from p in CharRange(isFirstPos, isSubtract) select (CharPattern)p,
-                                           from p in CharEscapeInsideClass(isFirstPos, isSubtract, false) select (CharPattern)p);
+                                    Choice(NamedCharClass
+                                                .Cast<CharClassPattern, CharPattern>(),
+                                           CharRange(isFirstPos, isSubtract),
+                                           CharEscapeInsideClass(isFirstPos, isSubtract, false)
+                                                .Cast<CharEscapePattern, CharPattern>());
 
             BareCharGroup = isSubtract =>
                                 from positive in
@@ -78,23 +84,25 @@ namespace RegexParser.Patterns
                                 Choice(CharClassSubtract,
                                        BareCharGroup(false)));
 
-            CharClass = Choice(from _c in Char('.') select (CharClassPattern)new AnyCharPattern(false),
+            CharClass = Choice(AnyCharClass,
                                NamedCharClass,
-                               CharGroup);
+                               CharGroup)
+                            .Cast<CharClassPattern, BasePattern>();
 
 
             // Anchors
             Anchor = from a in Choice(OneOf(bareAnchorKeys),
                                       PrefixedBy(Char('\\'),
                                                  OneOf(backslashAnchorKeys)))
-                     select new AnchorPattern(anchorTypes[a]);
+                     select (BasePattern)new AnchorPattern(anchorTypes[a]);
 
 
             // Quantifiers
             NaturalNum = from ds in Many1(Digit)
                          select Numeric.ReadDec(ds);
 
-            var RangeQuantifierSuffix = Between(Char('{'), Char('}'),
+            var RangeQuantifierSuffix = Between(Char('{'),
+                                                Char('}'),
 
                                                 from min in NaturalNum
                                                 from max in
@@ -113,45 +121,41 @@ namespace RegexParser.Patterns
                                                     select false)
                                    select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
 
-            Quantifier = from child in
-                             Choice(
-                                 from p in Lazy(() => ParenGroup) select (BasePattern)p,
-                                 from p in Anchor select (BasePattern)p,
-                                 from p in CharEscapeOutsideClass select (BasePattern)p,
-                                 from p in CharClass select (BasePattern)p)
+            Quantifier = from child in Choice(Lazy(() => ParenGroup),
+                                              Anchor,
+                                              CharEscapeOutsideClass,
+                                              CharClass)
                          from suffix in QuantifierSuffix
-                         select new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
+                         select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
 
 
             // Alternations
-            AlternationGroup = from ps in
-                                   Many(Choice(
-                                            from p in Quantifier select (BasePattern)p,
-                                            from p in Lazy(() => ParenGroup) select (BasePattern)p,
-                                            from p in Anchor select (BasePattern)p,
-                                            from p in CharEscapeOutsideClass select (BasePattern)p,
-                                            from p in CharClass select (BasePattern)p))
-                               select ps.Count() == 1 ? ps.First() :
-                                                        (BasePattern)new GroupPattern(false, ps);
+            AlternationGroup = from ps in Many(Choice(Quantifier,
+                                                      Lazy(() => ParenGroup),
+                                                      Anchor,
+                                                      CharEscapeOutsideClass,
+                                                      CharClass))
+                               select ps.Count() == 1 ?
+                                            ps.First() :
+                                            (BasePattern)new GroupPattern(false, ps);
 
             Alternation = from alts in SepBy(2, AlternationGroup, Char('|'))
-                          select new AlternationPattern(alts);
+                          select (BasePattern)new AlternationPattern(alts);
 
 
             // Groups
-            BareGroup = from ps in Many(Choice(
-                                            from p in Alternation select (BasePattern)p,
-                                            from p in Quantifier select (BasePattern)p,
-                                            from p in Lazy(() => ParenGroup) select (BasePattern)p,
-                                            from p in Anchor select (BasePattern)p,
-                                            from p in CharEscapeOutsideClass select (BasePattern)p,
-                                            from p in CharClass select (BasePattern)p))
+            BareGroup = from ps in Many(Choice(Alternation,
+                                               Quantifier,
+                                               Lazy(() => ParenGroup),
+                                               Anchor,
+                                               CharEscapeOutsideClass,
+                                               CharClass))
                         select new GroupPattern(false, ps);
 
             ParenGroup = from bare in Between(Char('('),
                                               Char(')'),
                                               BareGroup)
-                         select new GroupPattern(true, bare.Patterns);
+                         select (BasePattern)new GroupPattern(true, bare.Patterns);
 
             Regex = from bare in BareGroup
                     select new GroupPattern(true, bare.Patterns);
@@ -159,27 +163,28 @@ namespace RegexParser.Patterns
 
 
         public static Func<string, string, Parser<char, CharEscapePattern>> CharEscape;
-        public static Parser<char, CharEscapePattern> CharEscapeOutsideClass;
+        public static Parser<char, BasePattern> CharEscapeOutsideClass;
         public static Func<bool, bool, bool, Parser<char, CharEscapePattern>> CharEscapeInsideClass;
 
+        public static Parser<char, CharClassPattern> AnyCharClass;
         public static Parser<char, CharClassPattern> NamedCharClass;
-        public static Func<bool, bool, Parser<char, CharRangePattern>> CharRange;
+        public static Func<bool, bool, Parser<char, CharPattern>> CharRange;
         public static Func<bool, bool, Parser<char, CharPattern>> CharGroupElement;
         public static Func<bool, Parser<char, CharClassPattern>> BareCharGroup;
         public static Parser<char, CharClassPattern> CharClassSubtract;
         public static Parser<char, CharClassPattern> CharGroup;
-        public static Parser<char, CharClassPattern> CharClass;
+        public static Parser<char, BasePattern> CharClass;
 
-        public static Parser<char, AnchorPattern> Anchor;
+        public static Parser<char, BasePattern> Anchor;
 
         public static Parser<char, int> NaturalNum;
-        public static Parser<char, QuantifierPattern> Quantifier;
+        public static Parser<char, BasePattern> Quantifier;
 
         public static Parser<char, BasePattern> AlternationGroup;
-        public static Parser<char, AlternationPattern> Alternation;
+        public static Parser<char, BasePattern> Alternation;
 
         public static Parser<char, GroupPattern> BareGroup;
-        public static Parser<char, GroupPattern> ParenGroup;
+        public static Parser<char, BasePattern> ParenGroup;
         public static Parser<char, GroupPattern> Regex;
 
 
