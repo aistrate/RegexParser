@@ -106,7 +106,7 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 > `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
 
-> This allows the parser to be ambiguous (able to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
+> This allows the parser to be ambiguous (to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
 
 > As the regex syntax is non-ambigious, the `Maybe` definition was preferred.
 
@@ -256,7 +256,7 @@ integerNum = do sign <- option '+' (char '-')
 
 Using parser combinators and primitives, as well as _syntactic sugar_ notation as described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
 
-For example, the `Quantifier` parser, which can parse the following forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
+For example, the `Quantifier` parser, which accepts the following forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
 
 ```C#
 var RangeQuantifierSuffix = Between(Char('{'),
@@ -300,8 +300,9 @@ The following transforms are performed (see [sources][11]):
 
 - `BaseASTTransform`: Remove empty groups. Replace non-capturing groups having a single child pattern with the pattern itself.
 
-- `QuantifierASTTransform`: Split quantifiers into their deterministic and non-deterministic parts. For example, the `QuantifierPattern` representing <code>**a{2,5}**</code> will be split into two, similar to <code>**a{2}a{0,3}**</code>. The second part is fully non-deterministic, which means that _backtracking_ can and will be used at every step.  
-Also, clean up corner cases: quantifiers with empty child patterns, etc.
+- `QuantifierASTTransform`: Split quantifiers into their deterministic and non-deterministic parts. For example, the `QuantifierPattern` representing <code>**a{2,5}**</code> will be split into two, equivalent to <code>**a{2}a{0,3}**</code>. The second part is fully non-deterministic, which means that _backtracking_ can and will be used at every step.
+
+    Also, clean up some corner cases: quantifiers with empty child patterns, etc.
 
 - `RegexOptionsASTTransform`: Implement the global regex options: `IgnoreCase`, `Multiline`, and `Singleline`, by recreating `CharPattern` and `AnchorPattern` objects.
 
