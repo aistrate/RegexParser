@@ -116,7 +116,7 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 ### Parser Combinators in C# ###
 
-The following parser combinators have been defined (see [definitions][4]):
+The following parser combinators have been defined (see [source][4] for descriptions):
 
 - `Choice`
 - `Option`
@@ -154,7 +154,7 @@ public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[]
 }
 ```
 
-Besides combinators, there are also a number of "primitive" character parsers (see [definitions][5]):
+Besides combinators, there are also a number of "primitive" character parsers (see [source][5] for descriptions):
 
 - `AnyChar`
 - `Satisfy`
@@ -229,7 +229,7 @@ naturalNum = do ds <- many1 digit
                 return (readInt ds)
 ```
 
-So far, we could only use the `from` keyword _once_ per expression. By also defining a _LINQ_-related method called `SelectMany()` ([source][8]), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
+So far, we could only use the `from` keyword _once_ per expression. By also defining a _LINQ_-related method called `SelectMany()` (see [source][8]), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
 
 ```C#
 Parser<char, int> integerNum = from sign in Option('+', Char('-'))
@@ -287,7 +287,7 @@ Quantifier = from child in Atom
 More complex parsers are built from more simple ones. The topmost parser is called simply `Regex`. The result of parsing will be a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
 
 - `CharEscapePattern`
-- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (which deal with character classes)
+- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (dealing with character classes)
 - `GroupPattern`
 - `QuantifierPattern`
 - `AlternationPattern`
