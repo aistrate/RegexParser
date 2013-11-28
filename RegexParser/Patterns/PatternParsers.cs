@@ -97,6 +97,13 @@ namespace RegexParser.Patterns
                      select (BasePattern)new AnchorPattern(anchorTypes[a]);
 
 
+            // Atomic (non-backtracking) elements
+            Atom = Choice(Lazy(() => ParenGroup),
+                          Anchor,
+                          CharEscapeOutsideClass,
+                          CharClass);
+
+
             // Quantifiers
             NaturalNum = from ds in Many1(Digit)
                          select Numeric.ReadDec(ds);
@@ -121,20 +128,14 @@ namespace RegexParser.Patterns
                                                     select false)
                                    select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
 
-            Quantifier = from child in Choice(Lazy(() => ParenGroup),
-                                              Anchor,
-                                              CharEscapeOutsideClass,
-                                              CharClass)
+            Quantifier = from child in Atom
                          from suffix in QuantifierSuffix
                          select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
 
 
             // Alternations
             AlternationBranch = from ps in Many(Choice(Quantifier,
-                                                       Lazy(() => ParenGroup),
-                                                       Anchor,
-                                                       CharEscapeOutsideClass,
-                                                       CharClass))
+                                                       Atom))
                                 select ps.Count() == 1 ?
                                             ps.First() :
                                             (BasePattern)new GroupPattern(false, ps);
@@ -146,10 +147,7 @@ namespace RegexParser.Patterns
             // Groups
             BareGroup = from ps in Many(Choice(Alternation,
                                                Quantifier,
-                                               Lazy(() => ParenGroup),
-                                               Anchor,
-                                               CharEscapeOutsideClass,
-                                               CharClass))
+                                               Atom))
                         select new GroupPattern(false, ps);
 
             ParenGroup = from bare in Between(Char('('),
@@ -176,6 +174,8 @@ namespace RegexParser.Patterns
         public static Parser<char, BasePattern> CharClass;
 
         public static Parser<char, BasePattern> Anchor;
+
+        public static Parser<char, BasePattern> Atom;
 
         public static Parser<char, int> NaturalNum;
         public static Parser<char, BasePattern> Quantifier;
