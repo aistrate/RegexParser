@@ -29,7 +29,7 @@ Regex Parser
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
     - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
-    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match _as many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex--and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match _as few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
+    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match _as many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex–and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match _as few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
 - Alternation: **`|`**
 - Anchors:
     - <code>**^**</code>: start of string or line (depending on the `Multiline` option)
@@ -256,7 +256,7 @@ integerNum = do sign <- option '+' (char '-')
 
 Using parser combinators and primitives, as well as _syntactic sugar_ notation as described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
 
-For example, the `Quantifier` parser, which parses any of the forms <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (greedy quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (lazy quantifiers), is defined like this:
+For example, the `Quantifier` parser, which parses any of the forms <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
 
 ```C#
 var RangeQuantifierSuffix = Between(Char('{'),
@@ -268,23 +268,20 @@ var RangeQuantifierSuffix = Between(Char('{'),
                                                                Option(null, Nullable(NaturalNum))))
                                     select new { Min = min, Max = max });
 
-var QuantifierSuffix = from quant in
-                           Choice(
-                               from _q in Char('*') select new { Min = 0, Max = (int?)null },
-                               from _q in Char('+') select new { Min = 1, Max = (int?)null },
-                               from _q in Char('?') select new { Min = 0, Max = (int?)1 },
-                               RangeQuantifierSuffix)
-                       from greedy in
-                           Option(true, from _c in Char('?')
-                                        select false)
-                       select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
-
 Quantifier = from child in Atom
-             from sfx in QuantifierSuffix
-             select (BasePattern)new QuantifierPattern(child, sfx.Min, sfx.Max, sfx.Greedy);
+             from quant in
+                 Choice(
+                     from _q in Char('*') select new { Min = 0, Max = (int?)null },
+                     from _q in Char('+') select new { Min = 1, Max = (int?)null },
+                     from _q in Char('?') select new { Min = 0, Max = (int?)1 },
+                     RangeQuantifierSuffix)
+             from greedy in
+                 Option(true, from _c in Char('?')
+                              select false)
+             select (BasePattern)new QuantifierPattern(child, quant.Min, quant.Max, greedy);
 ```
 
-More complex parsers are built from more simple ones. The topmost parser is called simply `Regex`. The result of parsing is a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
+The more complex parsers are built from more simple ones. The topmost parser is called `Regex`. The result of parsing is a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
 
 - `CharEscapePattern`
 - `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (dealing with character classes)
