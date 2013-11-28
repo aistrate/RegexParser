@@ -29,7 +29,7 @@ Regex Parser
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
     - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
-    <blockquote>The difference between greedy and lazy quantifiers is in how they control backtracking. _Greedy quantifiers_ will first try to match as _many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex--and so on, one character _less_ every time. _Lazy quantifiers_, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
+    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match as _many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex--and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match as _few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
 - Alternation: **`|`**
 - Anchors:
     - <code>**^**</code>: start of string or line (depending on the `Multiline` option)
@@ -106,7 +106,7 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 > `newtype Parser token tree = Parser ([token] -> [(tree, [token])])`
 
-> This allows the parser to be ambiguous (to be able to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
+> This allows the parser to be ambiguous (able to parse a string in multiple ways). The parser will return either a list of one or more "success" alternatives, or an empty list to indicate failure.
 
 > As the regex syntax is non-ambigious, the `Maybe` definition was the one preferred.
 
@@ -173,7 +173,7 @@ Each of these will match exactly _one_ character.
 
 ### The Parser Monad in C# ###
 
-[LINQ][6], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to the _Haskell_ `do` notation. This could greatly simplify the writing of more complex parsers.
+[LINQ][6], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to the _Haskell_ `do` notation. This greatly simplifies the writing of more complex parsers.
 
 For example, let's say we want to write a parser called `naturalNum`, which reads a sequence of digits and returns an `int` as the syntactic tree. Using parser combinators and primitives from the previous section (i.e., `Many1` and `Digit`), we can define it like this:
 
@@ -215,7 +215,7 @@ Now the parser can be written more simply as:
 Parser<char, int> naturalNum = Many1(Digit).Select(ds => readInt(ds));
 ```
 
-A `Select()` method with a signature similar to ours has a special meaning for _LINQ_. Taking advantage of that, we can rewrite the parser in a _syntactic sugar_ form, which will be translated (_de-sugared_) by the C# preprocessor to the exact same form as the above:
+A `Select()` method with a signature similar to ours has a special meaning for _LINQ_. Taking advantage of that, we can rewrite the parser in a _syntactic sugar_ form, which will be translated (_de-sugared_) by the C# preprocessor to exactly the same form as above:
 
 ```C#
 Parser<char, int> naturalNum = from ds in Many1(Digit)
@@ -254,9 +254,9 @@ integerNum = do sign <- option '+' (char '-')
 
 ### Parsing the Regex Language ###
 
-Using parser combinators and primitives, as well as the _syntactic sugar_ notation described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code. See the [source code][9] for details.
+Using parser combinators and primitives, as well as _syntactic sugar_ notation as described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
 
-For example, a _range quantifier suffix_, having one of the forms <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code> or <code>**{**_n_**,**_m_**}**</code>, will be parsed by this parser:
+For example, a _quantifier_ parser, which parses any of the forms <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (greedy quantifiers), or <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (lazy quantifiers), is defined like this:
 
 ```C#
 var RangeQuantifierSuffix = Between(Char('{'),
@@ -264,16 +264,30 @@ var RangeQuantifierSuffix = Between(Char('{'),
 
                                     from min in NaturalNum
                                     from max in
-                                        Option(min, from _comma in Char(',')
-                                                    from m in Option(null, Nullable(NaturalNum))
-                                                    select m)
+                                        Option(min, PrefixedBy(Char(','),
+                                                               Option(null, Nullable(NaturalNum))))
                                     select new { Min = min, Max = max });
+
+var QuantifierSuffix = from quant in
+                           Choice(
+                               from _q in Char('*') select new { Min = 0, Max = (int?)null },
+                               from _q in Char('+') select new { Min = 1, Max = (int?)null },
+                               from _q in Char('?') select new { Min = 0, Max = (int?)1 },
+                               RangeQuantifierSuffix)
+                       from greedy in
+                           Option(true, from _c in Char('?')
+                                        select false)
+                       select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
+
+Quantifier = from child in Atom
+             from suffix in QuantifierSuffix
+             select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
 ```
 
-More complex parsers get built from more simple ones. The topmost parser is simply called `Regex`. Its result will be a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
+More complex parsers are built from more simple ones. The topmost parser is called simply `Regex`. The result of parsing will be a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
 
 - `CharEscapePattern`
-- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (all dealing with character classes)
+- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (which deal with character classes)
 - `GroupPattern`
 - `QuantifierPattern`
 - `AlternationPattern`
