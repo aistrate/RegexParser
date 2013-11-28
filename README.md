@@ -280,8 +280,8 @@ var QuantifierSuffix = from quant in
                        select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
 
 Quantifier = from child in Atom
-             from suffix in QuantifierSuffix
-             select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
+             from sfx in QuantifierSuffix
+             select (BasePattern)new QuantifierPattern(child, sfx.Min, sfx.Max, sfx.Greedy);
 ```
 
 More complex parsers are built from more simple ones. The topmost parser is called simply `Regex`. The result of parsing will be a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
