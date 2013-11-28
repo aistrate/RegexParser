@@ -12,27 +12,28 @@ namespace RegexParser.Patterns
         {
             // Character Escapes
             CharEscape = (specialChars, charEscapeKeys) =>
-                                from esc in Choice(
-                                    NoneOf(specialChars),
+                                from esc in
+                                    Choice(
+                                        NoneOf(specialChars),
 
-                                    PrefixedBy(
-                                        Char('\\'),
-                                        Choice(
-                                            OneOf(specialChars),
+                                        PrefixedBy(
+                                            Char('\\'),
+                                            Choice(
+                                                OneOf(specialChars),
 
-                                            from c in OneOf(charEscapeKeys)
-                                            select charEscapes[c],
+                                                from c in OneOf(charEscapeKeys)
+                                                select charEscapes[c],
 
-                                            from k in
-                                               Choice(from _c in Char('x') select 2,
-                                                      from _c in Char('u') select 4)
-                                            from hs in Count(k, HexDigit)
-                                            select (char)Numeric.ReadHex(hs),
+                                                from k in
+                                                    Choice(from _c in Char('x') select 2,
+                                                           from _c in Char('u') select 4)
+                                                from hs in Count(k, HexDigit)
+                                                select (char)Numeric.ReadHex(hs),
 
-                                            from os in Count(2, 3, OctDigit)
-                                            select (char)Numeric.ReadOct(os),
+                                                from os in Count(2, 3, OctDigit)
+                                                select (char)Numeric.ReadOct(os),
 
-                                            Satisfy(c => !char.IsLetterOrDigit(c) && c != '_'))))
+                                                Satisfy(c => !char.IsLetterOrDigit(c) && c != '_'))))
                                 select new CharEscapePattern(esc);
 
             CharEscapeOutsideClass = CharEscape(specialCharsOutsideClass,
@@ -54,8 +55,8 @@ namespace RegexParser.Patterns
 
             CharRange = (isFirstPos, isSubtract) =>
                             from frm in CharEscapeInsideClass(isFirstPos, isSubtract, false)
-                            from _d  in Char('-')
-                            from to  in CharEscapeInsideClass(false, isSubtract, true)
+                            from _d in Char('-')
+                            from to in CharEscapeInsideClass(false, isSubtract, true)
                             select (CharPattern)new CharRangePattern(frm.Value, to.Value);
 
             CharGroupElement = (isFirstPos, isSubtract) =>
@@ -117,20 +118,17 @@ namespace RegexParser.Patterns
                                                                            Option(null, Nullable(NaturalNum))))
                                                 select new { Min = min, Max = max });
 
-            var QuantifierSuffix = from quant in
-                                       Choice(
-                                           from _q in Char('*') select new { Min = 0, Max = (int?)null },
-                                           from _q in Char('+') select new { Min = 1, Max = (int?)null },
-                                           from _q in Char('?') select new { Min = 0, Max = (int?)1 },
-                                           RangeQuantifierSuffix)
-                                   from greedy in
-                                       Option(true, from _c in Char('?')
-                                                    select false)
-                                   select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
-
             Quantifier = from child in Atom
-                         from sfx in QuantifierSuffix
-                         select (BasePattern)new QuantifierPattern(child, sfx.Min, sfx.Max, sfx.Greedy);
+                         from quant in
+                             Choice(
+                                 from _q in Char('*') select new { Min = 0, Max = (int?)null },
+                                 from _q in Char('+') select new { Min = 1, Max = (int?)null },
+                                 from _q in Char('?') select new { Min = 0, Max = (int?)1 },
+                                 RangeQuantifierSuffix)
+                         from greedy in
+                             Option(true, from _c in Char('?')
+                                          select false)
+                         select (BasePattern)new QuantifierPattern(child, quant.Min, quant.Max, greedy);
 
 
             // Alternations
@@ -197,7 +195,7 @@ namespace RegexParser.Patterns
 
         private static string getSpecialCharsInsideClass(bool isFirstPos, bool isSubtract, bool isAfterDash)
         {
-            return isFirstPos  ? specialCharsInsideClass_FirstPos :
+            return isFirstPos ? specialCharsInsideClass_FirstPos :
                    !isSubtract ? specialCharsInsideClass :
                    isAfterDash ? specialCharsInsideClass_Subtract_AfterDash :
                                  specialCharsInsideClass_Subtract;
