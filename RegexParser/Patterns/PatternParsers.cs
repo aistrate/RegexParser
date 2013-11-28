@@ -129,8 +129,8 @@ namespace RegexParser.Patterns
                                    select new { Min = quant.Min, Max = quant.Max, Greedy = greedy };
 
             Quantifier = from child in Atom
-                         from suffix in QuantifierSuffix
-                         select (BasePattern)new QuantifierPattern(child, suffix.Min, suffix.Max, suffix.Greedy);
+                         from sfx in QuantifierSuffix
+                         select (BasePattern)new QuantifierPattern(child, sfx.Min, sfx.Max, sfx.Greedy);
 
 
             // Alternations
