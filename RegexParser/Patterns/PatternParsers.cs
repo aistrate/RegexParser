@@ -130,16 +130,16 @@ namespace RegexParser.Patterns
 
 
             // Alternations
-            AlternationGroup = from ps in Many(Choice(Quantifier,
-                                                      Lazy(() => ParenGroup),
-                                                      Anchor,
-                                                      CharEscapeOutsideClass,
-                                                      CharClass))
-                               select ps.Count() == 1 ?
+            AlternationBranch = from ps in Many(Choice(Quantifier,
+                                                       Lazy(() => ParenGroup),
+                                                       Anchor,
+                                                       CharEscapeOutsideClass,
+                                                       CharClass))
+                                select ps.Count() == 1 ?
                                             ps.First() :
                                             (BasePattern)new GroupPattern(false, ps);
 
-            Alternation = from alts in SepBy(2, AlternationGroup, Char('|'))
+            Alternation = from alts in SepBy(2, AlternationBranch, Char('|'))
                           select (BasePattern)new AlternationPattern(alts);
 
 
@@ -180,7 +180,7 @@ namespace RegexParser.Patterns
         public static Parser<char, int> NaturalNum;
         public static Parser<char, BasePattern> Quantifier;
 
-        public static Parser<char, BasePattern> AlternationGroup;
+        public static Parser<char, BasePattern> AlternationBranch;
         public static Parser<char, BasePattern> Alternation;
 
         public static Parser<char, GroupPattern> BareGroup;
