@@ -47,7 +47,7 @@ _RegexParser_ is a fairly complete regex engine. The following constructs have b
 
 ## Missing Features ##
 
-Still on the TODO list:
+Still on the _TODO_ list:
 
 - Groups:
     - capturing groups

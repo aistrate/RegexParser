@@ -3,8 +3,8 @@
 _RegexParser_ works in three phases:
 
 1. Parsing the regex pattern, which results in an [Abstract Syntax Tree][1] (_AST_)
-2. Transforming the AST
-3. Parsing the target string using the AST
+2. Transforming the _AST_
+3. Parsing the target string using the _AST_
 
 Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple times, for different target strings.
 
