@@ -52,7 +52,9 @@ namespace RegexParser.Matchers
 
                 case PatternType.Quantifier:
                     QuantifierPattern quant = (QuantifierPattern)pattern;
-                    return from vs in CharParsers.Count(quant.MinOccurrences, quant.MaxOccurrences, createParser(quant.ChildPattern))
+                    return from vs in CharParsers.Count(quant.MinOccurrences,
+                                                        quant.MaxOccurrences,
+                                                        createParser(quant.ChildPattern))
                            select vs.JoinStrings();
 
 
