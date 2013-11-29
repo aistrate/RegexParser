@@ -45,8 +45,9 @@ namespace RegexParser.Matchers
             switch (pattern.Type)
             {
                 case PatternType.Group:
-                    return from vs in CharParsers.Sequence(((GroupPattern)pattern).Patterns
-                                                                                  .Select(p => createParser(p)))
+                    return from vs in
+                               CharParsers.Sequence(((GroupPattern)pattern).Patterns
+                                                                           .Select(p => createParser(p)))
                            select vs.JoinStrings();
 
 
