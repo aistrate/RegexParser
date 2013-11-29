@@ -3,6 +3,8 @@ Regex Parser
 
 ### Implemented Regex Features ###
 
+_RegexParser_ is quite a complete regex engine. The following constructs are implemented:
+
 - Character escapes:
     - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>** matches itself
     - **`\n`**: new line
@@ -165,7 +167,7 @@ Beside combinators, there are also a number of "primitive" character parsers (se
 - `OneOf`
 - `NoneOf`
 
-Each of these will match exactly _one_ character.
+Each of these will consume exactly _one_ character.
 
   [4]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/Parsers.cs
   [5]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/CharParsers.cs
@@ -254,7 +256,7 @@ integerNum = do sign <- option '+' (char '-')
 
 ### Parsing the Regex Language ###
 
-Using parser combinators and primitives, as well as _syntactic sugar_ notation as described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
+Using parser combinators and primitives, as well as the _syntactic sugar_ notation described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
 
 For example, the `Quantifier` parser, which accepts the following forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
 
@@ -284,29 +286,98 @@ Quantifier = from child in Atom
 The more complex parsers are built from more simple ones. The topmost parser is called `Regex`. The result of parsing is a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
 
 - `CharEscapePattern`
-- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern` (dealing with character classes)
+- `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern`, `CaseInsensitiveCharPattern` (dealing with character classes)
 - `GroupPattern`
 - `QuantifierPattern`
 - `AlternationPattern`
 - `AnchorPattern`
 
+All pattern classes are _immutable_.
+
   [9]: https://github.com/aistrate/RegexParser/blob/master/RegexParser/Patterns/PatternParsers.cs
   [10]: https://github.com/aistrate/RegexParser/tree/master/RegexParser/Patterns
 
 
-### Transforming the Abstract Syntax Tree (AST) ###
+### Transforming the _Abstract Syntax Tree_ (_AST_) ###
 
 The following transforms are performed (see [sources][11]):
 
-- `BaseASTTransform`: Remove empty groups. Replace non-capturing groups having a single child pattern with the pattern itself.
+- `BaseASTTransform`: Remove empty groups; replace non-capturing groups that have a single child pattern with the pattern itself.
 
-- `QuantifierASTTransform`: Split quantifiers into their deterministic and non-deterministic parts. For example, the `QuantifierPattern` representing <code>**a{2,5}**</code> will be split into two, equivalent to <code>**a{2}a{0,3}**</code>. The second part is fully non-deterministic, which means that _backtracking_ can and will be used at every step.
+- `QuantifierASTTransform`: Split quantifiers into their deterministic and non-deterministic parts. For example, the `QuantifierPattern` representing <code>**a{2,5}**</code> will be split into two patterns, equivalent to <code>**a{2}a{0,3}**</code>. The second pattern is fully non-deterministic, which means that _backtracking_ can and will be used at every step.
 
-    Also, clean up some corner cases: quantifiers with empty child patterns, etc.
+    Also, clean up the corner cases: quantifiers with empty child patterns, etc.
 
-- `RegexOptionsASTTransform`: Implement the global regex options: `IgnoreCase`, `Multiline`, and `Singleline`, by recreating `CharPattern` and `AnchorPattern` objects.
+- `RegexOptionsASTTransform`: Implement the global regex options `IgnoreCase`, `Multiline` and `Singleline` by transforming `CharPattern` and `AnchorPattern` objects.
 
   [11]: https://github.com/aistrate/RegexParser/tree/master/RegexParser/Transforms
+
+
+### Matching without Backtracking ###
+
+The simplest way to parse the target string is to build a parser from the _AST_ by using the combinators we already have. This, however, would be a _non-backtracking_ parser, as our `Parser` type does not allow returning multiple "success" alternatives.
+
+Here is a recursive definition (see [source][12]), based on the `Sequence`, `Count`, `Choice` and `Satisfy` combinators:
+
+```C#
+private Parser<char, string> createParser(BasePattern pattern)
+{
+    if (pattern == null)
+        throw new ArgumentNullException("pattern.", "Pattern is null when creating match parser.");
+
+    switch (pattern.Type)
+    {
+        case PatternType.Group:
+            return from vs in CharParsers.Sequence(((GroupPattern)pattern).Patterns
+                                                                          .Select(p => createParser(p)))
+                   select vs.JoinStrings();
+
+        case PatternType.Quantifier:
+            QuantifierPattern quant = (QuantifierPattern)pattern;
+            return from vs in CharParsers.Count(quant.MinOccurrences,
+                                                quant.MaxOccurrences,
+                                                createParser(quant.ChildPattern))
+                   select vs.JoinStrings();
+
+        case PatternType.Alternation:
+            return CharParsers.Choice(((AlternationPattern)pattern).Alternatives
+                                                                   .Select(p => createParser(p))
+                                                                   .ToArray());
+
+        case PatternType.Char:
+            return from c in CharParsers.Satisfy(((CharPattern)pattern).IsMatch)
+                   select new string(c, 1);
+
+        default:
+            throw new ApplicationException(
+                string.Format("ExplicitDFAMatcher: unrecognized pattern type ({0}).",
+                              pattern.GetType().Name));
+    }
+}
+```
+
+As a further drawback, this parser does not (and cannot) deal with _anchor_ patterns.
+
+  [12]: https://github.com/aistrate/RegexParser/blob/master/RegexParser/Matchers/ExplicitDFAMatcher.cs
+
+
+### The Need for Backtracking ###
+
+To understand the need for backtracking, let's consider a simple example: we want to find all the words that end with **`t`** within the target string `"a lot of important text"`.
+
+We start with the most logical pattern: **<code>\w+t</code>** (any word character, repeated one or more times, followed by **`t`**). This doesn't work as expected: **<code>\w+</code>** will match **<code>lot</code>** (including the final **`t`**), so the **`t`** in the pattern won't have anything left to match.
+
+We then try the pattern **<code>[\w-[t]]+t</code>** (any word character except **`t`**, repeated one or more times, followed by **`t`**). This will match **<code>lot</code>** correctly, but then it will match **<code>import</code>**, **<code>ant</code>**, and **<code>ext</code>**. Not correct.
+
+Next we try **<code>\w+?t</code>** (any word character, repeated one or more times _lazily_, followed by **`t`**). This produces the same result as above. (Not to mention the fact that lazy quantifiers actually need backtracking in order to work.)
+
+What _would_ work is the following: suppose that **<code>\w+</code>** matches every word character _including_ the **`t`** (in **`lot`**, for example), then when the parser notices that the next part of the pattern (i.e., **`t`**) doesn't match, it tries to _backtrack_ one match of the quantifier's subpattern (one word character); so now it has matched only **`lo`**, and the **`t`** in the pattern _will_ match.
+
+Complications:
+
+- Backtracking might need to go back thousands of matches (all of which need to be kept track of on a stack, like a trail of breadcrumbs).
+
+- The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, in a different part of the pattern tree. Jumping back will need to restore the whole context from just _before_ the match, including location in the pattern tree, and in the target string.
 
 
 ### Missing Regex Features ###
