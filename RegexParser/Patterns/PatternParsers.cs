@@ -98,7 +98,7 @@ namespace RegexParser.Patterns
                      select (BasePattern)new AnchorPattern(anchorTypes[a]);
 
 
-            // Atomic (non-backtracking) elements
+            // Atoms (non-backtracking elements)
             Atom = Choice(Lazy(() => ParenGroup),
                           Anchor,
                           CharEscapeOutsideClass,
