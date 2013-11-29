@@ -3,7 +3,7 @@ Regex Parser
 
 ### Implemented Regex Features ###
 
-_RegexParser_ is a quite complete regex engine. The following constructs are implemented:
+_RegexParser_ is a fairly complete regex engine. The following constructs have been implemented:
 
 - Character escapes:
     - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>** matches itself
@@ -258,7 +258,7 @@ integerNum = do sign <- option '+' (char '-')
 
 Using parser combinators and primitives, as well as the _syntactic sugar_ notation described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
 
-For example, the `Quantifier` parser, which accepts the following forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
+For example, the `Quantifier` parser, which accepts the forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
 
 ```C#
 var RangeQuantifierSuffix = Between(Char('{'),
@@ -315,7 +315,7 @@ The following transforms are performed (see [sources][11]):
 
 ### Matching without Backtracking ###
 
-The simplest way to parse the target string is to build a parser from the _AST_ by using the combinators we already have. This, however, would be a _non-backtracking_ parser, as our `Parser` type does not allow returning multiple "success" alternatives.
+The simplest way to parse the target string is to build a parser from the _AST_ using the combinators we already have. This, however, would be a _non-backtracking_ parser, as our `Parser` type does not allow returning multiple "success" alternatives.
 
 Here is a recursive definition (see [source][12]), based on the `Sequence`, `Count`, `Choice` and `Satisfy` combinators:
 
@@ -364,7 +364,7 @@ As a further drawback, this parser does not (and cannot) deal with _anchor_ patt
 
 ### The Need for Backtracking ###
 
-To understand the need for backtracking, let's consider a simple example: we want to find all the words that end with <code>**t**</code> within the target string <code>**"a lot of important text"**</code>.
+To understand the need for backtracking, let's consider a simple example: we want to find all the words that end with <code>**t**</code> within the target <code>**"a lot of important text"**</code>.
 
 We start with the most logical pattern: <code>**\w+t**</code> (any word character, repeated one or more times, followed by <code>**t**</code>). This doesn't work as expected: <code>**\w+**</code> will match <code>**lot**</code> (including the final <code>**t**</code>), so the <code>**t**</code> in the pattern won't have anything left to match.
 
@@ -372,13 +372,13 @@ We then try the pattern <code>**&#91;\w-&#91;t&#93;&#93;+t**</code> (any word ch
 
 Next we try <code>**\w+?t**</code> (any word character, repeated one or more times _lazily_, followed by <code>**t**</code>). This produces the same result as above. (Not to mention the fact that lazy quantifiers actually need backtracking in order to work.)
 
-What _would_ work is the following: suppose that <code>**\w+**</code> matches every word character _including_ the <code>**t**</code> (in <code>**lot**</code>, for example); then, when the parser notices that the next part of the pattern (i.e., <code>**t**</code>) doesn't match, it tries to _backtrack_ one match of the quantifier's subpattern (one word character); so now it has matched only <code>**lo**</code>, and the <code>**t**</code> in the pattern _will_ match.
+What _would_ work is the following: suppose that <code>**\w+**</code> matches every word character _including_ the <code>**t**</code> (in <code>**lot**</code>); then, when the parser notices that the next part of the pattern (i.e., <code>**t**</code>) does not match, it tries to _backtrack_ one match of the quantifier's subpattern (one word character); so now it has matched only <code>**lo**</code>, and the <code>**t**</code> in the pattern _will_ match.
 
 Possible complications:
 
 - Backtracking might need to go back thousands of matches (all of which need to be kept track of in a stack, like a trail of breadcrumbs).
 
-- The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, and in a different part of the pattern tree. Jumping back will need to restore the whole context as of just _before_ the match, including location in the pattern tree, and location in the target string.
+- The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, and in a different part of the pattern tree. Jumping back will need to restore the whole context as of _just before_ the match, including location in the pattern tree, and location in the target string.
 
 
 ### Missing Regex Features ###
