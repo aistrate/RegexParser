@@ -3,7 +3,7 @@ Regex Parser
 
 ### Implemented Regex Features ###
 
-_RegexParser_ is quite a complete regex engine. The following constructs are implemented:
+_RegexParser_ is a quite complete regex engine. The following constructs are implemented:
 
 - Character escapes:
     - any character except for one of **<code>.&#36;^{&#91;(|)&#42;+?&#92;</code>** matches itself
@@ -31,7 +31,7 @@ _RegexParser_ is quite a complete regex engine. The following constructs are imp
 - Quantifiers:
     - Greedy: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code>
     - Lazy: <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code>
-    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match _as many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex–and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match _as few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
+    <blockquote>The difference between _greedy_ and _lazy_ quantifiers is in how they control backtracking. _Greedy_ quantifiers will first try to match _as many_ characters as possible. Then, if the rest of the regex does not match, they will backtrack to matching one character _less_, then try again on the rest of the regex--and so on, one character _less_ every time. _Lazy_ quantifiers, on the other hand, will first try to match _as few_ characters as possible, then backtrack to matching one character _more_ every time.</blockquote>
 - Alternation: **`|`**
 - Anchors:
     - <code>**^**</code>: start of string or line (depending on the `Multiline` option)
@@ -328,8 +328,9 @@ private Parser<char, string> createParser(BasePattern pattern)
     switch (pattern.Type)
     {
         case PatternType.Group:
-            return from vs in CharParsers.Sequence(((GroupPattern)pattern).Patterns
-                                                                          .Select(p => createParser(p)))
+            return from vs in
+                       CharParsers.Sequence(((GroupPattern)pattern).Patterns
+                                                                   .Select(p => createParser(p)))
                    select vs.JoinStrings();
 
         case PatternType.Quantifier:
@@ -363,21 +364,21 @@ As a further drawback, this parser does not (and cannot) deal with _anchor_ patt
 
 ### The Need for Backtracking ###
 
-To understand the need for backtracking, let's consider a simple example: we want to find all the words that end with **`t`** within the target string `"a lot of important text"`.
+To understand the need for backtracking, let's consider a simple example: we want to find all the words that end with <code>**t**</code> within the target string <code>**"a lot of important text"**</code>.
 
-We start with the most logical pattern: **<code>\w+t</code>** (any word character, repeated one or more times, followed by **`t`**). This doesn't work as expected: **<code>\w+</code>** will match **<code>lot</code>** (including the final **`t`**), so the **`t`** in the pattern won't have anything left to match.
+We start with the most logical pattern: <code>**\w+t**</code> (any word character, repeated one or more times, followed by <code>**t**</code>). This doesn't work as expected: <code>**\w+**</code> will match <code>**lot**</code> (including the final <code>**t**</code>), so the <code>**t**</code> in the pattern won't have anything left to match.
 
-We then try the pattern **<code>[\w-[t]]+t</code>** (any word character except **`t`**, repeated one or more times, followed by **`t`**). This will match **<code>lot</code>** correctly, but then it will match **<code>import</code>**, **<code>ant</code>**, and **<code>ext</code>**. Not correct.
+We then try the pattern <code>**&#91;\w-&#91;t&#93;&#93;+t**</code> (any word character except <code>**t**</code>, repeated one or more times, followed by <code>**t**</code>). This will match <code>**lot**</code> correctly, but then it will match <code>**import**</code>, <code>**ant**</code>, and <code>**ext**</code>. Not correct.
 
-Next we try **<code>\w+?t</code>** (any word character, repeated one or more times _lazily_, followed by **`t`**). This produces the same result as above. (Not to mention the fact that lazy quantifiers actually need backtracking in order to work.)
+Next we try <code>**\w+?t**</code> (any word character, repeated one or more times _lazily_, followed by <code>**t**</code>). This produces the same result as above. (Not to mention the fact that lazy quantifiers actually need backtracking in order to work.)
 
-What _would_ work is the following: suppose that **<code>\w+</code>** matches every word character _including_ the **`t`** (in **`lot`**, for example), then when the parser notices that the next part of the pattern (i.e., **`t`**) doesn't match, it tries to _backtrack_ one match of the quantifier's subpattern (one word character); so now it has matched only **`lo`**, and the **`t`** in the pattern _will_ match.
+What _would_ work is the following: suppose that <code>**\w+**</code> matches every word character _including_ the <code>**t**</code> (in <code>**lot**</code>, for example); then, when the parser notices that the next part of the pattern (i.e., <code>**t**</code>) doesn't match, it tries to _backtrack_ one match of the quantifier's subpattern (one word character); so now it has matched only <code>**lo**</code>, and the <code>**t**</code> in the pattern _will_ match.
 
-Complications:
+Possible complications:
 
-- Backtracking might need to go back thousands of matches (all of which need to be kept track of on a stack, like a trail of breadcrumbs).
+- Backtracking might need to go back thousands of matches (all of which need to be kept track of in a stack, like a trail of breadcrumbs).
 
-- The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, in a different part of the pattern tree. Jumping back will need to restore the whole context from just _before_ the match, including location in the pattern tree, and in the target string.
+- The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, and in a different part of the pattern tree. Jumping back will need to restore the whole context as of just _before_ the match, including location in the pattern tree, and location in the target string.
 
 
 ### Missing Regex Features ###
