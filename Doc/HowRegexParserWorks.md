@@ -15,7 +15,7 @@ Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple t
 - [Phase 1: Parsing the Regex Pattern](#phase-1-parsing-the-regex-pattern)
     - [The Parser Type](#the-parser-type)
     - [Parser Combinators in C#](#parser-combinators-in-c)
-    - [The Parser Monad in C#](#the-parser-monad-in-c)
+    - [The Parser _Monad_ in C#](#the-parser-monad-in-c)
     - [Parsing the Regex Language](#parsing-the-regex-language)
 - [Phase 2: Transforming the _Abstract Syntax Tree_](#phase-2-transforming-the-abstract-syntax-tree)
 - [Phase 3: Pattern Matching on the Target String](#phase-3-pattern-matching-on-the-target-string)
@@ -83,7 +83,7 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 [Parser combinators][2] are higher-order functions that can be used to combine basic parsers to construct parsers for more complex rules.
 
-The following parser combinators have been defined (see [source](/ParserCombinators/Parsers.cs) for descriptions):
+The following parser combinators are defined (see [source](/ParserCombinators/Parsers.cs) for descriptions):
 
 - `Choice`
 - `Option`
@@ -135,7 +135,7 @@ Beside combinators, there are also a number of "primitive" character parsers (se
 Each of these will consume exactly _one_ character.
 
 
-### The Parser Monad in C# ###
+### The Parser _Monad_ in C# ###
 
 [LINQ][3], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to _Haskell_ `do` notation. This greatly simplifies the writing of more complex parsers.
 
