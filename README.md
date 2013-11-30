@@ -1,7 +1,8 @@
 RegexParser
 ============
 
-### Contents ###
+_RegexParser_ is a regular expression engine that follows functional programming principles: parser combinators, purely functional data structures, and side-effect free code.
+
 
 <toc>
 

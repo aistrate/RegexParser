@@ -263,7 +263,7 @@ The more complex parsers are built from more simple ones. The topmost parser is 
 All pattern classes are _immutable_.
 
   [9]: /RegexParser/Patterns/PatternParsers.cs
-  [10]: https://github.com/aistrate/RegexParser/tree/master/RegexParser/Patterns
+  [10]: /RegexParser/Patterns
 
 
 
@@ -279,7 +279,7 @@ The following transforms are performed (see [sources][11]):
 
 - `RegexOptionsASTTransform`: Implement the global regex options `IgnoreCase`, `Multiline` and `Singleline` by transforming `CharPattern` and `AnchorPattern` objects.
 
-  [11]: https://github.com/aistrate/RegexParser/tree/master/RegexParser/Transforms
+  [11]: /RegexParser/Transforms
 
 
 
