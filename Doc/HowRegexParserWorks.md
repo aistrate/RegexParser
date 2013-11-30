@@ -1,5 +1,6 @@
 # How _RegexParser_ Works #
 
+
 _RegexParser_ works in three phases:
 
 1. Parsing the regex pattern, which results in an [Abstract Syntax Tree][1] (_AST_)
@@ -18,12 +19,13 @@ Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple t
     - [Parser Combinators in C#](#parser-combinators-in-c)
     - [The Parser Monad in C#](#the-parser-monad-in-c)
     - [Parsing the Regex Language](#parsing-the-regex-language)
-- [Phase 2: Transforming the _Abstract Syntax Tree_ (_AST_)](#phase-2-transforming-the-abstract-syntax-tree-ast)
+- [Phase 2: Transforming the _Abstract Syntax Tree_](#phase-2-transforming-the-abstract-syntax-tree)
 - [Phase 3: Parsing the Target String](#phase-3-parsing-the-target-string)
     - [Matching without Backtracking](#matching-without-backtracking)
     - [The Need for Backtracking](#the-need-for-backtracking)
 
 </toc>
+
 
 
 ## Phase 1: Parsing the Regex Language ##
@@ -135,8 +137,8 @@ Beside combinators, there are also a number of "primitive" character parsers (se
 
 Each of these will consume exactly _one_ character.
 
-  [4]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/Parsers.cs
-  [5]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/CharParsers.cs
+  [4]: /ParserCombinators/Parsers.cs
+  [5]: /ParserCombinators/CharParsers.cs
 
 
 ### The Parser Monad in C# ###
@@ -217,7 +219,7 @@ integerNum = do sign <- option '+' (char '-')
 
   [6]: http://en.wikipedia.org/wiki/Language_Integrated_Query
   [7]: http://en.wikipedia.org/wiki/Extension_method
-  [8]: https://github.com/aistrate/RegexParser/blob/master/ParserCombinators/ParserMonad.cs
+  [8]: /ParserCombinators/ParserMonad.cs
 
 
 ### Parsing the Regex Language ###
@@ -260,12 +262,12 @@ The more complex parsers are built from more simple ones. The topmost parser is 
 
 All pattern classes are _immutable_.
 
-  [9]: https://github.com/aistrate/RegexParser/blob/master/RegexParser/Patterns/PatternParsers.cs
+  [9]: /RegexParser/Patterns/PatternParsers.cs
   [10]: https://github.com/aistrate/RegexParser/tree/master/RegexParser/Patterns
 
 
 
-## Phase 2: Transforming the _Abstract Syntax Tree_ (_AST_) ##
+## Phase 2: Transforming the _Abstract Syntax Tree_ ##
 
 The following transforms are performed (see [sources][11]):
 
@@ -330,7 +332,7 @@ private Parser<char, string> createParser(BasePattern pattern)
 
 As a further drawback, this parser does not (and cannot) deal with _anchor_ patterns.
 
-  [12]: https://github.com/aistrate/RegexParser/blob/master/RegexParser/Matchers/ExplicitDFAMatcher.cs
+  [12]: /RegexParser/Matchers/ExplicitDFAMatcher.cs
 
 
 ### The Need for Backtracking ###
