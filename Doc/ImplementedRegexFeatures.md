@@ -49,7 +49,7 @@ _RegexParser_ is a fairly complete regex engine. The following constructs have b
 
 Still on the _TODO_ list:
 
-- Groups:
+- Group related:
     - capturing groups
     - backreferences
     - named groups
