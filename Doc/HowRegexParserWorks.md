@@ -5,7 +5,7 @@ _RegexParser_ works in three phases:
 
 1. Parsing the regex pattern, which results in an [Abstract Syntax Tree][1] (_AST_)
 2. Transforming the _AST_
-3. Parsing the target string using the _AST_
+3. Pattern matching on the target string using the _AST_
 
 Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple times, for different target strings.
 
@@ -14,13 +14,13 @@ Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple t
 
 <toc>
 
-- [Phase 1: Parsing the Regex Language](#phase-1-parsing-the-regex-language)
+- [Phase 1: Parsing the Regex Pattern](#phase-1-parsing-the-regex-pattern)
     - [The Parser Type](#the-parser-type)
     - [Parser Combinators in C#](#parser-combinators-in-c)
     - [The Parser Monad in C#](#the-parser-monad-in-c)
     - [Parsing the Regex Language](#parsing-the-regex-language)
 - [Phase 2: Transforming the _Abstract Syntax Tree_](#phase-2-transforming-the-abstract-syntax-tree)
-- [Phase 3: Parsing the Target String](#phase-3-parsing-the-target-string)
+- [Phase 3: Pattern Matching on the Target String](#phase-3-pattern-matching-on-the-target-string)
     - [Matching without Backtracking](#matching-without-backtracking)
     - [The Need for Backtracking](#the-need-for-backtracking)
 
@@ -28,7 +28,7 @@ Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple t
 
 
 
-## Phase 1: Parsing the Regex Language ##
+## Phase 1: Parsing the Regex Pattern ##
 
 
 ### The Parser Type ###
@@ -283,7 +283,7 @@ The following transforms are performed (see [sources][11]):
 
 
 
-## Phase 3: Parsing the Target String ##
+## Phase 3: Pattern Matching on the Target String ##
 
 
 ### Matching without Backtracking ###
