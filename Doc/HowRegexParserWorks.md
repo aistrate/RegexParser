@@ -9,8 +9,6 @@ _RegexParser_ works in three phases:
 
 Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple times, for different target strings.
 
-  [1]: http://en.wikipedia.org/wiki/Abstract_Syntax_Tree
-
 
 <toc>
 
@@ -67,10 +65,10 @@ The `Parser` type is equivalent to the following _Haskell_ type:
 newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 ```
 
-> **NOTE**: The idea of _parser combinators_ came from these articles:
+> **NOTE**: The idea (and syntax) of _parser combinators_ came from these articles:
 
-> - [Monadic Parsing in Haskell][2] (Hutton, Meijer) (1998)
-> - [Parsec, a fast combinator parser][3] (Leijen) (2001)
+> - [Monadic Parsing in Haskell][11] (Hutton, Meijer) (1998)
+> - [Parsec, a fast combinator parser][12] (Leijen) (2001)
 
 > In the articles, the type is defined similarly to:
 
@@ -80,13 +78,12 @@ newtype Parser token tree = Parser ([token] -> Maybe (tree, [token]))
 
 > As the regex syntax is non-ambigious, the `Maybe` definition was preferred.
 
-  [2]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
-  [3]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
-
 
 ### Parser Combinators in C# ###
 
-The following parser combinators have been defined (see [source][4] for descriptions):
+[Parser combinators][2] are higher-order functions that can be used to combine basic parsers to construct parsers for more complex rules.
+
+The following parser combinators have been defined (see [source](/ParserCombinators/Parsers.cs) for descriptions):
 
 - `Choice`
 - `Option`
@@ -124,7 +121,7 @@ public static Parser<TToken, TTree> Choice<TTree>(params Parser<TToken, TTree>[]
 }
 ```
 
-Beside combinators, there are also a number of "primitive" character parsers (see [source][5] for descriptions):
+Beside combinators, there are also a number of "primitive" character parsers (see [source](/ParserCombinators/CharParsers.cs) for descriptions):
 
 - `AnyChar`
 - `Satisfy`
@@ -137,13 +134,10 @@ Beside combinators, there are also a number of "primitive" character parsers (se
 
 Each of these will consume exactly _one_ character.
 
-  [4]: /ParserCombinators/Parsers.cs
-  [5]: /ParserCombinators/CharParsers.cs
-
 
 ### The Parser Monad in C# ###
 
-[LINQ][6], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to the _Haskell_ `do` notation. This greatly simplifies the writing of more complex parsers.
+[LINQ][3], the data querying subset of _C#_, offers a form of _syntactic sugar_ that allows writing code similar to _Haskell_ `do` notation. This greatly simplifies the writing of more complex parsers.
 
 For example, let's say we want to write a parser called `naturalNum`, which reads a sequence of digits and returns an `int` as syntactic tree. Using parser combinators and primitives from the previous section (i.e., `Many1` and `Digit`), we can define it like this:
 
@@ -160,7 +154,7 @@ Parser<char, int> naturalNum =
     };
 ```
 
-Because this is a common pattern, we can define a helper [extension method][7], `Select()`:
+Because this is such a common pattern, we can define a helper [extension method][4], `Select()`:
 
 ```C#
 public static Parser<TToken, TTree2> Select<TToken, TTree, TTree2>(
@@ -199,7 +193,7 @@ naturalNum = do ds <- many1 digit
                 return (readInt ds)
 ```
 
-So far, we could only use the `from` keyword _once_ per expression. By also defining a _LINQ_-related method called `SelectMany()` (see [source][8]), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
+So far, we could only use the `from` keyword _once_ per expression. By also defining a _LINQ_-related method called `SelectMany()` (see [source](/ParserCombinators/ParserMonad.cs)), we become able to build parser expressions that use `from` more than once. For example, if we want to parse an integer (prefixed by an optional minus sign), we can write:
 
 ```C#
 Parser<char, int> integerNum = from sign in Option('+', Char('-'))
@@ -217,14 +211,10 @@ integerNum = do sign <- option '+' (char '-')
                 return (s * (readInt ds))
 ```
 
-  [6]: http://en.wikipedia.org/wiki/Language_Integrated_Query
-  [7]: http://en.wikipedia.org/wiki/Extension_method
-  [8]: /ParserCombinators/ParserMonad.cs
-
 
 ### Parsing the Regex Language ###
 
-Using parser combinators and primitives, as well as the _syntactic sugar_ notation described above, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source][9]).
+Using parser combinators and primitives, as well as the _syntactic sugar_ notation described, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source](/RegexParser/Patterns/PatternParsers.cs)).
 
 For example, the `Quantifier` parser, which accepts the forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
 
@@ -251,7 +241,7 @@ Quantifier = from child in Atom
              select (BasePattern)new QuantifierPattern(child, quant.Min, quant.Max, greedy);
 ```
 
-The more complex parsers are built from more simple ones. The topmost parser is called `Regex`. The result of parsing is a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources][10]):
+The more complex parsers are built from more simple ones. The topmost parser is called `Regex`. The result of parsing is a tree of _pattern_ objects (derived from class `BasePattern`). Here are the main pattern classes (see [sources](/RegexParser/Patterns)):
 
 - `CharEscapePattern`
 - `CharGroupPattern`, `CharRangePattern`, `CharClassSubtractPattern`, `AnyCharPattern`, `CaseInsensitiveCharPattern` (dealing with character classes)
@@ -262,14 +252,11 @@ The more complex parsers are built from more simple ones. The topmost parser is 
 
 All pattern classes are _immutable_.
 
-  [9]: /RegexParser/Patterns/PatternParsers.cs
-  [10]: /RegexParser/Patterns
-
 
 
 ## Phase 2: Transforming the _Abstract Syntax Tree_ ##
 
-The following transforms are performed (see [sources][11]):
+The following transforms are performed (see [sources](/RegexParser/Transforms)):
 
 - `BaseASTTransform`: Remove empty groups; replace non-capturing groups that have a single child pattern with the pattern itself.
 
@@ -278,8 +265,6 @@ The following transforms are performed (see [sources][11]):
     Also, clean up the corner cases: quantifiers with empty child patterns, etc.
 
 - `RegexOptionsASTTransform`: Implement the global regex options `IgnoreCase`, `Multiline` and `Singleline` by transforming `CharPattern` and `AnchorPattern` objects.
-
-  [11]: /RegexParser/Transforms
 
 
 
@@ -290,7 +275,7 @@ The following transforms are performed (see [sources][11]):
 
 The simplest way to parse the target string is to build a parser from the _AST_ using the combinators we already have. This, however, would be a _non-backtracking_ parser, as our `Parser` type does not allow returning multiple "success" alternatives.
 
-Here is a recursive definition (see [source][12]), based on the `Sequence`, `Count`, `Choice` and `Satisfy` combinators:
+Here is a recursive definition (see [source](/RegexParser/Matchers/ExplicitDFAMatcher.cs)), based on the `Sequence`, `Count`, `Choice` and `Satisfy` combinators:
 
 ```C#
 private Parser<char, string> createParser(BasePattern pattern)
@@ -332,8 +317,6 @@ private Parser<char, string> createParser(BasePattern pattern)
 
 As a further drawback, this parser does not (and cannot) deal with _anchor_ patterns.
 
-  [12]: /RegexParser/Matchers/ExplicitDFAMatcher.cs
-
 
 ### The Need for Backtracking ###
 
@@ -352,3 +335,12 @@ Possible complications:
 - Backtracking might need to go back thousands of matches (all of which need to be kept track of in a stack, like a trail of breadcrumbs).
 
 - The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, and in a different part of the pattern tree. Jumping back will need to restore the whole context as of _just before_ the match, including location in the pattern tree, and location in the target string.
+
+
+  [1]: http://en.wikipedia.org/wiki/Abstract_Syntax_Tree
+  [2]: http://en.wikipedia.org/wiki/Parser_combinator
+  [3]: http://en.wikipedia.org/wiki/Language_Integrated_Query
+  [4]: http://en.wikipedia.org/wiki/Extension_method
+
+  [11]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Monadic%20Parsing%20in%20Haskell%20(Hutton%2C%20Meijer%3B%201998).pdf
+  [12]: https://github.com/aistrate/RegexParser/raw/master/Haskell/Parsec%2C%20a%20fast%20combinator%20parser%20(Leijen%3B%202001).pdf
