@@ -15,7 +15,7 @@ _RegexParser_ is a regular expression engine that follows functional programming
     - [Phase 2: Transforming the _Abstract Syntax Tree_](/Doc/HowRegexParserWorks.md#phase-2-transforming-the-abstract-syntax-tree)
     - [Phase 3: Pattern Matching on the Target String](/Doc/HowRegexParserWorks.md#phase-3-pattern-matching-on-the-target-string)
         - [Matching without Backtracking](/Doc/HowRegexParserWorks.md#matching-without-backtracking)
-        - [The Need for Backtracking](/Doc/HowRegexParserWorks.md#the-need-for-backtracking)
+        - [Matching with Backtracking](/Doc/HowRegexParserWorks.md#matching-with-backtracking)
 - [Implemented Regex Features](/Doc/ImplementedRegexFeatures.md#implemented-regex-features)
     - [Missing Features](/Doc/ImplementedRegexFeatures.md#missing-features)
 

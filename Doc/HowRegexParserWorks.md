@@ -20,7 +20,7 @@ Phases 1 and 2 happen only once for a given regex. Phase 3 may happen multiple t
 - [Phase 2: Transforming the _Abstract Syntax Tree_](#phase-2-transforming-the-abstract-syntax-tree)
 - [Phase 3: Pattern Matching on the Target String](#phase-3-pattern-matching-on-the-target-string)
     - [Matching without Backtracking](#matching-without-backtracking)
-    - [The Need for Backtracking](#the-need-for-backtracking)
+    - [Matching with Backtracking](#matching-with-backtracking)
 
 </toc>
 
@@ -216,7 +216,7 @@ integerNum = do sign <- option '+' (char '-')
 
 Using parser combinators and primitives, as well as the _syntactic sugar_ notation described, we can write a parser for the whole regex language (as supported by _RegexParser_) in less than **150 lines** of code (see [source](/RegexParser/Patterns/PatternParsers.cs)).
 
-For example, the `Quantifier` parser, which accepts the forms: <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
+For example, the `Quantifier` parser, which accepts suffixes <code>**&#42;**</code>, <code>**+**</code>, <code>**?**</code>, <code>**{**_n_**}**</code>, <code>**{**_n_**,}**</code>, <code>**{**_n_**,**_m_**}**</code> (_greedy_ quantifiers), and <code>**&#42;?**</code>, <code>**+?**</code>, <code>**??**</code>, <code>**{**_n_**}?**</code>, <code>**{**_n_**,}?**</code>, <code>**{**_n_**,**_m_**}?**</code> (_lazy_ quantifiers), is defined like this:
 
 ```C#
 var RangeQuantifierSuffix = Between(Char('{'),
@@ -318,7 +318,7 @@ private Parser<char, string> createParser(BasePattern pattern)
 As a further drawback, this parser does not (and cannot) deal with _anchor_ patterns.
 
 
-### The Need for Backtracking ###
+### Matching with Backtracking ###
 
 To understand the need for backtracking, let's consider a simple example: we want to find all the words that end with <code>**t**</code> within the target <code>**"a lot of important text"**</code>.
 
@@ -335,6 +335,8 @@ Possible complications:
 - Backtracking might need to go back thousands of matches (all of which need to be kept track of in a stack, like a trail of breadcrumbs).
 
 - The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, and in a different part of the pattern tree. Jumping back will need to restore the whole context as of _just before_ the match, including location in the pattern tree, and location in the target string.
+
+See the implementation [here](/RegexParser/Matchers/BacktrackingMatcher.cs).
 
 
   [1]: http://en.wikipedia.org/wiki/Abstract_Syntax_Tree
