@@ -5,7 +5,7 @@ _RegexParser_ is a regular expression engine that:
 - is fully featured (character escapes, character classes, greedy/lazy quantifiers, alternations, anchors)
 - uses _backtracking_ while matching on the target string
 - follows _functional programming_ principles in its implementation (parser combinators, functional data structures, side-effect free code)
-- is fully tested and performance-optimized
+- is well tested and performance-optimized
 
 <h2>Contents</h2>
 
@@ -21,6 +21,8 @@ _RegexParser_ is a regular expression engine that:
 - [Phase 3: Pattern Matching on the Target String](#phase-3-pattern-matching-on-the-target-string)
     - [Matching without Backtracking](#matching-without-backtracking)
     - [Matching with Backtracking](#matching-with-backtracking)
+- [Testing](#testing)
+- [Performance](#performance)
 - [Implemented Regex Features](#implemented-regex-features)
     - [Missing Features](#missing-features)
 
@@ -287,7 +289,7 @@ The following transforms are performed (see [sources](/RegexParser/Transforms)):
 
 ### Matching without Backtracking ###
 
-The simplest way to parse the target string is to build a parser from the _AST_ using the combinators we already have. This, however, would be a _non-backtracking_ parser, as our `Parser` type does not allow returning multiple "success" alternatives.
+The simplest way to parse the target string is to build a parser from the _AST_ using combinators we already have. This, however, would be a _non-backtracking_ parser, as our `Parser` type does not allow returning multiple "success" alternatives.
 
 Here is a recursive definition (see [source](/RegexParser/Matchers/ExplicitDFAMatcher.cs)), based on the `Sequence`, `Count`, `Choice` and `Satisfy` combinators:
 
@@ -351,6 +353,40 @@ Possible complications:
 - The moment of "mismatch" may arrive long after the end of the non-deterministic pattern (instead of right after it, as in our example), thousands of characters away, and in a different part of the pattern tree. Jumping back will need to restore the whole context as of _just before_ the match, including location in the pattern tree, and location in the target string.
 
 See the implementation [here](/RegexParser/Matchers/BacktrackingMatcher.cs).
+
+
+
+## Testing ##
+
+The main unit tests are _matching_ tests for the supported regex patterns: char escapes, char classes, quantifiers (greedy/lazy), alternations, anchors, and global regex options (see [sources](/RegexParser.Tests/Matchers)).
+
+The tests make use of `RegexAssert.AreMatchesSameAsMsoft()` (see [source](/RegexParser.Tests/Asserts/RegexAssert.cs)) as the main way of asserting correctness. This method compares the result returned by _RegexParser_ (the whole collection of matches, including position in the target string) with the result of the standard .NET implementation (`System.Text.RegularExpressions.Regex.Matches()`).
+
+There are also unit tests for [AST transforms](/RegexParser.Tests/Transforms) and [pattern classes](/RegexParser.Tests/Patterns).
+
+
+
+## Performance ##
+
+Performance is about one order of magnitude slower than the standard .NET implementation, due in no small part to running on a virtual machine, the .NET Runtime (whereas the _Microsoft_ version is closer to the machine, being written in C).
+
+However, care has been taken to ensure that the performance _profile_ is similar to the standard .NET implementation. So, if the .NET implementation runs in _O(n)_ time, the _RegexParser_ version will also run in _O(n)_ time.
+
+There are a number of "informal" performance tests, run from the console, with performance figures attached to code as comments. For example (see [source](/RegexParser.Tests/Performance/MatcherPerformanceTests.cs)):
+
+```C#
+const int times = 1, inputLength = 1000000;    // or 10000000
+
+string alphabet = "abcdefghijklmnopqrstuvwxyz";
+string lowercaseChars = EnumerablePerformanceTests.RepeatChars(alphabet, inputLength)
+                                                  .AsString();
+
+testRegexMatches(lowercaseChars, @"(\w{1000})+", times);
+//  0.857 sec. (inputLength =  1,000,000)
+//  9.044 sec. (inputLength = 10,000,000)
+```
+
+See more performance tests [here](/RegexParser.Tests/Performance).
 
 
 
