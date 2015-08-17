@@ -1,6 +1,6 @@
 # RegexParser #
 
-_RegexParser_ is a regular expression engine written in C# which:
+_RegexParser_ is a regular expression engine written in C# that:
 
 - is fully featured (character escapes, character classes, greedy/lazy quantifiers, alternations, anchors)
 - uses _backtracking_ while matching on the target string
